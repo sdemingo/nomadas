@@ -90,8 +90,6 @@ func getCheckin(w http.ResponseWriter, r *http.Request) {
 		for i, key := range keys {
 			checkins[i].Id = key.IntID()
 		}
-
-		
 	}
 
 	if r.Form["pointId"]!=nil{
@@ -115,18 +113,7 @@ func getCheckin(w http.ResponseWriter, r *http.Request) {
 
 	}
 
-/*
-	q := datastore.NewQuery("checkins")
-	var points []Point
-        keys,_:= q.GetAll(c, &points)
-
-	// Fills the ID field with each internal key.ID of datastore
-	for i, key := range keys {
-		points[i].Id = key.IntID()
-	}*/
-
 	msg,_:=json.Marshal(checkins)
-
 	fmt.Fprintf(w, "%s", msg)
 }
 

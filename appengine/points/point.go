@@ -15,7 +15,7 @@ const(
 
 
 type Point struct{
-	Id int64     `datastore:"-"`  // ignored by datastore
+	Id int64     `datastore:"-"`  // ignored by datastore (only for the client)
 	UserId int64
 	Name string
 	Lat float32  `json:",string"`

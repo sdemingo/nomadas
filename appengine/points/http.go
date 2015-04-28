@@ -82,18 +82,46 @@ func getPoint(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
 
-	q := datastore.NewQuery("points")
-	var points []Point
-        keys,_:= q.GetAll(c, &points)
 
-	// Fills the ID field with each internal key.ID of datastore
-	for i, key := range keys {
-		points[i].Id = key.IntID()
+	if r.Form["id"]!=nil{
+		id,err:=strconv.ParseInt(r.Form["id"][0],10,64)
+		if err!=nil{
+			app.ServeError(c,w,errors.New("User not found. Bad ID"))	
+			return
+		}
+
+		var p Point
+		
+		// Busco información del usuario en la base de datos
+		// y relleno el objeto User para enviar	
+
+		k := datastore.NewKey(c, "points", "", id, nil)
+		datastore.Get(c, k, &p)
+
+		p.Id = k.IntID()
+		msg,_:=json.Marshal(p)
+		fmt.Fprintf(w, "%s", msg)
 	}
 
-	msg,_:=json.Marshal(points)
+	if r.Form["userId"]!=nil{
+		// Busco puntos de un usuario
+		uid,err:=strconv.ParseInt(r.Form["userId"][0],10,64)
+		if err!=nil{
+			app.ServeError(c,w,errors.New("User not found. Bad ID"))	
+			return
+		}
 
-	fmt.Fprintf(w, "%s", msg)
+		var points []Point
+
+		q := datastore.NewQuery("points").Filter("UserId =",uid)
+		keys,_:= q.GetAll(c, &points)
+		for i, key := range keys {
+			points[i].Id = key.IntID()
+		}
+
+		msg,_:=json.Marshal(points)
+		fmt.Fprintf(w, "%s", msg)
+	}
 }
 
 
