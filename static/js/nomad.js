@@ -1,7 +1,10 @@
 
-var points = []
-var markers = []
 
+var points = []
+var checks = []
+
+
+var markers = []
 var current_marker = null;
 
 var maker_lat, marker_lon;
@@ -10,6 +13,70 @@ var map;
 var blank_name = "Punto sin nombre"
 
 var current_user
+
+
+
+
+
+/*
+ *
+ *       FUNCIONES PARA GESTION DEL SESION LOCAL
+ *
+ */
+
+function Session(){
+    
+    this.user
+    this.points=[]
+    this.checkins=[]
+
+    Session.prototype.init=function(){
+	var u
+	var pts
+	var chks
+
+	getUserById(0,function(user){
+	    u=user  
+	},false)
+	this.user=u
+
+	getPointByUser(this.user.Id,function(srvpts){
+	    pts=srvpts
+	},false)
+
+	getCheckinByUser(this.user.Id,function(srvchks){
+	    chks=srvchks
+	},false)
+
+	this.points=pts
+	this.checkins=chks
+    }
+
+    // Chequea si el usuario ha visisitado ese punto
+    Session.prototype.pointVisited=function(pid){
+	for (var i=0;i<this.checkins.length; i++){
+	    if (this.checkins[i].PointId == pid){
+		return true
+	    }
+	}
+	return false
+    }
+
+    Session.prototype.totalPoints=function(){
+	return this.points.length
+    }
+
+    Session.prototype.totalCheckins=function(){
+	return this.checkins.length
+    }
+
+    
+}
+
+
+
+
+
 
 
 
@@ -55,16 +122,24 @@ function initialize() {
 
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);   
 
+    // Dibujo marcadores en el mapa
 
-    // pido información del usuario de sesion
-    getUserById(0,function(user){
-	current_user=user
-	$("#username").html(user.Name)
-    },false)
+    for (var i=0;i<current_user.points.length;i++){
+	var m 
+	var p = current_user.points[i]
+	if (current_user.pointVisited(p.Id)){
+	    m = marker(new google.maps.LatLng(p.Lat,p.Lon),p.Name)
+	}else{
+	    m = marker(new google.maps.LatLng(p.Lat,p.Lon),p.Name,"FireBrick")
+	}
+	m.point=p
+	markers.push(m)
 
-
-    // pido los puntos del usuario de sesion
-    getPoint(current_user.Id,loadPoints,false)
+	// Asociamos a cada punto el evento de click
+	google.maps.event.addListener(m, 'click', function() {
+	    showInfo(this)
+	});
+    }
     
 
     // Evento de redimensionado
@@ -87,7 +162,7 @@ function initialize() {
 // Crea un marcador generico
 function marker(location,name,color){
     if (!color){
-	color = "FireBrick"
+	color = "green"
     }
 
     var m = new google.maps.Marker({
@@ -114,7 +189,7 @@ function set_current_marker(location) {
     if (current_marker) {
 	current_marker.setPosition(location);
     } else {
-	current_marker = marker(location,"","green")
+	current_marker = marker(location,"","orange")
 
 	google.maps.event.addListener(current_marker, 'click', function(){
 	    editInfo(null)
@@ -160,26 +235,6 @@ function delete_marker(id){
  */
 
 
-// Carga los puntos del servidor y dibuja marcadores en todos ellos
-function loadPoints(points){
-
-    if (!points){
-	points=[]
-    }
-
-    for (var i=0;i<points.length;i++){
-	var m = marker(new google.maps.LatLng(points[i].Lat,points[i].Lon),points[i].Name)
-	m.point=points[i]
-	markers.push(m)
-
-	// Asociamos a cada punto el evento de click
-	google.maps.event.addListener(m, 'click', function() {
-	    showInfo(this)
-	});
-    }
-
-    $("#total-user-points").html(points.length)
-}
 
 
 
@@ -310,7 +365,7 @@ function editInfo(marker){
 	// 
 	// ------------- Creando un nuevo punto  ------------- 
 	// 
-	$("#editpoint #name").val(blank_name)
+	$("#editpoint #name").val("")
 	$("#editpoint #lat").val(marker_lat)
 	$("#editpoint #lon").val(marker_lon)
 	$("#editpoint #desc").val("")
@@ -379,6 +434,17 @@ function newCheckin(marker){
 
     showPanel("#checkinpanel")
 }
+
+
+function showCheckins(checkins,divId){
+    for (var i=0;i<checkins.length;i++){
+	checks[checkins[i].Id]=checkins[i]
+	getPoint(checkins[i].PointId,function(point){
+	    $(divId).append("<tr><td>"+point.Name+"</td><td><a href=\"#\" id=\"deleteCheckin\"><span icon=\"&#xf1f8;\"></span></a></td></tr>")
+	},true)
+    }
+}
+
 
 
 
@@ -473,8 +539,17 @@ function showConfirmation(msg,callback){
 
 
 $(document).ready(function(){
-       
+    
+    current_user = new Session()
+    current_user.init()
+
     google.maps.event.addDomListener(window, 'load', initialize)
+
+
+    $("#total-user-checkins").html(current_user.totalCheckins())
+    $("#total-user-points").html(current_user.totalPoints())
+    showCheckins(current_user.checkins,"#checkinsTable")
+
 
     $("#userpanel").show()
 

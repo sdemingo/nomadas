@@ -5,9 +5,9 @@
  *
  */
 
-var DOMAIN = "http://civic-rhythm-92417.appspot.com"
+//var DOMAIN = "http://civic-rhythm-92417.appspot.com"
 //var DOMAIN = "http://192.168.1.11:8080"
-
+var DOMAIN = ""
 
 
 // Recibe el punto para ser enviado al servidor y el callback que será ejecutado 
@@ -57,22 +57,31 @@ function getPoint(id,callback,asy){
 	asy=true
     }
 
-    if (id<0){
-	url="/points/get"
-    }else{
-	url="/points/get?id="+id
-    }
-    
     $.ajax({
-	url: DOMAIN+'/points/get',
+	url: DOMAIN+"/points/get?id="+id,
 	type: 'get',
 	dataType: 'json',
 	async:asy,
-	success: function (data) { 
-	    callback(data)
-	}
+	success: callback
     });
 }
+
+
+function getPointByUser(uid,callback,asy){
+    if (asy==undefined){
+	asy=true
+    }
+
+    $.ajax({
+	url: DOMAIN+"/points/get?userId="+uid,
+	type: 'get',
+	dataType: 'json',
+	async:asy,
+	success: callback
+    });
+}
+
+
 
 
 function sendImage(form,callback){
@@ -242,6 +251,25 @@ function getCheckinByPoint(pid,callback,asy){
 
     $.ajax({
 	url: DOMAIN+'/checkins/get?pointId='+pid,
+	type: 'get',
+	dataType: 'json',
+	async:asy,
+	success: callback,
+	error: function(req,status,data){
+            console.log("get checkin error:"+req.responseText);
+        }
+    });
+}
+
+
+
+function getCheckinByUser(uid,callback,asy){
+    if (asy==undefined){
+	asy=true
+    }
+
+    $.ajax({
+	url: DOMAIN+'/checkins/get?userId='+uid,
 	type: 'get',
 	dataType: 'json',
 	async:asy,

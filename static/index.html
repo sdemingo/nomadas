@@ -17,7 +17,7 @@
 
     <script src="js/nomad-client.js"></script> 
     <script src="js/nomad.js"></script>
-    <!--  <script src="js/import-data.js"></script> -->
+    <script src="js/import-data.js"></script>
 
 
   </head>
@@ -62,6 +62,7 @@
 	  <input type="hidden" id="edit-key" name="edit-key" value="" />
 	  <input type="hidden" id="blobKey" name="blobKey" value="" />
 	  <div class="form-item">
+             Nombre del lugar:
 	    <input  type="text" id="name" name="name" />
 	  </div>
 	  <div class="form-item">
@@ -129,11 +130,14 @@
       <div id="userpanel"  class="pointpanel">
 	<h2 id="username"></h2>
 	<ul>
-	  <li>Puntos creados: <span id="total-user-points">0</span></li>
-	  <hr>
 	  <li><a href="#">Configuración</a></li>
 	  <li><a href="/users/logout">Cerrar Sesión</a></li>
+	  <hr>
+	  <li>Has creado  <span id="total-user-points">0</span> puntos</li>
+	  <li>Has visitado <span id="total-user-checkins">0</span> puntos</li>
 	</ul>
+	<table id="checkinsTable">
+	</table>
       </div>
 
     </div> <!-- userframe -->
