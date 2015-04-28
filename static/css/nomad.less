@@ -1,0 +1,252 @@
+
+@backgroundColor: white;
+
+@iconSize:1.2em;
+
+@fontFamily: 'Noto Sans', sans-serif;
+@fontColor: grey;
+@fontColorHeads: black;
+@fontSize: 0.9em;
+@fontSizeSmall: 0.8em;
+
+@userFrameWidth:300px;
+@userFrameWidthResponsive:200px;
+
+@errorColor:#F08080;
+
+
+html, body {
+    width: 100%; 
+    height: 100%; 
+    margin:0;
+    background-color:@backgroundColor;
+    overflow:hidden;
+    font-family:@fontFamily;
+    font-size:@fontSize;
+    color:@fontColor;
+    
+    a{
+	text-decoration:none;
+
+	&:visited{
+	    color:@fontColor;
+	}
+	&:active{
+	    color:@fontColor;
+	}
+	&:hover{
+	    color:@fontColor;
+	    font-weight:bold;
+	}
+    }
+}
+
+
+#map-canvas{
+    width:75%; 
+    min-width:400px;
+    height:100%;
+}
+
+
+#userframe{
+    position:absolute;
+    top:0;
+    right:0;
+
+    height:100%;
+    width:@userFrameWidth;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index:2;
+
+    padding:10px;
+    background-color:@backgroundColor;
+
+    .small{
+	font-size:@fontSizeSmall;
+    }
+
+    @media (max-width: 700px) { 
+	display:none;
+	width:@userFrameWidthResponsive;
+    }
+}
+
+
+
+
+#collapse-tab{
+    display:none;
+    position:absolute;
+    top:0;
+    right:0;
+    width:40px;
+    height:25px;
+    text-align:center;
+
+    background-color:@backgroundColor;
+    z-index:3;
+
+    .btn{
+	display:none;
+    }
+
+    @media (max-width: 700px) { 
+	display:block;
+	
+	.btn#down-arrow{
+	    display:block;
+	}
+    }
+}
+
+
+
+.pointpanel{
+    display:none;
+    position:absolute;
+    top:50px;
+    left:0; 
+    right:0;
+    width:90%;
+    margin:0 auto;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    h1,h2,h3{
+	color:@fontColorHeads;
+    }
+
+    ul{
+	padding:0;
+	margin:0;
+	list-style-type:none;
+    }
+
+    img{
+	display:block;
+	width:80%;
+	margin:0 auto;
+	@media (max-width: 700px) { 
+	    width:90%;
+	}
+    }
+}
+
+
+
+/*
+  Formularios
+  */
+input{
+    border:1px solid @fontColor;
+    margin-top:5px;
+    margin-bottom:5px;
+    padding-left:5px;
+    padding:0;
+
+
+    &#name{
+	width:99%;
+    }
+
+    &#lat , &#lon{
+	width:47%;
+    }
+
+    &#img{
+	width:99%;
+    }
+
+    &#nights{
+	padding-left:5px;
+	width:50px;
+    }
+}
+
+
+#imgPreview{
+    width:40%;
+    margin:0 auto;
+    background-color:silver;
+
+    img{
+	width:99%;
+	border:0px;
+    }
+
+}
+
+textarea{
+    width:100%;
+    height:150px;
+    box-sizing: border-box;         /* For IE and modern versions of Chrome */
+    -moz-box-sizing: border-box;    /* For Firefox                          */
+    -webkit-box-sizing: border-box; /* For Safari                           */
+    resize: none;
+    margin:0 auto;
+    padding:0;
+}
+
+
+select{
+    overflow: hidden;
+    background: url(new_arrow.png) no-repeat right #ddd;
+    border: 1px solid #ccc;
+    
+    &#year{
+	width:23%;
+    }
+    &#month{
+	width:47%;
+    }
+}
+
+
+.form-item label { 
+    width:23%;
+    display: inline-block;
+    margin-right:10px;
+    text-align: right; 
+}
+
+
+
+.btn{
+    border:0px solid @fontColor;
+    background:@backgroundColor;
+    padding:5px;
+
+    &:hover{
+	font-weight:normal;
+    }
+}
+
+
+
+[icon]:before {
+    font-family: 'FontAwesome';
+    font-size: @iconSize;
+    color: @fontColor;
+    margin-right: .5em;
+    content: attr(icon);
+    speak: none;
+}
+
+
+.icon-alone {
+    margin-top:15px;
+    margin-bottom:15px;
+    display: inline-block;
+    text-align:right;
+}
+
+
+
+.rounds(@rad){
+    border-radius: @rad @rad @rad @rad;
+    -moz-border-radius: @rad @rad @rad @rad;
+    -webkit-border-radius: @rad @rad @rad @rad;
+}
