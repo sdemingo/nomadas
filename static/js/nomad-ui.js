@@ -1,35 +1,28 @@
 
 
 
+var nomadMap
+var current_session 
+
 
 
 
 // Dado un punto añade un marcador al mapa y le asigna ese punto
 function addMarkerToMap(point){
-    var m = marker(new google.maps.LatLng(marker_lat,marker_lon), name)
-    google.maps.event.addListener(m, 'click', function() {
-	showInfo(this)
-    });
-    m.point = point
-    markers.push(m)
 
-    var t = $("#total-user-points").html()
-    t = parseInt(t)+1
-    $("#total-user-points").html(t)
+    current_session.addMarker(point)
+    $("#total-user-points").html(current_session.totalMarkers())
 }
 
 
 
 function deleteMarkerFromMap(){
+
     var point_id = $("#info-key").val()
     deletePoint(point_id,null,false)
 
-    nomadMap.deleteMarker(point_id)
-
-    var t = $("#total-user-points").html()
-    t = parseInt(t)-1
-    $("#total-user-points").html(t)
-    
+    current_session.deleteMarker(point_id)
+    $("#total-user-points").html(current_session.totalMarkers())
 }
 
 
@@ -48,9 +41,15 @@ function previewImage(blobKey){
 
 
 
+
+
 // muestra el formulario de edición del punto. Vacio o con los datos
 // del punto ya rellenados y listos para editar
-function showInfo(marker){
+function fillInfoPanel(marker){
+
+    if (!marker.point){
+	return
+    }
 
     var username
 
@@ -67,26 +66,26 @@ function showInfo(marker){
     }
     html+="<p>"+marker.point.Desc+"</p>"
 
-    $("#infopoint #info-key").val(marker.point.Id)
-    $("#infopoint .content").html(html)
+    $("#infopanel #info-key").val(marker.point.Id)
+    $("#infopanel .content").html(html)
 
-    showPanel("#infopoint")
+    showPanel("#infopanel")
 
     // Configuro botones de registro, actualizar borrar y cerrar
-    $("#infopoint #checkin").off('click').click(function(){
+    $("#infopanel #checkin").off('click').click(function(){
 	newCheckin(marker)  //muestro formulario de checkin
     })
 
-    $("#infopoint #update").off('click').click(function(){
-	editInfo(marker)  //muestro formulario de edición
+    $("#infopanel #update").off('click').click(function(){
+	fillEditPointPanel(marker)  //muestro formulario de edición
     })
 
-    $("#infopoint #delete").off('click').click(function(){
+    $("#infopanel #delete").off('click').click(function(){
 	showConfirmation("¿Realmente desea eliminar el punto?",deleteMarkerFromMap)
 	showPanel("#userpanel")
     })
 
-    $("#infopoint #close").off('click').click(function(){
+    $("#infopanel #close").off('click').click(function(){
 	showPanel("#userpanel",true)
     })
 }
@@ -95,25 +94,25 @@ function showInfo(marker){
 
 // Configura el formulario de edición, bien para craar un nuevo punto o bien para 
 // editar un punto ya existente
-function editInfo(marker){
+function fillEditPointPanel(marker){
 
     if (marker && marker.point){
 	// 
 	// ------------- Actualizando un punto existente  ------------- 
 	// 
-	$("#editpoint #name").val(marker.point.Name)
-	$("#editpoint #lat").val(marker.point.Lat)
-	$("#editpoint #lon").val(marker.point.Lon)
-	$("#editpoint #desc").val(marker.point.Desc)
-	$("#editpoint #edit-key").val(marker.point.Id)
-	$("#editpoint #blobKey").val(marker.point.ImageKey)
-	$("#editpoint #imgPreview").empty()
+	$("#editpanel #name").val(marker.point.Name)
+	$("#editpanel #lat").val(marker.point.Lat)
+	$("#editpanel #lon").val(marker.point.Lon)
+	$("#editpanel #desc").val(marker.point.Desc)
+	$("#editpanel #edit-key").val(marker.point.Id)
+	$("#editpanel #blobKey").val(marker.point.ImageKey)
+	$("#editpanel #imgPreview").empty()
 	if (marker.point.ImageKey!=""){
-	    $("#editpoint #imgPreview").append("<img src=\"http://localhost:8080/images/serve?blobKey="+marker.point.ImageKey+"\"  />")
+	    $("#editpanel #imgPreview").append("<img src=\"http://localhost:8080/images/serve?blobKey="+marker.point.ImageKey+"\"  />")
 	}
 
-	$("#editpoint #savePoint").off('click').click(function(){
-	    marker.point.UserId = current_user.Id
+	$("#editpanel #savePoint").off('click').click(function(){
+	    marker.point.UserId = current_session.user.Id
 	    marker.point.Name = $("#name").val()
 	    marker.point.Id = parseInt($("#edit-key").val())
 	    marker.point.Lat = $("#lat").val()
@@ -131,18 +130,18 @@ function editInfo(marker){
 	// 
 	// ------------- Creando un nuevo punto  ------------- 
 	// 
-	$("#editpoint #name").val("")
-	$("#editpoint #lat").val(marker_lat)
-	$("#editpoint #lon").val(marker_lon)
-	$("#editpoint #desc").val("")
-	$("#editpoint #img").val("")
-	$("#editpoint #imgPreview").empty()
+	$("#editpanel #name").val("")
+	$("#editpanel #lat").val(nomadMap.marker_lat)
+	$("#editpanel #lon").val(nomadMap.marker_lon)
+	$("#editpanel #desc").val("")
+	$("#editpanel #img").val("")
+	$("#editpanel #imgPreview").empty()
 
-	$("#editpoint #savePoint").off('click').click(function(){
+	$("#editpanel #savePoint").off('click').click(function(){
 	    // Creo el punto y relleno con el formulario
 	    var p = new Point()
 
-	    p.UserId = current_user.Id
+	    p.UserId = current_session.user.Id
 	    p.Name = $("#name").val()
 	    p.Lat = $("#lat").val()
 	    p.Lon = $("#lon").val()
@@ -155,12 +154,39 @@ function editInfo(marker){
     }
 
     //configuro botones de cancelar  en ambos casos
-    $("#editpoint #cancelPoint").off('click').click(function(){
+    $("#editpanel #cancelPoint").off('click').click(function(){
 	showPanel("#userpanel",true)
     })
     
-    showPanel("#editpoint")
+    showPanel("#editpanel")
 }
+
+
+function fillUserPanel(){
+    
+    $("#total-user-checkins").html(current_session.totalCheckins())
+    $("#total-user-points").html(current_session.totalMarkers())
+    $("#username").html(current_session.user.Name)
+
+    fillCheckins(current_session.checkins,"#checkinsTable")
+}
+
+
+
+
+function fillCheckins(checkins,divId){
+    if (!checkins){
+	return
+    }
+    for (var i=0;i<checkins.length;i++){
+	checks[checkins[i].Id]=checkins[i]
+	getPoint(checkins[i].PointId,function(point){
+	    $(divId).append("<tr><td>"+point.Name+"</td><td><a href=\"#\" id=\"deleteCheckin\"><span icon=\"&#xf1f8;\"></span></a></td></tr>")
+	},true)
+    }
+}
+
+
 
 
 
@@ -184,7 +210,7 @@ function newCheckin(marker){
 	// Creo el checkin y relleno con el formulario
 	var c = new Checkin()
 
-	c.UserId = current_user.Id
+	c.UserId = current_session.user.Id
 	c.PointId = marker.point.Id
 	c.Stamp = $("#month").val()+"/"+$("#year").val()
 	c.Nights = parseInt($("#nights").val())
@@ -203,18 +229,10 @@ function newCheckin(marker){
 
 
 
-function showCheckins(checkins,divId){
-    if (!checkins){
-	return
-    }
-    for (var i=0;i<checkins.length;i++){
-	checks[checkins[i].Id]=checkins[i]
-	getPoint(checkins[i].PointId,function(point){
-	    $(divId).append("<tr><td>"+point.Name+"</td><td><a href=\"#\" id=\"deleteCheckin\"><span icon=\"&#xf1f8;\"></span></a></td></tr>")
-	},true)
-    }
 
-}
+
+
+
 
 
 
@@ -225,8 +243,8 @@ function showPanel(panel,cancelOp){
 	cancelOp=false
     }
 
-    $("#infopoint").hide()
-    $("#editpoint").hide()
+    $("#infopanel").hide()
+    $("#editpanel").hide()
     $("#checkinpanel").hide()
     $("#userpanel").hide()
 
@@ -302,27 +320,35 @@ function showConfirmation(msg,callback){
 
 
 
-/*
- * 
- *       PRINCIPAL
- *
- */
 
-var nomadMap
-var current_user
+
+
+
 
 
 function init(){
     nomadMap = new NomadMap()
+
+    nomadMap.onMapClickHandler=function(event){
+	nomadMap.setCurrentMarker(event.latLng)
+	showPanel("#userpanel")
+    }
+
+    nomadMap.onMarkerClickHandler=function(){
+	if (this.point){    // this is the marker
+	    fillInfoPanel(this)
+	}else{              // marker without point. It's the current marker
+	    fillEditPointPanel(null) 
+	}
+    }
+
     nomadMap.init()
 
-    current_user = new Session(nomadMap)
-    current_user.init()
 
+    current_session = new Session(nomadMap)
+    current_session.init()
 
-    $("#total-user-checkins").html(current_user.totalCheckins())
-    $("#total-user-points").html(current_user.totalPoints())
-    showCheckins(current_user.checkins,"#checkinsTable")
+    fillUserPanel()
 }
 
 
@@ -330,7 +356,7 @@ $(document).ready(function(){
     
     google.maps.event.addDomListener(window, 'load', init)
 
-
+ 
     $("#userpanel").show()
 
     $("#img").on("change",function() {
@@ -339,7 +365,6 @@ $(document).ready(function(){
     });
 
 
-    // Controlo el menu desplegable 
     $("#collapse-tab #up-arrow").click(function(){
 	$("#userframe").hide();
 	$("#collapse-tab #up-arrow").hide();
@@ -350,7 +375,6 @@ $(document).ready(function(){
 	$("#collapse-tab #down-arrow").hide();
 	$("#collapse-tab #up-arrow").show();
     })
-    
 });
 
 

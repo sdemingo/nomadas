@@ -111,10 +111,6 @@ Session.prototype.addMarker=function(point,visited){
     }
     m.point=point
     this.markers.push(m)
-
-    google.maps.event.addListener(m, 'click', function() {
-	showInfo(this)
-    });
 }
 
 
@@ -122,7 +118,8 @@ Session.prototype.deleteMarker=function(id){
     for (var i=0;i<this.markers.length;i++){
 	if ((this.markers[i]) && (this.markers[i].point.Id == id)){
 	    this.markers[i].setMap(null)
-	    this.markers[i] = null
+	    this.markers.splice(i, 1);
+	    i--;
 	}
     }
 }
@@ -162,12 +159,12 @@ NomadMap.prototype.init=function(){
 	google.maps.event.trigger(this.map, "resize");
 	self.map.setCenter(center);
     });
-}
 
 
-NomadMap.prototype.addListener=function(eventName,callback){
-    google.maps.event.addListener(this.map, eventName, callback)
+    google.maps.event.addListener(this.map,"click",this.onMapClickHandler)
+
 }
+
 
 
 NomadMap.prototype.newMarker=function(location,name,color){
@@ -186,6 +183,9 @@ NomadMap.prototype.newMarker=function(location,name,color){
 	},
 	title:name
     })
+
+    google.maps.event.addListener(m,"click",this.onMarkerClickHandler)
+
     return m
 }
 
@@ -198,11 +198,6 @@ NomadMap.prototype.setCurrentMarker=function(location){
 	this.current_marker.setPosition(location);
     } else {
 	this.current_marker = this.newMarker(location,"",MARKERCOLOR_CURRENT)
-
-	google.maps.event.addListener(this.current_marker, "click", function(){
-	    editInfo(null)
-	    set_current_marker(this.getPosition());
-	});
     }
 }
 
