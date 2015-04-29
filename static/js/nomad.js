@@ -4,7 +4,7 @@
 function Point(){
     this.Id=0
     this.UserId=0
-    this.Name=blank_name
+    this.Name=""
     this.Lat=0
     this.Lon=0
     this.ImageKey=""
@@ -25,10 +25,21 @@ function Checkin(){
 
 
 
+
+
+
+
+
+
+var MARKERCOLOR = "FireBrick"
+var MARKERCOLOR_VISITED = "green"
+var MARKERCOLOR_CURRENT = "orange"
+
+
 function Session(map){
     
     this.user
-    this.points=[]
+    this.markers=[]
     this.checkins=[]
     this.nomadMap=map
 }
@@ -52,19 +63,17 @@ Session.prototype.init=function(){
 	getCheckinByUser(this.user.Id,function(srvchks){
 	    chks=srvchks
 	},false)
-
-	//this.points=pts
 	this.checkins=chks
 
-	// Dibujo los puntos en markers del mapa
-	for (var i=0;i<pts.length;i++){
-	    this.nomadMap.addMarker(pts[i],this.pointVisited(pts[i].Id))
+	if (pts){
+	    for (var i=0;i<pts.length;i++){
+		this.addMarker(pts[i],this.pointVisited(pts[i].Id))
+	    }
 	}
     }
 }
 
 
-// Chequea si el usuario ha visisitado ese punto
 Session.prototype.pointVisited=function(pid){
     if (this.checkins){
 	for (var i=0;i<this.checkins.length; i++){
@@ -76,9 +85,9 @@ Session.prototype.pointVisited=function(pid){
     return false
 }
 
-Session.prototype.totalPoints=function(){
-    if (this.points){
-	return this.points.length
+Session.prototype.totalMarkers=function(){
+    if (this.markers){
+	return this.markers.length
     }else{
 	return 0
     }
@@ -91,6 +100,35 @@ Session.prototype.totalCheckins=function(){
 	return 0
     }
 }
+
+
+Session.prototype.addMarker=function(point,visited){
+
+    if (visited){
+	m = this.nomadMap.newMarker(new google.maps.LatLng(point.Lat,point.Lon),point.Name)
+    }else{
+	m = this.nomadMap.newMarker(new google.maps.LatLng(point.Lat,point.Lon),point.Name, MARKERCOLOR)
+    }
+    m.point=point
+    this.markers.push(m)
+
+    google.maps.event.addListener(m, 'click', function() {
+	showInfo(this)
+    });
+}
+
+
+Session.prototype.deleteMarker=function(id){
+    for (var i=0;i<this.markers.length;i++){
+	if ((this.markers[i]) && (this.markers[i].point.Id == id)){
+	    this.markers[i].setMap(null)
+	    this.markers[i] = null
+	}
+    }
+}
+
+
+
 
 
 
@@ -118,26 +156,23 @@ NomadMap.prototype.init=function(){
 
     this.map = new google.maps.Map(document.getElementById("map-canvas"), this.mapOptions);   
 
-    // Evento de redimensionado
+
     google.maps.event.addDomListener(window, "resize", function() {
 	var center = self.map.getCenter();
 	google.maps.event.trigger(this.map, "resize");
 	self.map.setCenter(center);
     });
-
-    // Evento de posicionamiento del current marker
-    google.maps.event.addListener(this.map, "click", function(event) {
-	//set_current_marker(event.latLng);
-	self.setCurrentMarker(event.latLng)
-	showPanel("#userpanel")
-    });
 }
 
+
+NomadMap.prototype.addListener=function(eventName,callback){
+    google.maps.event.addListener(this.map, eventName, callback)
+}
 
 
 NomadMap.prototype.newMarker=function(location,name,color){
     if (!color){
-	color = "green"
+	color = MARKERCOLOR_VISITED
     }
 
     var m = new google.maps.Marker({
@@ -162,7 +197,7 @@ NomadMap.prototype.setCurrentMarker=function(location){
     if (this.current_marker) {
 	this.current_marker.setPosition(location);
     } else {
-	this.current_marker = this.newMarker(location,"","orange")
+	this.current_marker = this.newMarker(location,"",MARKERCOLOR_CURRENT)
 
 	google.maps.event.addListener(this.current_marker, "click", function(){
 	    editInfo(null)
@@ -171,33 +206,6 @@ NomadMap.prototype.setCurrentMarker=function(location){
     }
 }
 
-
-
-NomadMap.prototype.addMarker=function(point,visited){
-
-    if (visited){
-	m = this.newMarker(new google.maps.LatLng(point.Lat,point.Lon),point.Name)
-    }else{
-	m = this.newMarker(new google.maps.LatLng(point.Lat,point.Lon),point.Name,"FireBrick")
-    }
-    m.point=point
-    this.markers.push(m)
-
-    // Asociamos a cada punto el evento de click (meter el callback por parametro)
-    google.maps.event.addListener(m, 'click', function() {
-	showInfo(this)
-    });
-}
-
-
-NomadMap.prototype.deleteMarker=function(id){
-    for (var i=0;i<this.markers.length;i++){
-	if ((this.markers[i]) && (this.markers[i].point.Id == id)){
-	    this.markers[i].setMap(null)
-	    this.markers[i] = null
-	}
-    }
-}
 
 
 
