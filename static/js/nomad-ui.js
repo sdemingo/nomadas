@@ -39,7 +39,7 @@ function addCheckinToMap(checkin,point){
 
 
 function deleteCheckinFromMap(){
-
+    // TODO
 }
 
 
@@ -395,7 +395,7 @@ function initSessionMap(){
 
     nomadMap.onMapClickHandler=function(event){
 	nomadMap.setCurrentMarker(event.latLng)
-	showPanel("#userpanel")
+	//showPanel("#userpanel")
     }
 
     nomadMap.onMarkerClickHandler=function(){
