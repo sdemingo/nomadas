@@ -111,6 +111,19 @@ table {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+table .btn {
+  padding: 0;
+}
+table td {
+  border: 0;
+}
+table a:hover {
+  font-weight: normal;
+}
+table tr.colored,
+table tr.colored span {
+  background-color: #e6e6e6;
+}
 /*
   Formularios
   */

@@ -85,10 +85,13 @@ func getCheckin(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		q := datastore.NewQuery("checkins").Filter("UserId =",uid)
+		q := datastore.NewQuery("checkins").Filter("UserId =",uid).Order("-DBStamp")
 		keys,_:= q.GetAll(c, &checkins)
+
+		// Relleno claves y fechas en formato TimeStamp para aplanarlas
 		for i, key := range keys {
 			checkins[i].Id = key.IntID()
+			checkins[i].Stamp = TimeStamp(checkins[i].DBStamp)
 		}
 	}
 
@@ -104,6 +107,7 @@ func getCheckin(w http.ResponseWriter, r *http.Request) {
 		keys,_:= q.GetAll(c, &checkins)
 		for i, key := range keys {
 			checkins[i].Id = key.IntID()
+			checkins[i].Stamp = TimeStamp(checkins[i].DBStamp)
 		}
 
 	}

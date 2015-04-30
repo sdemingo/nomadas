@@ -25,6 +25,27 @@ function deleteMarkerFromMap(){
 }
 
 
+function addCheckinToMap(checkin,point){
+    addCheckin(checkin,function(){
+	// Cambio el marker por uno visitado
+	current_session.deleteMarker(point.Id)
+	current_session.addMarker(point,MARKERCOLOR_VISITED)
+	setTimeout(function(){
+	    current_session.addCheckin(checkin)
+	    fillUserPanel()
+	},1000)
+    },false)
+}
+
+
+function deleteCheckinFromMap(){
+
+}
+
+
+
+
+
 // Recarga el cuadro de previsualización de la imagen en el formulario de edición
 function previewImage(blobKey){
     $("#imgPreview").empty()
@@ -166,11 +187,9 @@ function fillEditPointPanel(marker){
 
 
 function fillUserPanel(){
-    
     $("#total-user-checkins").html(current_session.totalCheckins())
     $("#total-user-points").html(current_session.totalMarkers())
     $("#username").html(current_session.user.Name)
-
     fillCheckinsTable("#checkinsTable")
 }
 
@@ -182,18 +201,40 @@ function fillCheckinsTable(divId){
     if (!checkins){
 	return
     }
+
+    $(divId).empty()
+
     for (var i=0;i<checkins.length;i++){
 	var m = current_session.getMarker(checkins[i].PointId)
 	if (m && m.point){
 	    var row = "<tr> \
-		<td>"+m.point.Name+"</td>  \
-		<td>"+checkins[i].Stamp+"</td>  \
-		<td><a href=\"#\" id=\"deleteCheckin\"><span icon=\"&#xf1f8;\"></span></a></td> \
-		</tr>"
-
+<td><a href=\"#\" class=\"showPoint\" id=\"showPoint-"+m.point.Id+"\">"+m.point.Name+"</a></td>  \
+<td>"+checkins[i].Stamp+"</td>  \
+<td><a href=\"#\" class=\"btn delPoint\" id=\"delPoint-"+m.point.Id+"\"><span icon=\"&#xf00d;\"></span></a></td> \
+</tr>"
 	    $(divId).append(row)
+	    
 	}
     }
+
+    $(divId+" tr:even").addClass("colored")
+
+    $(divId+" .showPoint").click(function(){
+	var id=$(this).attr("id")
+	var f=id.split("-")
+	if (f[1]){
+	    var m = current_session.getMarker(f[1])
+	    fillInfoPanel(m)
+	}
+    })
+
+    $(divId+" .delPoint").click(function(){
+	var id=$(this).attr("id")
+	var f=id.split("-")
+	if (f[1]){
+	    var m = current_session.deleteMarker(f[1])
+	}
+    })
 }
 
 
@@ -224,14 +265,8 @@ function fillCheckin(marker){
 	    Nights : parseInt($("#nights").val()),
 	    Text : $("#comment").val()
 	}
-	
-	addCheckin(c,null,false)
+	addCheckinToMap(c,marker.point)
 	showPanel("#userpanel")
-
-	// Cambio el marker por uno visitado
-	var p = marker.point
-	current_session.deleteMarker(marker.point.Id)
-	current_session.addMarker(p,MARKERCOLOR_VISITED)
     })
 
     $("#checkinpanel #cancelCheckin").off('click').click(function(){
@@ -387,7 +422,7 @@ function initSessionMap(){
 
 
 $(document).ready(function(){
- 
+    
     google.maps.event.addDomListener(window, "load", initSessionMap)
     initCollapseArrow()
     $("#userpanel").show()
