@@ -1,33 +1,6 @@
 
 
 
-function Point(){
-    this.Id=0
-    this.UserId=0
-    this.Name=""
-    this.Lat=0
-    this.Lon=0
-    this.ImageKey=""
-    this.Desc=""
-}
-
-
-
-function Checkin(){
-    this.Id=0
-    this.UserId=0
-    this.PointId=0
-    this.Stamp=""
-    this.Nights=0
-    this.Text=""
-}
-
-
-
-
-
-
-
 
 
 

@@ -139,14 +139,14 @@ function fillEditPointPanel(marker){
 
 	$("#editpanel #savePoint").off('click').click(function(){
 	    // Creo el punto y relleno con el formulario
-	    var p = new Point()
-
-	    p.UserId = current_session.user.Id
-	    p.Name = $("#name").val()
-	    p.Lat = $("#lat").val()
-	    p.Lon = $("#lon").val()
-	    p.Desc = $("desc").val()
-	    p.ImageKey = $("#blobKey").val()
+	    var p = {
+		UserId : current_session.user.Id,
+		Name : $("#name").val(),
+		Lat :  $("#lat").val(),
+		Lon :  $("#lon").val(),
+		Desc : $("desc").val(),
+		ImageKey : $("#blobKey").val()
+	    }
 	    
 	    sendPoint(p,addMarkerToMap,false)
 	    showPanel("#userpanel")
@@ -208,13 +208,14 @@ function newCheckin(marker){
 
     $("#checkinpanel #saveCheckin").off('click').click(function(){
 	// Creo el checkin y relleno con el formulario
-	var c = new Checkin()
 
-	c.UserId = current_session.user.Id
-	c.PointId = marker.point.Id
-	c.Stamp = $("#month").val()+"/"+$("#year").val()
-	c.Nights = parseInt($("#nights").val())
-	c.Text = $("#comment").val()
+	var c ={
+	    UserId : current_session.user.Id,
+	    PointId : marker.point.Id,
+	    Stamp : $("#month").val()+"/"+$("#year").val(),
+	    Nights : parseInt($("#nights").val()),
+	    Text : $("#comment").val()
+	}
 	
 	addCheckin(c,null,false)
 	showPanel("#userpanel")
