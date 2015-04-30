@@ -58,6 +58,21 @@ Session.prototype.pointVisited=function(pid){
     return false
 }
 
+
+Session.prototype.getMarker=function(pid){
+    if (!this.markers){
+	return
+    }
+
+    for (var i=0; i<this.markers.length; i++){
+	if ((this.markers[i]) && (this.markers[i].point.Id == pid)){
+	    return this.markers[i]
+	}
+    }
+}
+
+
+
 Session.prototype.totalMarkers=function(){
     if (this.markers){
 	return this.markers.length
@@ -88,6 +103,9 @@ Session.prototype.addMarker=function(point,visited){
 
 
 Session.prototype.deleteMarker=function(id){
+    if (!this.markers){
+	return
+    }
     for (var i=0;i<this.markers.length;i++){
 	if ((this.markers[i]) && (this.markers[i].point.Id == id)){
 	    this.markers[i].setMap(null)
@@ -105,7 +123,6 @@ Session.prototype.deleteMarker=function(id){
 
 
 function NomadMap(){
-    this.markers=[]
     this.current_marker = null;
     this.maker_lat=0 
     this.marker_lon=0
@@ -158,6 +175,7 @@ NomadMap.prototype.newMarker=function(location,name,color){
     })
 
     google.maps.event.addListener(m,"click",this.onMarkerClickHandler)
+    google.maps.event.addListener(m,"dblclick",this.onMarkerDblClickHandler)
 
     return m
 }

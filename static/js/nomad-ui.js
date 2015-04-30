@@ -171,21 +171,28 @@ function fillUserPanel(){
     $("#total-user-points").html(current_session.totalMarkers())
     $("#username").html(current_session.user.Name)
 
-    fillCheckinsTable(current_session.checkins,"#checkinsTable")
+    fillCheckinsTable("#checkinsTable")
 }
 
 
 
 
-function fillCheckinsTable(checkins,divId){
+function fillCheckinsTable(divId){
+    var checkins = current_session.checkins
     if (!checkins){
 	return
     }
     for (var i=0;i<checkins.length;i++){
-	checks[checkins[i].Id]=checkins[i]
-	getPoint(checkins[i].PointId,function(point){
-	    $(divId).append("<tr><td>"+point.Name+"</td><td><a href=\"#\" id=\"deleteCheckin\"><span icon=\"&#xf1f8;\"></span></a></td></tr>")
-	},true)
+	var m = current_session.getMarker(checkins[i].PointId)
+	if (m && m.point){
+	    var row = "<tr> \
+		<td>"+m.point.Name+"</td>  \
+		<td>"+checkins[i].Stamp+"</td>  \
+		<td><a href=\"#\" id=\"deleteCheckin\"><span icon=\"&#xf1f8;\"></span></a></td> \
+		</tr>"
+
+	    $(divId).append(row)
+	}
     }
 }
 
@@ -220,6 +227,11 @@ function fillCheckin(marker){
 	
 	addCheckin(c,null,false)
 	showPanel("#userpanel")
+
+	// Cambio el marker por uno visitado
+	var p = marker.point
+	current_session.deleteMarker(marker.point.Id)
+	current_session.addMarker(p,MARKERCOLOR_VISITED)
     })
 
     $("#checkinpanel #cancelCheckin").off('click').click(function(){
@@ -352,10 +364,14 @@ function initSessionMap(){
     }
 
     nomadMap.onMarkerClickHandler=function(){
-	if (this.point){    // this is the marker
+	if (this.point){    // marker with point its a normal marker
 	    fillInfoPanel(this)
-	}else{              // marker without point. It's the current marker
-	    fillEditPointPanel(null) 
+	}
+    }
+
+    nomadMap.onMarkerDblClickHandler=function(){
+	if (!this.point){    // marker without point. It's the current marker
+	    fillEditPointPanel(null)  
 	}
     }
 

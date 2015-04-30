@@ -105,6 +105,12 @@ body a:hover {
     width: 90%;
   }
 }
+table {
+  border: 1px solid #808080;
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 /*
   Formularios
   */
@@ -143,13 +149,10 @@ textarea {
   height: 150px;
   box-sizing: border-box;
   /* For IE and modern versions of Chrome */
-
   -moz-box-sizing: border-box;
   /* For Firefox                          */
-
   -webkit-box-sizing: border-box;
   /* For Safari                           */
-
   resize: none;
   margin: 0 auto;
   padding: 0;
