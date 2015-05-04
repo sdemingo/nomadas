@@ -159,7 +159,7 @@ NomadMap.prototype.init=function(){
     this.mapOptions = {
 	zoom: 5,
 	disableDefaultUI: true,
-	zoomControl: true,
+	zoomControl: false,
 	mapTypeControl: true,
 	mapTypeControlOptions: {
             style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,

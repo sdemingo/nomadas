@@ -50,7 +50,7 @@ function deleteCheckinFromMap(){
 function previewImage(blobKey){
     $("#imgPreview").empty()
     if (blobKey!=""){
-	$("#imgPreview").append("<img src=\"http://localhost:8080/images/serve?blobKey="+blobKey+"\"  />")
+	$("#imgPreview").append("<img src=\""+DOMAIN+"/images/serve?blobKey="+blobKey+"\"  />")
     }
     var oldBlobKey = $("#blobKey").val()
     $("#blobKey").val(blobKey)
@@ -80,7 +80,7 @@ function fillInfoPanel(marker){
     html+="<p><span> Coord: "+marker.point.Lat+", "+marker.point.Lon+"</span></p>"
     html+="<p><span> Por "+username+"</span></p>"
     if (marker.point.ImageKey!=""){
-	html+="<img src=\"http://localhost:8080/images/serve?blobKey="+marker.point.ImageKey+"\" />"
+	html+="<img src=\""+DOMAIN+"/images/serve?blobKey="+marker.point.ImageKey+"\" />"
     }
     html+="<p>"+marker.point.Desc+"</p>"
 
@@ -126,7 +126,7 @@ function fillEditPointPanel(marker){
 	$("#editpanel #blobKey").val(marker.point.ImageKey)
 	$("#editpanel #imgPreview").empty()
 	if (marker.point.ImageKey!=""){
-	    $("#editpanel #imgPreview").append("<img src=\"http://localhost:8080/images/serve?blobKey="+marker.point.ImageKey+"\"  />")
+	    $("#editpanel #imgPreview").append("<img src=\""+DOMAIN+"/images/serve?blobKey="+marker.point.ImageKey+"\"  />")
 	}
 
 	$("#editpanel #savePoint").off("click").click(function(){
