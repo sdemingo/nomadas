@@ -9,7 +9,7 @@ var current_session
 
 // Dado un punto añade un marcador al mapa y le asigna ese punto
 function addMarkerToMap(point){
-    sendPoint(p,function(){
+    sendPoint(point,function(){
 	current_session.addMarker(point)
 	$("#total-user-points").html(current_session.totalMarkers())
     },false)
