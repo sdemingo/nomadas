@@ -120,14 +120,14 @@ Session.prototype.addCheckin=function(c){
     // Los repido de nuevo y asi los obtengo ordenados
     var chks
     getCheckinByUser(this.user.Id,function(srvchks){
-	    chks=srvchks
-	},false)
+	chks=srvchks
+    },false)
     this.checkins=chks
 }
 
 
 Session.prototype.deleteCheckin=function(id){
-if (!this.checkins){
+    if (!this.checkins){
 	return
     }
     for (var i=0;i<this.checkins.length;i++){
@@ -149,7 +149,7 @@ function NomadMap(){
     this.marker_lon=0
     this.map
 
-    this.initLoc = new google.maps.LatLng(15.4279613,20.2967822);
+    this.initLoc = new google.maps.LatLng(40.4279613,0.2967822);
 }
 
 
@@ -159,6 +159,13 @@ NomadMap.prototype.init=function(){
     this.mapOptions = {
 	zoom: 5,
 	disableDefaultUI: true,
+	zoomControl: true,
+	mapTypeControl: true,
+	mapTypeControlOptions: {
+            style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+            position: google.maps.ControlPosition.TOP_LEFT
+	},
+
 	center: this.initLoc
     }
 
