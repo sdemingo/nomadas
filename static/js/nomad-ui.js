@@ -174,13 +174,14 @@ function fillEditPointPanel(marker){
     //configuro botones de cancelar  en ambos casos
     $("#editpanel #cancelPoint").off("click").click(function(){
 	showPanel("#userpanel",true)
+	deleteImage($("#blobKey").val())
     })
 
     // configuro en upload de la imagen
     $("#editpanel #img").off("change").on("change",function() {
 	var formData = document.getElementById("editform")
 	sendImage(formData,previewImage)
-    });
+    })
     
     showPanel("#editpanel")
 }

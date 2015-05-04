@@ -6,8 +6,8 @@
  */
 
 //var DOMAIN = "http://civic-rhythm-92417.appspot.com"
-var DOMAIN = "http://192.168.1.11:8080"
-//var DOMAIN = ""
+//var DOMAIN = "http://192.168.1.11:8080"
+var DOMAIN = ""
 
 
 // Recibe el punto para ser enviado al servidor y el callback que será ejecutado 
@@ -123,16 +123,15 @@ function sendImage(form,callback){
 
 
 function deleteImage(key,callback){
+    if (!key || key==""){
+	return
+    }
     $.ajax({
 	type:"GET",
 	url:DOMAIN+"/images/delete?blobKey="+key,
-	success:function(data){
-	    if (callback){
-		callback(data)
-	    }
-	},
-	error: function(data){
-            console.log("delete image error:"+data);
+	success:callback,
+	error: function(req,status,data){
+            console.log("delete image error:"+req.responseText);
         }
     })
 }
