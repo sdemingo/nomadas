@@ -12,6 +12,7 @@ body {
 html a,
 body a {
   text-decoration: none;
+  color: #808080;
 }
 html a:visited,
 body a:visited {
@@ -162,10 +163,13 @@ textarea {
   height: 150px;
   box-sizing: border-box;
   /* For IE and modern versions of Chrome */
+
   -moz-box-sizing: border-box;
   /* For Firefox                          */
+
   -webkit-box-sizing: border-box;
   /* For Safari                           */
+
   resize: none;
   margin: 0 auto;
   padding: 0;
