@@ -93,9 +93,9 @@ Session.prototype.totalCheckins=function(){
 Session.prototype.addMarker=function(point,visited){
 
     if (visited){
-	m = this.nomadMap.newMarker(new google.maps.LatLng(point.Lat,point.Lon),point.Name)
+	m = this.nomadMap.newMarker(point.Lat,point.Lon,point.Name)
     }else{
-	m = this.nomadMap.newMarker(new google.maps.LatLng(point.Lat,point.Lon),point.Name, MARKERCOLOR)
+	m = this.nomadMap.newMarker(point.Lat,point.Lon,point.Name, MARKERCOLOR)
     }
     m.point=point
     this.markers.push(m)
@@ -185,13 +185,15 @@ NomadMap.prototype.init=function(){
 
 
 
-NomadMap.prototype.newMarker=function(location,name,color){
+NomadMap.prototype.newMarker=function(lat,lon,name,color){
+
+    
     if (!color){
 	color = MARKERCOLOR_VISITED
     }
 
     var m = new google.maps.Marker({
-	position:location,
+	position:new google.maps.LatLng(lat,lon),
 	map:this.map,
 	icon: {
 	    path: google.maps.SymbolPath.CIRCLE,
