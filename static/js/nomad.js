@@ -116,29 +116,21 @@ Session.prototype.deleteMarker=function(id){
 }
 
 
-Session.prototype.addCheckin=function(c){
+Session.prototype.reloadCheckins=function(callback){
     // Los repido de nuevo y asi los obtengo ordenados
     var chks
     getCheckinByUser(this.user.Id,function(srvchks){
 	chks=srvchks
     },false)
-    this.checkins=chks
-}
-
-
-Session.prototype.deleteCheckin=function(id){
-    if (!this.checkins){
-	return
+    if (!chks){
+	this.checkins=[]
+    }else{
+	this.checkins=chks
     }
-    for (var i=0;i<this.checkins.length;i++){
-	if ((this.checkins[i]) && (this.checkins[i].Id == id)){
-	    this.checkins.splice(i, 1);
-	    i--;
-	}
+    if (callback){
+	callback()
     }
 }
-
-
 
 
 

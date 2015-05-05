@@ -75,6 +75,27 @@ func getCheckin(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
 
+
+	if r.Form["id"]!=nil{
+		id,err:=strconv.ParseInt(r.Form["id"][0],10,64)
+		if err!=nil{
+			app.ServeError(c,w,errors.New("Checkin not found. Bad ID"))	
+			return
+		}
+
+		var ck Checkin
+		// Busco un checkin concreto
+		k := datastore.NewKey(c, "checkins", "", id, nil)
+		datastore.Get(c, k, &ck)
+
+		msg,_:=json.Marshal(ck)
+		fmt.Fprintf(w, "%s", msg)
+
+		return
+	}
+
+
+
 	var checkins []Checkin
 
 	if r.Form["userId"]!=nil{
@@ -109,11 +130,6 @@ func getCheckin(w http.ResponseWriter, r *http.Request) {
 			checkins[i].Id = key.IntID()
 			checkins[i].Stamp = TimeStamp(checkins[i].DBStamp)
 		}
-
-	}
-
-	if r.Form["id"]!=nil{
-		// Busco un checkin concreto
 
 	}
 

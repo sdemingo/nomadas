@@ -243,6 +243,24 @@ function deleteCheckin(id,callback,asy){
 }
 
 
+function getCheckin(id,callback,asy){
+    if (asy==undefined){
+	asy=true
+    }
+
+    $.ajax({
+	url: DOMAIN+'/checkins/get?id='+id,
+	type: 'get',
+	dataType: 'json',
+	async:asy,
+	success: callback,
+	error: function(req,status,data){
+            console.log("get checkin error:"+req.responseText);
+        }
+    });
+}
+
+
 function getCheckinByPoint(pid,callback,asy){
     if (asy==undefined){
 	asy=true

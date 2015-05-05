@@ -29,17 +29,42 @@ function addCheckinToMap(checkin,point){
     addCheckin(checkin,function(){
 	// Cambio el marker por uno visitado
 	current_session.deleteMarker(point.Id)
-	current_session.addMarker(point,MARKERCOLOR_VISITED)
+	current_session.addMarker(point,true)
 	setTimeout(function(){
-	    current_session.addCheckin(checkin)
-	    fillUserPanel()
-	},1000)
+	    current_session.reloadCheckins(fillUserPanel)
+	},1500)
     },false)
 }
 
 
-function deleteCheckinFromMap(){
-    // TODO
+
+function deleteCheckinFromMap(ckid,pid){
+
+    var marker = current_session.getMarker(pid)
+    var point = marker.point
+    var ncheckins
+
+    // Chequeo cuantos checkins tiene el punto
+    getCheckinByPoint(pid,function(data){
+	if (data){
+	    ncheckins=data.length
+	}else{
+	    ncheckins=0
+	}
+	console.log(ncheckins)
+    },false)
+
+    deleteCheckin(ckid,function(){
+	setTimeout(function(){
+	    console.log("Recargo panel")
+	    current_session.reloadCheckins(fillUserPanel)
+	},1500)
+	if (ncheckins <= 1){
+	    // Cambio el marker por uno no visitado
+	    current_session.deleteMarker(point.Id)
+	    current_session.addMarker(point,false)
+	}
+    },false)
 }
 
 
@@ -211,7 +236,7 @@ function fillCheckinsTable(divId){
 	    var row = "<tr> \
 <td><a href=\"#\" class=\"showPoint\" id=\"showPoint-"+m.point.Id+"\">"+m.point.Name+"</a></td>  \
 <td>"+checkins[i].Stamp+"</td>  \
-<td><a href=\"#\" class=\"btn delPoint\" id=\"delPoint-"+m.point.Id+"\"><span icon=\"&#xf00d;\"></span></a></td> \
+<td><a href=\"#\" class=\"btn delCheckin\" id=\"delCheckin-"+checkins[i].Id+"-"+m.point.Id+"\"><span icon=\"&#xf00d;\"></span></a></td> \
 </tr>"
 	    $(divId).append(row)
 	    
@@ -229,11 +254,11 @@ function fillCheckinsTable(divId){
 	}
     })
 
-    $(divId+" .delPoint").click(function(){
+    $(divId+" .delCheckin").click(function(){
 	var id=$(this).attr("id")
 	var f=id.split("-")
-	if (f[1]){
-	    var m = current_session.deleteMarker(f[1])
+	if (f[1] && f[2]){
+	    deleteCheckinFromMap(f[1],f[2])
 	}
     })
 }
@@ -256,7 +281,7 @@ function fillCheckin(marker){
 	$('#month').append($('<option />').val(i+1).html(months[i]));
     }
 
-    $("#checkinpanel #nights").val(0)
+    $("#checkinpanel #nights").val(1)
     $("#checkinpanel #saveCheckin").off('click').click(function(){
 	// Creo el checkin y relleno con el formulario
 	var c ={
