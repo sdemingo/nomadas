@@ -163,8 +163,12 @@ function fillEditPointPanel(marker){
 	    marker.point.Desc = $("#desc").val()
 	    marker.point.ImageKey = $("#blobKey").val()
 
-	    sendPoint(marker.point,null,false)
-	    showPanel("#userpanel")
+	    if (current_session.markerOk(marker.point)){
+		sendPoint(marker.point,null,false)
+		showPanel("#userpanel")
+	    }else{
+		showError("Algunos campos no se rellenaron correctamente")
+	    }
 	})
 
     }else{
@@ -188,10 +192,14 @@ function fillEditPointPanel(marker){
 		Desc : $("desc").val(),
 		ImageKey : $("#blobKey").val()
 	    }
-	    
-	    //sendPoint(p,addMarkerToMap,false)
-	    addMarkerToMap(p)
-	    showPanel("#userpanel")
+
+	    if (current_session.markerOk(p)){
+		//sendPoint(p,addMarkerToMap,false)
+		addMarkerToMap(p)
+		showPanel("#userpanel")
+	    }else{
+		showError("Algunos campos no se rellenaron correctamente")
+	    }
 	})
     }
 

@@ -115,6 +115,25 @@ Session.prototype.deleteMarker=function(id){
     }
 }
 
+Session.prototype.markerOk=function(point){
+    if (point.Name == "" ||
+	point.Lat == "" ||
+	point.Lont == ""){
+	return false
+    }else{
+	return true
+    }
+    
+}
+
+
+Session.prototype.checkinOk=function(checkin){
+    if (checkin.Stamp == ""){
+	return true
+    }else{
+	return false
+    }
+}
 
 Session.prototype.reloadCheckins=function(callback){
     // Los repido de nuevo y asi los obtengo ordenados
@@ -131,6 +150,11 @@ Session.prototype.reloadCheckins=function(callback){
 	callback()
     }
 }
+
+
+
+
+
 
 
 
@@ -210,7 +234,7 @@ NomadMap.prototype.setCurrentMarker=function(location){
     if (this.current_marker) {
 	this.current_marker.setPosition(location);
     } else {
-	this.current_marker = this.newMarker(location,"",MARKERCOLOR_CURRENT)
+	this.current_marker = this.newMarker(this.marker_lat,this.marker_lon,"",MARKERCOLOR_CURRENT)
     }
 }
 
