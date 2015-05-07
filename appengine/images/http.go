@@ -12,7 +12,9 @@ import (
 	"app"
 	"appengine"
 	"appengine/users"
+	"appengine/points"
 	"appengine/blobstore"
+	"appengine/datastore"
 
 )
 
@@ -23,7 +25,7 @@ const (
 	ERR_FILENOTSTORED = "File no stored in database"
 	ERR_FILENOTVALID = "File format not valid"
 	ERR_FILENOTDELETED = "File cannot be deleted"
-	)
+)
 
 
 func init() {
@@ -31,6 +33,8 @@ func init() {
 	http.HandleFunc("/images/upload", storeImage)
 	http.HandleFunc("/images/serve", handleServe)
 	http.HandleFunc("/images/delete",deleteImage)
+
+	http.HandleFunc("/images/clean",cleanImage)
 }
 
 
@@ -74,20 +78,13 @@ func storeImage(w http.ResponseWriter, r *http.Request) {
                 return
         }
 
-
 	key:=file[0].BlobKey
-	// Comprobar también el formato de la imagen
-	key,_=resizeImage(c,key)  // si mide mas de 500 la reducimos
 
-	// Si continua midiendo demasiado la eliminamos
-	if file[0].Size > MAXSZIMAGE {
-		err:=blobstore.Delete(c,key)
-		if err!=nil{
-			c.Errorf(ERR_FILENOTDELETED)
-		}
-		app.ServeError(c, w, errors.New(ERR_FILENOTVALID))
+	key,err=resizeImage(c,key)
+	if err != nil {
+                app.ServeError(c, w, errors.New(ERR_FILENOTVALID))
                 return
-	}
+        }
 
 	fmt.Fprintf(w, "%s", string(key))
 }
@@ -116,6 +113,41 @@ func deleteImage(w http.ResponseWriter, r *http.Request) {
                 app.ServeError(c, w, err)
                 return
         }
+}
+
+
+
+
+
+
+func cleanImage(w http.ResponseWriter, r *http.Request) {
+	// Con esta manejador borramos las imagenes que no están asociadas a
+	// ningún punto y han quedado huerfanas
+
+	c := appengine.NewContext(r)
+
+	var blobs []blobstore.BlobInfo
+
+	q := datastore.NewQuery("__BlobInfo__")
+	keys,_:= q.GetAll(c, &blobs)
+	for _, key := range keys {
+
+		var imgk = appengine.BlobKey(key.StringID())
+
+		// Busco algun punto con esa key como imagen
+		var points []points.Point
+		qp := datastore.NewQuery("points").Filter("ImageKey = ",imgk)
+		qp.GetAll(c, &points)
+		if len(points)==0{
+			// borro la imagen
+			c.Infof("borro imagen %s",imgk)
+			err:=blobstore.Delete(c,imgk)
+			if err != nil {
+				app.ServeError(c, w, err)
+				return
+			}
+		}
+	}
 }
 
 
@@ -152,6 +184,7 @@ func resizeImage(c appengine.Context, blobKey appengine.BlobKey)(appengine.BlobK
 	buf := new(bytes.Buffer)
 	jpeg.Encode(buf, img2, nil)
 	fimg2,_:=blobstore.Create(c,"image/jpeg")
+
 	fimg2.Write(buf.Bytes())
 	fimg2.Close()
 
