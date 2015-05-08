@@ -112,6 +112,8 @@ function fillInfoPanel(marker){
     $("#infopanel #info-key").val(marker.point.Id)
     $("#infopanel .content").html(html)
 
+    fillPointCheckinsTable(marker.point.Id,"#pointCheckinsTable")
+
     showPanel("#infopanel")
 
     // Configuro botones de registro, actualizar borrar y cerrar
@@ -224,20 +226,24 @@ function fillUserPanel(){
     $("#total-user-checkins").html(current_session.totalCheckins())
     $("#total-user-points").html(current_session.totalMarkers())
     $("#username").html(current_session.user.Name)
-    fillCheckinsTable("#checkinsTable")
+    fillUserCheckinsTable("#userCheckinsTable")
 }
 
 
 
 
-function fillCheckinsTable(divId){
+function fillUserCheckinsTable(divId){
+
+    $(divId).empty()
+
     var checkins = current_session.checkins
     if (!checkins){
 	return
     }
 
-    $(divId).empty()
-
+    if (checkins.length>0){
+	$(divId).append("<tr><td>Lugar</td><td>Fecha</td><td>Eliminar</td></tr>")
+    }
     for (var i=0;i<checkins.length;i++){
 	var m = current_session.getMarker(checkins[i].PointId)
 	if (m && m.point){
@@ -266,9 +272,43 @@ function fillCheckinsTable(divId){
 	var id=$(this).attr("id")
 	var f=id.split("-")
 	if (f[1] && f[2]){
-	    deleteCheckinFromMap(f[1],f[2])
+	    showConfirmation("¿Realmente desea eliminar el registro?",function(){
+		deleteCheckinFromMap(f[1],f[2])
+	    })
 	}
     })
+}
+
+
+
+function fillPointCheckinsTable(pid,divId){
+
+    var checkins
+
+    $(divId).empty()
+
+    getCheckinByPoint(pid,function(cks){
+	checkins=cks
+    },false)
+    
+    if (!checkins){
+	return
+    }
+
+    if (checkins.length>0){
+	$(divId).append("<tr><td>Nombre</td><td>Fecha</td><td>Noches</td></tr>")
+    }
+
+    for (var i=0;i<checkins.length;i++){	
+	var row = "<tr> \
+<td>"+checkins[i].Username+"</td>  \
+<td>"+checkins[i].Stamp+"</td>  \
+<td>"+checkins[i].Nights+"</td>  \
+</tr>"
+	$(divId).append(row)
+    }
+
+    $(divId+" tr:even").addClass("colored")
 }
 
 
