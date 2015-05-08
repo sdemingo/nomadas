@@ -84,6 +84,7 @@ func getCheckin(w http.ResponseWriter, r *http.Request) {
 		}
 
 		var ck Checkin
+
 		// Busco un checkin concreto
 		k := datastore.NewKey(c, "checkins", "", id, nil)
 		datastore.Get(c, k, &ck)
@@ -106,6 +107,10 @@ func getCheckin(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		var nu users.NUser
+		k := datastore.NewKey(c, "users", "", uid, nil)
+		datastore.Get(c, k, &nu)
+
 		q := datastore.NewQuery("checkins").Filter("UserId =",uid).Order("-DBStamp")
 		keys,_:= q.GetAll(c, &checkins)
 
@@ -113,6 +118,7 @@ func getCheckin(w http.ResponseWriter, r *http.Request) {
 		for i, key := range keys {
 			checkins[i].Id = key.IntID()
 			checkins[i].Stamp = TimeStamp(checkins[i].DBStamp)
+			checkins[i].Username = nu.Name
 		}
 	}
 
@@ -129,8 +135,12 @@ func getCheckin(w http.ResponseWriter, r *http.Request) {
 		for i, key := range keys {
 			checkins[i].Id = key.IntID()
 			checkins[i].Stamp = TimeStamp(checkins[i].DBStamp)
+			
+			var nu users.NUser
+			k := datastore.NewKey(c, "users", "", checkins[i].UserId, nil)
+			datastore.Get(c, k, &nu)
+			checkins[i].Username = nu.Name
 		}
-
 	}
 
 	msg,_:=json.Marshal(checkins)

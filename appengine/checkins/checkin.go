@@ -10,9 +10,11 @@ import (
 
 type Checkin struct{
 	Id int64           `datastore:"-"`  // ignored by datastore
+	Username string    `datastore:"-"`  // ignored by datastore
+	Stamp TimeStamp    `datastore:"-"` // ignored by datastore
+
 	UserId int64
 	PointId int64
-	Stamp TimeStamp   `datastore:"-"` // ignored by datastore
 	DBStamp time.Time     `json:"-"`      // ignored by json (only for the DB)
 	Nights int
 	Text string
