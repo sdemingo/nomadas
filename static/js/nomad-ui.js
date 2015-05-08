@@ -242,7 +242,7 @@ function fillUserCheckinsTable(divId){
     }
 
     if (checkins.length>0){
-	$(divId).append("<tr><td>Lugar</td><td>Fecha</td><td>Eliminar</td></tr>")
+	$(divId).append("<tr><th>Lugar</th><th>Fecha</th><th>Eliminar</th></tr>")
     }
     for (var i=0;i<checkins.length;i++){
 	var m = current_session.getMarker(checkins[i].PointId)
@@ -257,7 +257,7 @@ function fillUserCheckinsTable(divId){
 	}
     }
 
-    $(divId+" tr:even").addClass("colored")
+    $(divId+" tr:odd").addClass("colored")
 
     $(divId+" .showPoint").click(function(){
 	var id=$(this).attr("id")
@@ -296,7 +296,7 @@ function fillPointCheckinsTable(pid,divId){
     }
 
     if (checkins.length>0){
-	$(divId).append("<tr><td>Nombre</td><td>Fecha</td><td>Noches</td></tr>")
+	$(divId).append("<tr><th>Nombre</th><th>Fecha</th><th>Noches</th></tr>")
     }
 
     for (var i=0;i<checkins.length;i++){	
@@ -308,7 +308,7 @@ function fillPointCheckinsTable(pid,divId){
 	$(divId).append(row)
     }
 
-    $(divId+" tr:even").addClass("colored")
+    $(divId+" tr:odd").addClass("colored")
 }
 
 
