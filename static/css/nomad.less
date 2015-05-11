@@ -11,9 +11,9 @@
 
 @userFrameWidth:300px;
 @userFrameWidthResponsive:200px;
-
 @errorColor:#F08080;
 
+@mobileUIWidth: 700px;
 
 html, body {
     width: 100%; 
@@ -68,7 +68,7 @@ html, body {
 	font-size:@fontSizeSmall;
     }
 
-    @media (max-width: 700px) { 
+    @media (max-width: @mobileUIWidth) { 
 	display:none;
 	width:@userFrameWidthResponsive;
     }
@@ -93,7 +93,7 @@ html, body {
 	display:none;
     }
 
-    @media (max-width: 700px) { 
+    @media (max-width: @mobileUIWidth) { 
 	display:block;
 	
 	.btn#down-arrow{
@@ -130,7 +130,7 @@ html, body {
 	display:block;
 	width:80%;
 	margin:0 auto;
-	@media (max-width: 700px) { 
+	@media (max-width: @mobileUIWidth ) { 
 	    width:90%;
 	}
     }
@@ -140,9 +140,12 @@ html, body {
 table{
     border:1px solid @fontColor;
     width:100%;
-
     margin-top:10px;
     margin-bottom:10px;
+ 
+    @media (max-width: @mobileUIWidth ) { 
+	table-layout:fixed;
+    }
 
     .btn{
 	padding:0;
@@ -150,6 +153,15 @@ table{
 
     td{
 	border:0;
+	overflow:hidden; 
+	white-space: nowrap;
+	&.center-align-cell{
+	    text-align:center;
+	}
+    }
+
+    th{
+	font-weight:bold;
     }
 
     a:hover{
@@ -158,11 +170,7 @@ table{
 
     tr.colored, tr.colored span{
 	background-color: lighten(@fontColor,40%);
-    }
-
-    th{
-	font-weight:bold;
-    }
+    }  
 }
 
 

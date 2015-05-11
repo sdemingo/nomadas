@@ -1,6 +1,7 @@
 
 
-
+var mobileUIWidth = 700
+var mobileUI = false
 var nomadMap
 var current_session 
 
@@ -248,12 +249,11 @@ function fillUserCheckinsTable(divId){
 	var m = current_session.getMarker(checkins[i].PointId)
 	if (m && m.point){
 	    var row = "<tr> \
-<td><a href=\"#\" class=\"showPoint\" id=\"showPoint-"+m.point.Id+"\">"+m.point.Name+"</a></td>  \
-<td>"+checkins[i].Stamp+"</td>  \
-<td><a href=\"#\" class=\"btn delCheckin\" id=\"delCheckin-"+checkins[i].Id+"-"+m.point.Id+"\"><span icon=\"&#xf00d;\"></span></a></td> \
+<td class=\"resp-title\"><a href=\"#\" class=\"showPoint\" id=\"showPoint-"+m.point.Id+"\">"+m.point.Name+"</a></td>  \
+<td class=\"center-align-cell resp-title\">"+showDate(checkins[i].Stamp)+"</td>  \
+<td class=\"center-align-cell\"><a href=\"#\" class=\"btn delCheckin\" id=\"delCheckin-"+checkins[i].Id+"-"+m.point.Id+"\"><span icon=\"&#xf00d;\"></span></a></td> \
 </tr>"
-	    $(divId).append(row)
-	    
+	    $(divId).append(row) 
 	}
     }
 
@@ -277,6 +277,12 @@ function fillUserCheckinsTable(divId){
 	    })
 	}
     })
+
+    if (mobileUI){
+	$(divId+" td.resp-title").each(function(){
+	    $(this).attr("title",$(this).text())
+	})
+	    }
 }
 
 
@@ -301,14 +307,20 @@ function fillPointCheckinsTable(pid,divId){
 
     for (var i=0;i<checkins.length;i++){	
 	var row = "<tr> \
-<td>"+checkins[i].Username+"</td>  \
-<td>"+checkins[i].Stamp+"</td>  \
-<td>"+checkins[i].Nights+"</td>  \
+<td class=\"resp-title\">"+checkins[i].Username+"</td>  \
+<td class=\"center-align-cell resp-title\">"+showDate(checkins[i].Stamp)+"</td>  \
+<td class=\"center-align-cell resp-title\">"+checkins[i].Nights+"</td>  \
 </tr>"
 	$(divId).append(row)
     }
 
     $(divId+" tr:odd").addClass("colored")
+
+    if (mobileUI){
+	$(divId+" td.resp-title").each(function(){
+	    $(this).attr("title",$(this).text())
+	})
+	    }
 }
 
 
@@ -372,8 +384,7 @@ function showPanel(panel,cancelOp){
     $("#userpanel").hide()
 
     if (cancelOp){
-	var windowsize = $(window).width();
-	if( windowsize < 700 ){
+	if (mobileUI){
 	    $("#userframe").hide()
 	    $("#collapse-tab #up-arrow").hide();
 	    $("#collapse-tab #down-arrow").show();
@@ -440,7 +451,31 @@ function showConfirmation(msg,callback){
 
 
 
+function showDate(date){
+    var month,year
 
+    var f = date.split("/")
+    
+    if (f[0] == 1) {month = "Ene"}
+    if (f[0] == 2) {month = "Feb"}
+    if (f[0] == 3) {month = "Mar"}
+    if (f[0] == 4) {month = "Abr"}
+    if (f[0] == 5) {month = "May"}
+    if (f[0] == 6) {month = "Jun"}
+    if (f[0] == 7) {month = "Jul"}
+    if (f[0] == 8) {month = "Ago"}
+    if (f[0] == 9) {month = "Sept"}
+    if (f[0] == 10){month = "Oct"}
+    if (f[0] == 11){month = "Nov"}
+    if (f[0] == 12){month = "Dic"}
+
+    year = f[1]
+    if (mobileUI && year.length==4){
+	year = year.substring(2,4)
+    }
+
+    return month+" "+year
+}
 
 
 
@@ -469,7 +504,6 @@ function initSessionMap(){
 
     nomadMap.onMapClickHandler=function(event){
 	nomadMap.setCurrentMarker(event.latLng)
-	//showPanel("#userpanel")
     }
 
     nomadMap.onMarkerClickHandler=function(){
@@ -496,6 +530,10 @@ function initSessionMap(){
 
 
 $(document).ready(function(){
+
+    if ( $(window).width() < mobileUIWidth){
+	mobileUI=true
+    }
     
     google.maps.event.addDomListener(window, "load", initSessionMap)
     initCollapseArrow()
