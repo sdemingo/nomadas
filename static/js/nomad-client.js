@@ -5,9 +5,9 @@
  *
  */
 
-//var DOMAIN = "http://civic-rhythm-92417.appspot.com"
+var DOMAIN = "http://civic-rhythm-92417.appspot.com"
 //var DOMAIN = "http://192.168.1.11:8080"
-var DOMAIN = ""
+//var DOMAIN = ""
 
 
 // Recibe el punto para ser enviado al servidor y el callback que será ejecutado 
