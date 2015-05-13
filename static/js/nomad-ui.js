@@ -223,6 +223,8 @@ function fillEditPointPanel(marker){
 }
 
 
+
+
 function fillUserPanel(){
     $("#total-user-checkins").html(current_session.totalCheckins())
     $("#total-user-points").html(current_session.totalMarkers())
@@ -231,6 +233,29 @@ function fillUserPanel(){
 }
 
 
+
+
+function fillCheckinInfoPanel(checkin_id,point_id){
+    
+    html=""
+    html+="<h2>Nombre del punto</h2>"
+    html+="<p> Información del checkin.Fecha y comentario</p>"
+    $("#infocheckinpanel .content").html(html)
+
+    showPanel("#infocheckinpanel")
+
+    $("#infocheckinpanel #deleteCheckin").off('click').click(function(){
+	showConfirmation("¿Realmente desea eliminar el registro?",function(){
+	    deleteCheckinFromMap(checkin_id,point_id)
+	})
+	showPanel("#userpanel")
+    })
+
+
+    $("#infocheckinpanel #closeCheckin").off('click').click(function(){
+	showPanel("#userpanel",true)
+    })
+}
 
 
 function fillUserCheckinsTable(divId){
@@ -243,7 +268,7 @@ function fillUserCheckinsTable(divId){
     }
 
     if (checkins.length>0){
-	$(divId).append("<tr><th>Lugar</th><th>Fecha</th><th>Eliminar</th></tr>")
+	$(divId).append("<tr><th>Lugar</th><th>Fecha</th></tr>")
     }
     for (var i=0;i<checkins.length;i++){
 	var m = current_session.getMarker(checkins[i].PointId)
@@ -251,7 +276,7 @@ function fillUserCheckinsTable(divId){
 	    var row = "<tr> \
 <td class=\"resp-title\"><a href=\"#\" class=\"showPoint\" id=\"showPoint-"+m.point.Id+"\">"+m.point.Name+"</a></td>  \
 <td class=\"center-align-cell resp-title\">"+showDate(checkins[i].Stamp)+"</td>  \
-<td class=\"center-align-cell\"><a href=\"#\" class=\"btn delCheckin\" id=\"delCheckin-"+checkins[i].Id+"-"+m.point.Id+"\"><span icon=\"&#xf00d;\"></span></a></td> \
+<td class=\"center-align-cell\"><a href=\"#\" class=\"btn delCheckin\" id=\"delCheckin-"+checkins[i].Id+"-"+m.point.Id+"\"><span icon=\"&#xf00d;\"></span></a><a href=\"#\" class=\"btn showCheckin\" id=\"showCheckin-"+checkins[i].Id+"-"+m.point.Id+"\"><span icon=\"&#xf0f6;\"></span></a></td> \
 </tr>"
 	    $(divId).append(row) 
 	}
@@ -277,6 +302,17 @@ function fillUserCheckinsTable(divId){
 	    })
 	}
     })
+
+    $(divId+" .showCheckin").click(function(){
+	var id=$(this).attr("id")
+	var f=id.split("-")
+	if (f[1] && f[2]){
+	    // recargar el cuadro de informacion de checkpoint con su información
+	    fillCheckinInfoPanel(f[1],f[2])
+	}
+    })
+    
+
 
     if (mobileUI){
 	$(divId+" td.resp-title").each(function(){
@@ -382,6 +418,7 @@ function showPanel(panel,cancelOp){
     $("#editpanel").hide()
     $("#checkinpanel").hide()
     $("#userpanel").hide()
+    $("#infocheckinpanel").hide()
 
     if (cancelOp){
 	if (mobileUI){
