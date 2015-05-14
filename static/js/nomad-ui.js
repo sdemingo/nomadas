@@ -237,10 +237,19 @@ function fillUserPanel(){
 
 function fillCheckinInfoPanel(checkin_id,point_id){
     
+    var checkin = current_session.getCheckin(checkin_id)
+    var marker = current_session.getMarker(point_id)
+
+    if (!checkin  || !marker){
+	return
+    }
+    
     html=""
-    html+="<h2>Nombre del punto</h2>"
-    html+="<p> Información del checkin.Fecha y comentario</p>"
+    html+="<h2>"+marker.point.Name+"</h2>"
+    html+="<p><span> Por "+checkin.Username+". "+showDate(checkin.Stamp)+"</span></p>"
+    html+="<p>"+checkin.Text+"</p>"
     $("#infocheckinpanel .content").html(html)
+
 
     showPanel("#infocheckinpanel")
 

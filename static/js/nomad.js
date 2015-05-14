@@ -135,6 +135,18 @@ Session.prototype.checkinOk=function(checkin){
     }
 }
 
+Session.prototype.getCheckin=function(ckid){
+    if (!this.checkins){
+	return
+    }
+
+    for (var i=0; i<this.markers.length; i++){
+	if ((this.checkins[i]) && (this.checkins[i].Id == ckid)){
+	    return this.checkins[i]
+	}
+    }
+}
+
 Session.prototype.reloadCheckins=function(callback){
     // Los repido de nuevo y asi los obtengo ordenados
     var chks

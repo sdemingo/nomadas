@@ -1,18 +1,13 @@
 
-/*
- * 
- *       COMUNICACIONES POR AJAX CON EL SERVIDOR
- *
- */
 
-var DOMAIN = "http://civic-rhythm-92417.appspot.com"
+
+
+//var DOMAIN = "http://civic-rhythm-92417.appspot.com"
 //var DOMAIN = "http://192.168.1.11:8080"
-//var DOMAIN = ""
+var DOMAIN = ""
 
 
-// Recibe el punto para ser enviado al servidor y el callback que será ejecutado 
-// cuando retorne exito el envio. El callback recibe el punto y la id asignada al punto
-// en la base de datos
+
 function sendPoint(p,callback,asy){
 
     if (asy==undefined){
@@ -157,8 +152,8 @@ function addUser(u,callback,asy){
     });
 }
 
-// Solicita información de un usuario. Si la id introducida es cero
-// se solicita la información del usuario de la sesion
+
+
 function getUserById(id,callback,asy){
     if (asy==undefined){
 	asy=true
@@ -181,7 +176,7 @@ function getUserById(id,callback,asy){
 }
 
 
-// Solicita información de un usuario segun su mail
+
 function getUserByMail(mail,callback,asy){
     if (asy==undefined){
 	asy=true
