@@ -147,13 +147,16 @@
       <!-- Cuadro de perfil de usuario -->
       <div id="userpanel"  class="pointpanel">
 	<h2 id="username"></h2>
+	<div class="icon-alone">
+	  <a class="btn" href="#" title="Configuración">
+	    <span icon="&#xf013;"></span></a>
+	  <a class="btn"  href="/users/logout" title="Cerrar">
+	    <span icon="&#xf08b;"></span></a>
+	</div>
 	<ul>
-	  <li><a href="#">Configuración</a></li>
-	  <li><a href="/users/logout">Cerrar Sesión</a></li>
-	  <hr>
-	  <li>Has creado  <span id="total-user-points">0</span> puntos</li>
-	  <li>Has realizado <span id="total-user-checkins">0</span> registros</li>
-	  <li>Has dormido un total de <span id="total-user-nights">0</span> noches</li>
+	  <li>Has creado  <span class="normal" id="total-user-points">0</span> puntos</li>
+	  <li>Has realizado <span class="normal" id="total-user-checkins">0</span> registros</li>
+	  <li>Has dormido un total de <span class="normal" id="total-user-nights">0</span> noches</li>
 	</ul>
 	<table class="checkin-table" id="userCheckinsTable">
 	</table>

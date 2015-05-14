@@ -2,12 +2,14 @@
 @backgroundColor: white;
 
 @iconSize:1.2em;
+@iconColor:grey;
 
 @fontFamily: 'Noto Sans', sans-serif;
-@fontColor: grey;
+@fontColor: black;
 @fontColorHeads: black;
-@fontSize: 0.9em;
-@fontSizeSmall: 0.8em;
+@fontColorSecundary: grey;
+
+@defaultFontSize: 14px;
 
 @userFrameWidth:300px;
 @userFrameWidthResponsive:200px;
@@ -22,7 +24,7 @@ html, body {
     background-color:@backgroundColor;
     overflow:hidden;
     font-family:@fontFamily;
-    font-size:@fontSize;
+    font-size:@defaultFontSize;
     color:@fontColor;
     
     a{
@@ -64,9 +66,15 @@ html, body {
     padding:10px;
     background-color:@backgroundColor;
 
-    .small{
-	font-size:@fontSizeSmall;
+    span{
+	color: @fontColorSecundary;	
+	&.normal{
+	    color:@fontColor;
+	}
     }
+
+
+
 
     @media (max-width: @mobileUIWidth) { 
 	display:none;
@@ -138,11 +146,11 @@ html, body {
 
 
 table{
-    border:1px solid @fontColor;
+    border:1px solid @fontColorSecundary;
     width:100%;
     margin-top:10px;
-    margin-bottom:10px;
- 
+    margin-bottom:10px; 
+
     @media (max-width: @mobileUIWidth ) { 
 	table-layout:fixed;
     }
@@ -155,8 +163,18 @@ table{
 	border:0;
 	overflow:hidden; 
 	white-space: nowrap;
+	color: @fontColorSecundary;
 	&.center-align-cell{
 	    text-align:center;
+	}
+
+	a, a:active, a:visited{
+	    color: @fontColorSecundary;
+	}
+
+	a:hover{
+	    font-weight:normal;
+	    color:@fontColor;
 	}
     }
 
@@ -164,12 +182,8 @@ table{
 	font-weight:bold;
     }
 
-    a:hover{
-	font-weight:normal;
-    }
-
     tr.colored, tr.colored span{
-	background-color: lighten(@fontColor,40%);
+	background-color: lighten(@fontColorSecundary,40%);
     }  
 }
 
@@ -266,7 +280,7 @@ select{
 [icon]:before {
     font-family: 'FontAwesome';
     font-size: @iconSize;
-    color: @fontColor;
+    color: @iconColor;
     margin-right: .5em;
     content: attr(icon);
     speak: none;

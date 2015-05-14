@@ -6,25 +6,25 @@ body {
   background-color: #ffffff;
   overflow: hidden;
   font-family: 'Noto Sans', sans-serif;
-  font-size: 0.9em;
-  color: #808080;
+  font-size: 14px;
+  color: #000000;
 }
 html a,
 body a {
   text-decoration: none;
-  color: #808080;
+  color: #000000;
 }
 html a:visited,
 body a:visited {
-  color: #808080;
+  color: #000000;
 }
 html a:active,
 body a:active {
-  color: #808080;
+  color: #000000;
 }
 html a:hover,
 body a:hover {
-  color: #808080;
+  color: #000000;
   font-weight: bold;
 }
 #map-canvas {
@@ -44,8 +44,11 @@ body a:hover {
   padding: 10px;
   background-color: #ffffff;
 }
-#userframe .small {
-  font-size: 0.8em;
+#userframe span {
+  color: #808080;
+}
+#userframe span.normal {
+  color: #000000;
 }
 @media (max-width: 700px) {
   #userframe {
@@ -124,15 +127,22 @@ table td {
   border: 0;
   overflow: hidden;
   white-space: nowrap;
+  color: #808080;
 }
 table td.center-align-cell {
   text-align: center;
 }
+table td a,
+table td a:active,
+table td a:visited {
+  color: #808080;
+}
+table td a:hover {
+  font-weight: normal;
+  color: #000000;
+}
 table th {
   font-weight: bold;
-}
-table a:hover {
-  font-weight: normal;
 }
 table tr.colored,
 table tr.colored span {
@@ -142,7 +152,7 @@ table tr.colored span {
   Formularios
   */
 input {
-  border: 1px solid #808080;
+  border: 1px solid #000000;
   margin-top: 5px;
   margin-bottom: 5px;
   padding-left: 5px;
@@ -202,7 +212,7 @@ select#month {
   text-align: right;
 }
 .btn {
-  border: 0px solid #808080;
+  border: 0px solid #000000;
   background: #ffffff;
   padding: 5px;
 }
