@@ -269,7 +269,6 @@ function fillCheckinInfoPanel(checkin_id,point_id){
 function fillUserCheckinsTable(divId){
 
     $(divId).empty()
-    $("p.table-header").remove()
 
     var checkins = current_session.checkins
     if (!checkins){
@@ -277,9 +276,10 @@ function fillUserCheckinsTable(divId){
     }
 
     if (checkins.length>0){
-	$(divId).before("<p class=\"table-header\">Últimos registros</p>")
+	$(divId).append("<p class=\"checkin-table-header\">Últimos registros</p>")
     }
 
+    $(divId).append("<table id=\"user-checkin-table\">")
     for (var i=0;i<checkins.length;i++){
 	var m = current_session.getMarker(checkins[i].PointId)
 	if (m && m.point){
@@ -288,7 +288,7 @@ function fillUserCheckinsTable(divId){
 <td class=\"center-align-cell resp-title\">"+showDate(checkins[i].Stamp)+"</td>  \
 <td class=\"center-align-cell\"><a href=\"#\" class=\"btn delCheckin\" id=\"delCheckin-"+checkins[i].Id+"-"+m.point.Id+"\"><span icon=\"&#xf00d;\"></span></a><a href=\"#\" class=\"btn showCheckin\" id=\"showCheckin-"+checkins[i].Id+"-"+m.point.Id+"\"><span icon=\"&#xf0f6;\"></span></a></td> \
 </tr>"
-	    $(divId).append(row) 
+	    $(divId+" #user-checkin-table").append(row) 
 	}
     }
 
@@ -338,7 +338,6 @@ function fillPointCheckinsTable(pid,divId){
     var checkins
 
     $(divId).empty()
-    $("p.table-header").remove()
 
     getCheckinByPoint(pid,function(cks){
 	checkins=cks
@@ -349,16 +348,17 @@ function fillPointCheckinsTable(pid,divId){
     }
 
     if (checkins.length>0){
-	$(divId).before("<p class=\"table-header\">También se registraron aquí:</p>")
+	$(divId).append("<p class=\"table-header\">También se registraron aquí:</p>")
     }
 
+    $(divId).append("<table id=\"point-checkin-table\">")
     for (var i=0;i<checkins.length;i++){	
 	var row = "<tr> \
 <td class=\"resp-title\">"+checkins[i].Username+"</td>  \
 <td class=\"center-align-cell resp-title\">"+showDate(checkins[i].Stamp)+"</td>  \
 <td class=\"center-align-cell resp-title\">"+checkins[i].Nights+"</td>  \
 </tr>"
-	$(divId).append(row)
+	$(divId+" #point-checkin-table").append(row)
     }
 
     $(divId+" tr:odd").addClass("colored")
