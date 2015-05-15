@@ -1,3 +1,6 @@
+/*@fontColor: black;
+@fontColorHeads: black;
+@fontColorSecundary: grey;*/
 html,
 body {
   width: 100%;
@@ -7,24 +10,24 @@ body {
   overflow: hidden;
   font-family: 'Noto Sans', sans-serif;
   font-size: 14px;
-  color: #000000;
+  color: #003333;
 }
 html a,
 body a {
   text-decoration: none;
-  color: #000000;
+  color: #003333;
 }
 html a:visited,
 body a:visited {
-  color: #000000;
+  color: #003333;
 }
 html a:active,
 body a:active {
-  color: #000000;
+  color: #003333;
 }
 html a:hover,
 body a:hover {
-  color: #000000;
+  color: #003333;
   font-weight: bold;
 }
 #map-canvas {
@@ -51,18 +54,18 @@ body a:hover {
   }
 }
 span {
-  color: #808080;
+  color: #407f7f;
 }
 span.normal {
-  color: #000000;
+  color: #003333;
 }
 span.label {
   display: inline-block;
   font-size: 0.8em;
   padding: 0px 5px 0px 5px;
   margin: 5px 5px 0px 0px;
-  border: 1px solid #808080;
-  background-color: #e6e6e6;
+  border: 1px solid #407f7f;
+  background-color: #d4eaea;
   border-radius: 5px 5px 5px 5px;
   -moz-border-radius: 5px 5px 5px 5px;
   -webkit-border-radius: 5px 5px 5px 5px;
@@ -101,13 +104,14 @@ span.label {
   width: 90%;
   margin: 0 auto;
   padding-bottom: 20px;
+  background-color: #ffffff;
   overflow-y: auto;
   overflow-x: hidden;
 }
 .pointpanel h1,
 .pointpanel h2,
 .pointpanel h3 {
-  color: #000000;
+  color: #003333;
   margin: 0px;
   padding: 5px 0px 5px 0px;
 }
@@ -127,7 +131,7 @@ span.label {
   }
 }
 table {
-  border: 1px solid #808080;
+  border: 1px solid #407f7f;
   border-radius: 5px 5px 5px 5px;
   -moz-border-radius: 5px 5px 5px 5px;
   -webkit-border-radius: 5px 5px 5px 5px;
@@ -147,7 +151,7 @@ table td {
   border: 0;
   overflow: hidden;
   white-space: nowrap;
-  color: #808080;
+  color: #407f7f;
 }
 table td.center-align-cell {
   text-align: center;
@@ -155,11 +159,11 @@ table td.center-align-cell {
 table td a,
 table td a:active,
 table td a:visited {
-  color: #808080;
+  color: #407f7f;
 }
 table td a:hover {
   font-weight: normal;
-  color: #000000;
+  color: #003333;
 }
 table th {
   font-weight: bold;
@@ -169,13 +173,13 @@ table tr span {
 }
 table tr.colored,
 table tr.colored span {
-  background-color: #e6e6e6;
+  background-color: #d4eaea;
 }
 /*
   Formularios
   */
 input {
-  border: 1px solid #000000;
+  border: 1px solid #003333;
   margin-top: 5px;
   margin-bottom: 5px;
   padding-left: 5px;
@@ -209,10 +213,13 @@ textarea {
   height: 150px;
   box-sizing: border-box;
   /* For IE and modern versions of Chrome */
+
   -moz-box-sizing: border-box;
   /* For Firefox                          */
+
   -webkit-box-sizing: border-box;
   /* For Safari                           */
+
   resize: none;
   margin: 0 auto;
   padding: 0;
@@ -235,8 +242,8 @@ select#month {
   text-align: right;
 }
 .btn {
-  border: 0px solid #000000;
-  background-color: #e6e6e6;
+  border: 0px solid #003333;
+  background-color: #d4eaea;
   padding: 0px 5px 0px 5px;
 }
 .btn:hover {
@@ -245,20 +252,20 @@ select#month {
 [icon]:before {
   font-family: 'FontAwesome';
   font-size: 1.2em;
-  color: #808080;
+  color: #407f7f;
   margin-right: .5em;
   content: attr(icon);
   speak: none;
 }
 .icon-alone {
   display: inline-block;
-  width: 90%;
+  width: 98%;
   margin-top: 15px;
   margin-bottom: 15px;
   padding: 2px;
   text-align: left;
-  background-color: #e6e6e6;
-  border: 1px solid #808080;
+  background-color: #d4eaea;
+  border: 1px solid #407f7f;
   border-radius: 5px 5px 5px 5px;
   -moz-border-radius: 5px 5px 5px 5px;
   -webkit-border-radius: 5px 5px 5px 5px;

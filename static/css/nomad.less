@@ -1,16 +1,20 @@
 
-@backgroundColor: white;
+
+/*@fontColor: black;
+@fontColorHeads: black;
+@fontColorSecundary: grey;*/
+
+@fontColor: #003333;
+@fontColorHeads: #003333;
+@fontColorSecundary: #407F7F;
 
 @iconSize:1.2em;
-@iconColor:grey;
+@iconColor: @fontColorSecundary;
+
+@backgroundColor: white;
+@backgroundSecundary:lighten(@fontColorSecundary,50%);
 
 @fontFamily: 'Noto Sans', sans-serif;
-
-@fontColor: black;
-@fontColorHeads: black;
-@fontColorSecundary: grey;
-@backgroundSecundary:lighten(@fontColorSecundary,40%);
-
 @defaultFontSize: 14px;
 
 @userFrameWidth:300px;
@@ -136,6 +140,7 @@ span{
     width:90%;
     margin:0 auto;
     padding-bottom:20px;
+    background-color:@backgroundColor;
 
     overflow-y: auto;
     overflow-x: hidden;
@@ -310,7 +315,7 @@ select{
 
 .icon-alone {
     display: inline-block;
-    width:90%;
+    width:97%;
     margin-top:15px;
     margin-bottom:15px;
     padding:2px;
