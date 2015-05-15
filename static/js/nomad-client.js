@@ -91,8 +91,8 @@ function sendImage(form,callback){
 	success:function(data){
 	    updateUrl=data
 	},
-	error: function(data){
-            console.log("requested upload url error:"+data);
+	error: function(req,status,data){
+            console.log("requested upload url error: "+req.responseText);
         }
     })
 
@@ -110,7 +110,7 @@ function sendImage(form,callback){
 	    },
             error: function(req,status,data){
 		console.log("upload image error: "+req.responseText);
-		showError("Imagen demasiado grande")
+		showError("Error al subir imagen: "+req.responseText)
             }
 	});
     }
