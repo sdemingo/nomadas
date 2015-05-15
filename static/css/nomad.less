@@ -112,6 +112,10 @@ span{
 	display:none;
     }
 
+    & > .btn{
+	background-color:@backgroundColor;
+    }
+
     @media (max-width: @mobileUIWidth) { 
 	display:block;
 	
@@ -161,6 +165,7 @@ span{
 
 table{
     border:1px solid @fontColorSecundary;
+    .rounds(5px);
     width:100%;
     margin-top:10px;
     margin-bottom:10px; 
@@ -196,6 +201,9 @@ table{
 	font-weight:bold;
     }
 
+    tr span{
+	background-color: @backgroundColor;
+    }
     tr.colored, tr.colored span{
 	background-color: @backgroundSecundary;
     }  
@@ -285,9 +293,6 @@ select{
     padding:0px 5px 0px 5px;
     &:hover{
 	font-weight:normal;
-    }
-    #collapse-tab > &{
-	background-color:@backgroundColor;
     }
 }
 

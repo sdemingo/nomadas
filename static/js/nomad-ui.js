@@ -269,6 +269,7 @@ function fillCheckinInfoPanel(checkin_id,point_id){
 function fillUserCheckinsTable(divId){
 
     $(divId).empty()
+    $("p.table-header").remove()
 
     var checkins = current_session.checkins
     if (!checkins){
@@ -276,8 +277,9 @@ function fillUserCheckinsTable(divId){
     }
 
     if (checkins.length>0){
-	$(divId).append("<tr><th>Lugar</th><th>Fecha</th></tr>")
+	$(divId).before("<p class=\"table-header\">Últimos registros</p>")
     }
+
     for (var i=0;i<checkins.length;i++){
 	var m = current_session.getMarker(checkins[i].PointId)
 	if (m && m.point){
@@ -336,6 +338,7 @@ function fillPointCheckinsTable(pid,divId){
     var checkins
 
     $(divId).empty()
+    $("p.table-header").remove()
 
     getCheckinByPoint(pid,function(cks){
 	checkins=cks
@@ -346,7 +349,7 @@ function fillPointCheckinsTable(pid,divId){
     }
 
     if (checkins.length>0){
-	$(divId).append("<tr><th>Nombre</th><th>Fecha</th><th>Noches</th></tr>")
+	$(divId).before("<p class=\"table-header\">También se registraron aquí:</p>")
     }
 
     for (var i=0;i<checkins.length;i++){	

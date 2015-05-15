@@ -81,6 +81,9 @@ span.label {
 #collapse-tab .btn {
   display: none;
 }
+#collapse-tab > .btn {
+  background-color: #ffffff;
+}
 @media (max-width: 700px) {
   #collapse-tab {
     display: block;
@@ -125,6 +128,9 @@ span.label {
 }
 table {
   border: 1px solid #808080;
+  border-radius: 5px 5px 5px 5px;
+  -moz-border-radius: 5px 5px 5px 5px;
+  -webkit-border-radius: 5px 5px 5px 5px;
   width: 100%;
   margin-top: 10px;
   margin-bottom: 10px;
@@ -157,6 +163,9 @@ table td a:hover {
 }
 table th {
   font-weight: bold;
+}
+table tr span {
+  background-color: #ffffff;
 }
 table tr.colored,
 table tr.colored span {
@@ -232,9 +241,6 @@ select#month {
 }
 .btn:hover {
   font-weight: normal;
-}
-#collapse-tab > .btn {
-  background-color: #ffffff;
 }
 [icon]:before {
   font-family: 'FontAwesome';
