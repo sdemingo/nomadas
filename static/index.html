@@ -19,7 +19,7 @@
     <script src="js/nomad.js"></script>
     <script src="js/nomad-ui.js"></script>
 
-      <script src="js/import-data.js"></script>
+    <script src="js/import-data.js"></script>
 
 
   </head>
@@ -40,12 +40,7 @@
       
       <!-- Cuadro de información sobre un punto -->
       <div id="infopanel" class="pointpanel">
-	<div class="content">
-	    Contenido sobre el punto
-	</div>
-	<table class="checkin-table" id="pointCheckinsTable">
-	</table>
-	<input type="hidden" id="info-key" name="info-key" value="" />
+	<h2 id="infotitle"></h2>
 	<div class="icon-alone">
 	  <a class="btn" id="checkin" href="#" title="Check In">
 	    <span icon="&#xf00c;"></span></a>
@@ -56,6 +51,13 @@
 	  <a class="btn" id="close" href="#" title="Cerrar">
 	    <span icon="&#xf00d;"></span></a>
 	</div>
+	<div class="content">
+	    Contenido sobre el punto
+	</div>
+	<table class="checkin-table" id="pointCheckinsTable">
+	</table>
+	<input type="hidden" id="info-key" name="info-key" value="" />
+	
       </div>
 
 
@@ -132,7 +134,7 @@
       <!-- Cuadro de información de un checkin -->
       <div id="infocheckinpanel" class="pointpanel">
 	<div class="content">
-	 
+	  
 	</div>
 	<div class="icon-alone">
 	  <a class="btn" id="deleteCheckin" href="#" title="Borrar">

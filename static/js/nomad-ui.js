@@ -102,19 +102,18 @@ function fillInfoPanel(marker){
     },false)
 
     html=""
-    html+="<h2>"+marker.point.Name+"</h2>"
-    html+="<p><span> Coord: "+marker.point.Lat+", "+marker.point.Lon+"</span></p>"
-    html+="<p><span> Por "+username+"</span></p>"
+    html+="<span class=\"label\">"+username+"</span>"
+    html+="<span class=\"label\">"+marker.point.Lat+", "+marker.point.Lon+"</span>"
+    html+="<p>"+marker.point.Desc+"</p>"
     if (marker.point.ImageKey!=""){
 	html+="<img src=\""+DOMAIN+"/images/serve?blobKey="+marker.point.ImageKey+"\" />"
     }
-    html+="<p>"+marker.point.Desc+"</p>"
-
+ 
     $("#infopanel #info-key").val(marker.point.Id)
+    $("#infopanel #infotitle").html(marker.point.Name)
     $("#infopanel .content").html(html)
 
     fillPointCheckinsTable(marker.point.Id,"#pointCheckinsTable")
-
     showPanel("#infopanel")
 
     // Configuro botones de registro, actualizar borrar y cerrar

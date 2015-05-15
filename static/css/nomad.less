@@ -5,9 +5,11 @@
 @iconColor:grey;
 
 @fontFamily: 'Noto Sans', sans-serif;
+
 @fontColor: black;
 @fontColorHeads: black;
 @fontColorSecundary: grey;
+@backgroundSecundary:lighten(@fontColorSecundary,40%);
 
 @defaultFontSize: 14px;
 
@@ -66,19 +68,28 @@ html, body {
     padding:10px;
     background-color:@backgroundColor;
 
-    span{
-	color: @fontColorSecundary;	
-	&.normal{
-	    color:@fontColor;
-	}
-    }
-
-
-
-
     @media (max-width: @mobileUIWidth) { 
 	display:none;
 	width:@userFrameWidthResponsive;
+    }
+}
+
+
+span{
+    color: @fontColorSecundary;	
+
+    &.normal{
+	color:@fontColor;
+    }
+
+    &.label{
+	display:inline-block;
+	font-size:0.8em;
+	padding:0px 5px 0px 5px;
+	margin:5px 5px 0px 0px;
+	border:1px solid @fontColorSecundary;
+	background-color: @backgroundSecundary;
+	.rounds(5px);
     }
 }
 
@@ -120,12 +131,15 @@ html, body {
     right:0;
     width:90%;
     margin:0 auto;
+    padding-bottom:20px;
 
     overflow-y: auto;
     overflow-x: hidden;
 
     h1,h2,h3{
 	color:@fontColorHeads;
+	margin:0px;
+	padding:5px 0px 5px 0px;
     }
 
     ul{
@@ -137,7 +151,7 @@ html, body {
     img{
 	display:block;
 	width:80%;
-	margin:0 auto;
+	margin:5px auto;
 	@media (max-width: @mobileUIWidth ) { 
 	    width:90%;
 	}
@@ -183,7 +197,7 @@ table{
     }
 
     tr.colored, tr.colored span{
-	background-color: lighten(@fontColorSecundary,40%);
+	background-color: @backgroundSecundary;
     }  
 }
 
@@ -267,11 +281,13 @@ select{
 
 .btn{
     border:0px solid @fontColor;
-    background:@backgroundColor;
-    padding:5px;
-
+    background-color:@backgroundSecundary; 
+    padding:0px 5px 0px 5px;
     &:hover{
 	font-weight:normal;
+    }
+    #collapse-tab > &{
+	background-color:@backgroundColor;
     }
 }
 
@@ -288,10 +304,15 @@ select{
 
 
 .icon-alone {
+    display: inline-block;
+    width:90%;
     margin-top:15px;
     margin-bottom:15px;
-    display: inline-block;
-    text-align:right;
+    padding:2px;
+    text-align:left;
+    background-color:@backgroundSecundary;
+    border:1px solid @fontColorSecundary;
+    .rounds(5px);
 }
 
 
