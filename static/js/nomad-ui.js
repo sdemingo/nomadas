@@ -76,13 +76,19 @@ function deleteCheckinFromMap(ckid,pid){
 function previewImage(blobKey){
     $("#imgPreview").empty()
     if (blobKey!=""){
-	$("#imgPreview").append("<img src=\""+DOMAIN+"/images/serve?blobKey="+blobKey+"\"  />")
+	$("#imgPreview").append("<img  src=\""+DOMAIN+"/images/serve?blobKey="+blobKey+"\"  />")
     }
     var oldBlobKey = $("#blobKey").val()
     $("#blobKey").val(blobKey)
     deleteImage(oldBlobKey) // Borramos la anterior del servidor siempre
 }
 
+
+function previewUploadImage(){
+    $("#imgPreview").empty()
+    $("#imgPreview").append("<span class=\"helper\"></span>")
+    $("#imgPreview").append("<img class=\"animation\" src=\""+DOMAIN+"/images/ajax-loader.gif\"  />")
+}
 
 
 
@@ -106,7 +112,7 @@ function fillInfoPanel(marker){
     html+="<span class=\"label\">"+marker.point.Lat+", "+marker.point.Lon+"</span>"
     html+="<p>"+marker.point.Desc+"</p>"
     if (marker.point.ImageKey!=""){
-	html+="<img src=\""+DOMAIN+"/images/serve?blobKey="+marker.point.ImageKey+"\" />"
+	html+="<img  src=\""+DOMAIN+"/images/serve?blobKey="+marker.point.ImageKey+"\" />"
     }
  
     $("#infopanel #info-key").val(marker.point.Id)
@@ -215,6 +221,8 @@ function fillEditPointPanel(marker){
     // configuro en upload de la imagen
     $("#editpanel #img").off("change").on("change",function() {
 	var formData = document.getElementById("editform")
+	// Activo la animación de subida
+	previewUploadImage()
 	sendImage(formData,previewImage)
     })
     

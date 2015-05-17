@@ -218,12 +218,12 @@ input{
     border:1px solid @fontColor;
     margin-top:5px;
     margin-bottom:5px;
-    padding-left:5px;
+    padding:0 0 0 5px;
     padding:0;
 
 
     &#name{
-	width:99%;
+	width:98%;
     }
 
     &#lat , &#lon{
@@ -231,7 +231,7 @@ input{
     }
 
     &#img{
-	width:99%;
+	width:98%;
     }
 
     &#nights{
@@ -242,15 +242,28 @@ input{
 
 
 #imgPreview{
-    width:40%;
+    width:50%;
+    min-height:80px;
+
     margin:0 auto;
     background-color:silver;
-
+    
     img{
 	width:99%;
-	border:0px;
+	border:0px;	
     }
 
+    .helper {
+	display: inline-block;
+	height: 100%;
+	vertical-align: middle;
+    }
+
+    img.animation{
+	vertical-align: middle;
+	width:16px;
+	height:16px;
+    }
 }
 
 textarea{

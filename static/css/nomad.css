@@ -179,31 +179,42 @@ input {
   border: 1px solid #000000;
   margin-top: 5px;
   margin-bottom: 5px;
-  padding-left: 5px;
+  padding: 0 0 0 5px;
   padding: 0;
 }
 input#name {
-  width: 99%;
+  width: 98%;
 }
 input#lat,
 input#lon {
   width: 47%;
 }
 input#img {
-  width: 99%;
+  width: 98%;
 }
 input#nights {
   padding-left: 5px;
   width: 50px;
 }
 #imgPreview {
-  width: 40%;
+  width: 50%;
+  min-height: 80px;
   margin: 0 auto;
   background-color: silver;
 }
 #imgPreview img {
   width: 99%;
   border: 0px;
+}
+#imgPreview .helper {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+#imgPreview img.animation {
+  vertical-align: middle;
+  width: 16px;
+  height: 16px;
 }
 textarea {
   width: 100%;
