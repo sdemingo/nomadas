@@ -75,6 +75,45 @@ html, body {
 }
 
 
+.pointpanel{
+    display:none;
+    position:absolute;
+    top:50px;
+    left:0; 
+    right:0;
+    width:90%;
+    margin:0 auto;
+    padding-bottom:20px;
+    background-color:@backgroundColor;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    h1,h2,h3{
+	color:@fontColorHeads;
+	margin:0px;
+	padding:5px 0px 5px 0px;
+    }
+
+    ul{
+	padding:0;
+	margin:0;
+	list-style-type:none;
+    }
+
+    img{
+	display:block;
+	width:80%;
+	margin:5px auto;
+	@media (max-width: @mobileUIWidth ) { 
+	    width:90%;
+	}
+    }
+}
+
+
+
+
 span{
     color: @fontColorSecundary;	
 
@@ -127,42 +166,6 @@ span{
 
 
 
-.pointpanel{
-    display:none;
-    position:absolute;
-    top:50px;
-    left:0; 
-    right:0;
-    width:90%;
-    margin:0 auto;
-    padding-bottom:20px;
-    background-color:@backgroundColor;
-
-    overflow-y: auto;
-    overflow-x: hidden;
-
-    h1,h2,h3{
-	color:@fontColorHeads;
-	margin:0px;
-	padding:5px 0px 5px 0px;
-    }
-
-    ul{
-	padding:0;
-	margin:0;
-	list-style-type:none;
-    }
-
-    img{
-	display:block;
-	width:80%;
-	margin:5px auto;
-	@media (max-width: @mobileUIWidth ) { 
-	    width:90%;
-	}
-    }
-}
-
 
 table{
     border:1px solid @fontColorSecundary;
@@ -214,16 +217,23 @@ table{
 /*
   Formularios
   */
+
+
 input{
-    border:1px solid @fontColor;
+    border:1px solid @fontColorSecundary;
+    .rounds(5px);
     margin-top:5px;
     margin-bottom:5px;
-    padding:0 0 0 5px;
-    padding:0;
 
-
-    &#name{
-	width:98%;
+    &[type=text],
+    &[type=password] {
+	width: 100%;
+	height: 30px;
+	padding: 5px 10px;
+	line-height: @defaultFontSize + 2;
+	box-sizing : border-box;
+	-moz-box-sizing : border-box;
+	-webkit-box-sizing: border-box;
     }
 
     &#lat , &#lon{
@@ -238,6 +248,19 @@ input{
 	padding-left:5px;
 	width:50px;
     }
+}
+
+
+textarea{
+    width:100%;
+    height:150px;
+    padding: 5px 10px;
+    line-height: @defaultFontSize + 2;
+    box-sizing: border-box;         
+    -moz-box-sizing: border-box;   
+    -webkit-box-sizing: border-box;
+    resize: none;
+    margin:0 auto;
 }
 
 
@@ -266,16 +289,6 @@ input{
     }
 }
 
-textarea{
-    width:100%;
-    height:150px;
-    box-sizing: border-box;         /* For IE and modern versions of Chrome */
-    -moz-box-sizing: border-box;    /* For Firefox                          */
-    -webkit-box-sizing: border-box; /* For Safari                           */
-    resize: none;
-    margin:0 auto;
-    padding:0;
-}
 
 
 select{
@@ -319,12 +332,17 @@ select{
     margin-right: .5em;
     content: attr(icon);
     speak: none;
+
 }
 
 
 .icon-alone {
     display: inline-block;
-    width:97%;
+    width:100%;
+    height: 30px;
+    box-sizing: border-box;         
+    -moz-box-sizing: border-box;   
+    -webkit-box-sizing: border-box;
     margin-top:15px;
     margin-bottom:15px;
     padding:2px;
@@ -332,6 +350,10 @@ select{
     background-color:@backgroundSecundary;
     border:1px solid @fontColorSecundary;
     .rounds(5px);
+
+    // To align icons vertically
+    line-height: 22px; 
+    vertical-align: middle;
 }
 
 
