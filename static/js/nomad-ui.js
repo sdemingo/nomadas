@@ -244,9 +244,16 @@ function fillCheckinInfoPanel(checkin_id,point_id){
     }
     
     html=""
-    html+="<h2>"+marker.point.Name+"</h2>"
-    html+="<p><span> Por "+checkin.Username+". "+showDate(checkin.Stamp)+"</span></p>"
-    html+="<p>"+checkin.Text+"</p>"
+
+    html=""
+    html+="<span class=\"label\">"+checkin.Username+"</span>"
+    html+="<span class=\"label\">"+showDate(checkin.Stamp)+"</span>"
+    if (checkin.Text==""){
+	html+="<p><i>Este registro no tiene ningún comentario</i></p>"
+    }else{
+	html+="<p>"+checkin.Text+"</p>"
+    }
+    $("#infocheckinpanel #checkintitle").html(marker.point.Name)
     $("#infocheckinpanel .content").html(html)
 
 
