@@ -141,6 +141,15 @@ table {
     table-layout: fixed;
   }
 }
+table tbody .scrollit {
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 200px;
+}
+table tbody .scrollit table {
+  border: 0;
+  margin: 0;
+}
 table .btn {
   padding: 0;
 }

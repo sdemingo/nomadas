@@ -294,7 +294,9 @@ function fillUserCheckinsTable(divId){
 	$(divId).append("<p class=\"checkin-table-header\">Últimos registros</p>")
     }
 
-    $(divId).append("<table id=\"user-checkin-table\">")
+
+    $(divId).append("<table class=\"customtable\"><tbody><tr><td colspan=\"2\"><div class=\"scrollit\"><table id=\"user-checkin-table\">")
+
     for (var i=0;i<checkins.length;i++){
 	var m = current_session.getMarker(checkins[i].PointId)
 	if (m && m.point){
@@ -307,7 +309,7 @@ function fillUserCheckinsTable(divId){
 	}
     }
 
-    $(divId+" tr:odd").addClass("colored")
+    $(divId+" #user-checkin-table tr:odd").addClass("colored")
 
     $(divId+" .showPoint").click(function(){
 	var id=$(this).attr("id")
@@ -337,8 +339,6 @@ function fillUserCheckinsTable(divId){
 	}
     })
     
-
-
     if (mobileUI){
 	$(divId+" td.resp-title").each(function(){
 	    $(this).attr("title",$(this).text())
@@ -366,7 +366,8 @@ function fillPointCheckinsTable(pid,divId){
 	$(divId).append("<p class=\"table-header\">También se registraron aquí:</p>")
     }
 
-    $(divId).append("<table id=\"point-checkin-table\">")
+    $(divId).append("<table class=\"customtable\"><tbody><tr><td colspan=\"2\"><div class=\"scrollit\"><table id=\"point-checkin-table\">")
+
     for (var i=0;i<checkins.length;i++){	
 	var row = "<tr> \
 <td class=\"resp-title\">"+checkins[i].Username+"</td>  \
@@ -376,7 +377,7 @@ function fillPointCheckinsTable(pid,divId){
 	$(divId+" #point-checkin-table").append(row)
     }
 
-    $(divId+" tr:odd").addClass("colored")
+    $(divId+" #point-checkin-table tr:odd").addClass("colored")
 
     if (mobileUI){
 	$(divId+" td.resp-title").each(function(){
