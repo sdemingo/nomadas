@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"errors"
 	"net/http"
-	"image/jpeg"
-	"image"
-	"bytes"
+	//"image/jpeg"
+	//"image"
+	//"bytes"
 
 
 	"app"
@@ -80,11 +80,15 @@ func storeImage(w http.ResponseWriter, r *http.Request) {
 
 	key:=file[0].BlobKey
 
+	/*
+	
 	key,err=resizeImage(c,key)
 	if err != nil {
                 app.ServeError(c, w, errors.New(ERR_FILENOTVALID))
                 return
         }
+
+	*/
 
 	fmt.Fprintf(w, "%s", string(key))
 }
@@ -153,6 +157,9 @@ func cleanImage(w http.ResponseWriter, r *http.Request) {
 
 
 
+/*
+
+ It uses deprecated File API over blobstore and it needs migrate to Cloud Store
 
 
 func resizeImage(c appengine.Context, blobKey appengine.BlobKey)(appengine.BlobKey, error){
@@ -199,3 +206,4 @@ func resizeImage(c appengine.Context, blobKey appengine.BlobKey)(appengine.BlobK
 	return k,err
 }
 
+*/
