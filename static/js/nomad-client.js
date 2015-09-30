@@ -111,6 +111,7 @@ function sendImage(form,callback){
             error: function(req,status,data){
 		console.log("upload image error: "+req.responseText);
 		showError("Error al subir imagen: "+req.responseText)
+		callback()
             }
 	});
     }

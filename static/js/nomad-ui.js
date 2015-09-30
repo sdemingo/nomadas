@@ -75,7 +75,7 @@ function deleteCheckinFromMap(ckid,pid){
 // Recarga el cuadro de previsualización de la imagen en el formulario de edición
 function previewImage(blobKey){
     $("#imgPreview").empty()
-    if (blobKey!=""){
+    if (blobKey!=undefined && blobKey!=""){
 	$("#imgPreview").append("<img  src=\""+DOMAIN+"/images/serve?blobKey="+blobKey+"\"  />")
     }
     var oldBlobKey = $("#blobKey").val()

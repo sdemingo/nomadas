@@ -80,6 +80,18 @@ func storeImage(w http.ResponseWriter, r *http.Request) {
 
 	key:=file[0].BlobKey
 
+	info,err:=blobstore.Stat(c,key)
+	if err != nil {
+                app.ServeError(c, w, err)
+                return
+        }
+
+	if info.Size > MAXSZIMAGE {
+		blobstore.Delete(c,key)
+		app.ServeError(c, w, errors.New(ERR_FILENOTVALID))
+                return
+	}
+
 	/*
 	
 	key,err=resizeImage(c,key)
