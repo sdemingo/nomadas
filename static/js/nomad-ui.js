@@ -471,7 +471,7 @@ function showPanel(panel,cancelOp){
 function showError(error){
     $("#modal" ).dialog({height:80,
 			 title:"Error",
-			 width:280,
+			 width:"auto",
 			 resizable: false,
 			 autoOpen: false });
     $("#modal" ).html(error).dialog("open");
