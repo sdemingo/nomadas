@@ -590,6 +590,20 @@ function initSessionMap(){
 }
 
 
+function initSearchBox(){
+
+    var defaultmsg = "..."
+    $("#searchkey").val(defaultmsg)
+    $("#searchkey").on("blur",function(){
+	if (this.value == "") {
+	    this.value = defaultmsg
+	}
+    }).on("focus",function(){
+	if (this.value == defaultmsg) {
+	    this.value = ""
+	}
+    })
+}
 
 
 
@@ -603,18 +617,7 @@ $(document).ready(function(){
     initCollapseArrow()
     $("#userpanel").show()
 
- 
-    //$("#searchkey").val("buscaa")
-    $("#searchkey").on("blur",function(){
-	if (this.value == "") {
-	    this.value = "buscaa"
-	}
-    }).on("focus",function(){
-	if (this.value == "buscaa") {
-	    this.value = ""
-	}
-    })
-
+    initSearchBox()
 });
 
 
