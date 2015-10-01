@@ -213,6 +213,12 @@ input#nights {
   padding-left: 5px;
   width: 50px;
 }
+input#searchkey {
+  width: 89%;
+  content: "\f007";
+  color: #808080;
+  font-style: italic;
+}
 textarea {
   width: 100%;
   height: 150px;

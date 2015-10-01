@@ -602,6 +602,19 @@ $(document).ready(function(){
     google.maps.event.addDomListener(window, "load", initSessionMap)
     initCollapseArrow()
     $("#userpanel").show()
+
+ 
+    //$("#searchkey").val("buscaa")
+    $("#searchkey").on("blur",function(){
+	if (this.value == "") {
+	    this.value = "buscaa"
+	}
+    }).on("focus",function(){
+	if (this.value == "buscaa") {
+	    this.value = ""
+	}
+    })
+
 });
 
 
