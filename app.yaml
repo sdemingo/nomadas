@@ -7,6 +7,9 @@ api_version: go1
 #- url: /.*
 #  script: _go_app
 
+skip_files:
+- static/js/import-data.js
+
 handlers:
 - url: /(.*\.(appcache|manifest))
   mime_type: text/cache-manifest
