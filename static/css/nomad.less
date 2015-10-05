@@ -82,12 +82,14 @@ html, body {
     left:0; 
     right:0;
     width:90%;
-    margin:0 auto;
+    margin:0 auto 0 auto;
     padding-bottom:20px;
     background-color:@backgroundColor;
 
     overflow-y: auto;
     overflow-x: hidden;
+
+
 
     h1,h2,h3{
 	color:@fontColorHeads;
@@ -259,6 +261,10 @@ input{
     &#nights{
 	padding-left:5px;
 	width:50px;
+	@media (max-width: @mobileUIWidth ) { 
+	    width:60px;
+	}
+
     }
 
     &#searchkey{
@@ -266,6 +272,10 @@ input{
 	content: "\f007";
 	color:@fontColorSecundary;
 	font-style:italic;
+
+	@media (max-width: @mobileUIWidth ) { 
+	    width:70%;
+	}
     }
 }
 
@@ -282,6 +292,7 @@ textarea{
     resize: none;
     margin:0 auto;
 }
+
 
 
 #imgPreview{
@@ -318,11 +329,27 @@ select{
     
     &#year{
 	width:23%;
+	@media (max-width: @mobileUIWidth ) {
+ 	    display:block;
+	    width:130px;
+	    margin-top:5px;
+	}
     }
     &#month{
 	width:47%;
+	@media (max-width: @mobileUIWidth ) {
+ 	    display:block;
+	    width:130px;
+	    margin-top:5px;
+	}
     }
+
 }
+
+
+
+
+
 
 
 .form-item label { 
