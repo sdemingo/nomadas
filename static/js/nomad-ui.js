@@ -114,7 +114,7 @@ function fillInfoPanel(marker){
     if (marker.point.ImageKey!=""){
 	html+="<img  src=\""+DOMAIN+"/images/serve?blobKey="+marker.point.ImageKey+"\" />"
     }
- 
+    
     $("#infopanel #info-key").val(marker.point.Id)
     $("#infopanel #infotitle").html(marker.point.Name)
     $("#infopanel .content").html(html)
@@ -212,10 +212,20 @@ function fillEditPointPanel(marker){
     }
 
 
+    // Configuro detector de cambios en la imagen
+    var imgChanged = false
+    $(document).ready(function() { 
+	$("#img").change(function() { 
+            imgChanged = true
+	}) 
+    })
+
     //configuro botones de cancelar  en ambos casos
     $("#editpanel #cancelPoint").off("click").click(function(){
 	showPanel("#userpanel",true)
-	deleteImage($("#blobKey").val())
+	if (imgChanged){
+	    deleteImage($("#blobKey").val())
+	}
     })
 
     // configuro en upload de la imagen
