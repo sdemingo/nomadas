@@ -80,7 +80,6 @@ function previewImage(blobKey){
     }
     var oldBlobKey = $("#blobKey").val()
     $("#blobKey").val(blobKey)
-    deleteImage(oldBlobKey) // Borramos la anterior del servidor siempre
 }
 
 
@@ -212,20 +211,9 @@ function fillEditPointPanel(marker){
     }
 
 
-    // Configuro detector de cambios en la imagen
-    var imgChanged = false
-    $(document).ready(function() { 
-	$("#img").change(function() { 
-            imgChanged = true
-	}) 
-    })
-
     //configuro botones de cancelar  en ambos casos
     $("#editpanel #cancelPoint").off("click").click(function(){
 	showPanel("#userpanel",true)
-	if (imgChanged){
-	    deleteImage($("#blobKey").val())
-	}
     })
 
     // configuro en upload de la imagen

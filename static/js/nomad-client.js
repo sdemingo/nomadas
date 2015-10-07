@@ -106,7 +106,7 @@ function sendImage(form,callback){
             contentType: false,
             processData: false,
 	    success:function(data){
-		callback(data)
+		callback(data)  //data is imgKey in blobstore
 	    },
             error: function(req,status,data){
 		console.log("upload image error: "+req.responseText);
