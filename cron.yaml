@@ -1,0 +1,4 @@
+cron:
+- description: clean orphan images
+  url: /images/clean
+  schedule: every 1 hours

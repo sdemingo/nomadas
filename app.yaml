@@ -195,6 +195,10 @@ handlers:
   expiration: "15m"
   login: required
 
+- url: /images/clean
+  script: _go_app
+  login: admin
+
 - url: /.+
   script: _go_app
 
