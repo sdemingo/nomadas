@@ -5,8 +5,8 @@ function error (data){
     var msg = data.Error
     if ((!data) || (!data.Error)){
 	msg="Se ha producido un error desconocido. El servidor no ha enviado información"
-	showErrorMessage(msg)
     }
+    showErrorMessage(msg)
     console.log("Internal server error: "+msg)
 }
 
