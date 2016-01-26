@@ -26,14 +26,14 @@ func RedirectToLogin(w http.ResponseWriter, r *http.Request) {
 	srv.RedirectUserLogin(w, r)
 }
 
-var adminTmpl = "app/tmpl/adminWelcome.html"
+var baseTmpl = "app/tmpl/base.html"
 var helpTmpl = "app/tmpl/help.html"
 
 func Welcome(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
 	if wr.NU.GetRole() < users.ROLE_ADMIN {
 		return "", errors.New(users.ERR_NOTOPERATIONALLOWED)
 	}
-	return adminTmpl, nil
+	return baseTmpl, nil
 }
 
 func Help(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
