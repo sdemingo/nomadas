@@ -1,9 +1,0 @@
-#!/bin/bash
-
-# echo 
-# echo "usuario creados inicialmente: admin@chex, teacher@chex, student@chex"
-# echo
-
-
-#dev_appserver.py . --datastore_path=~/varios/chex_datastore
-goapp serve

@@ -1,5 +1,5 @@
 
-files = nomad-map.js nomad-main.js 
+files = nomad-map.js nomad-utils.js nomad-main.js 
 target = nomad.js
 target_min = nomad.min.js
 
