@@ -18,8 +18,39 @@ footer{
 
 
 
+/*     Forms             */
+
+textarea.form-control  {
+    resize: none;
+    height: 100%;
+    min-height:150px;
+    padding:10;
+}
+
+.form-group ul{
+    list-style:none;
+}
+
+.form-group input[type=radio] + label{
+    margin-left: 15px;
+    font-weight:normal;
+}
+
+.list-group-item a{
+    text-decoration:none;
+}
+
+form.disabled {
+    pointer-events: none;
+    opacity: 0.8;
+}
 
 
+/*   labels   */
+.tags-panel .label{
+    display:inline-block;
+    margin:1px;
+}
 
 
 /* modal headers */

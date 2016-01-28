@@ -1,0 +1,28 @@
+
+<form method="post">
+  
+  <div class="form-group">
+    <label>Nombre</label>
+    <input type="text" class="form-control" name="Name" placeholder="..." value="{{.Content.Name}}">
+  </div>
+
+  <div class="form-group">
+    <label>Descripción:</label>
+    <textarea name="Desc" class="form-control">
+    </textarea>
+  </div>
+
+  <div class="form-group">
+    <label>Posición:</label>
+    <input type="text" class="form-control" name="Lat" placeholder="..." >
+    <input type="text" class="form-control" name="Lon" placeholder="..." >
+  </div>
+
+
+  <div class="form-group tags-panel">
+  </div>
+
+  <div class="form-group text-right">
+    <button type="button" id="userUpdateSubmit" class="btn btn-default">Crear</button>
+  </div>
+</form>

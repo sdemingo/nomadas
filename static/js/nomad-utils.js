@@ -25,11 +25,33 @@ function firstbootApp(){
 	dataType: 'json',
 	data: JSON.stringify(firstUser),
     	success: function(){
-	    window.location.replace("/logout");
+	    console.log("Añadido usuario por defecto")
 	},
-    	error: error
-    });
-}
+    	error: function(){
+		console.log("Error añadiendo usuario por defecto")
+	}
+    })
+
+    var tags=["Vaciado","Aguas","Gasolinera","Merendero",
+	      "Zona Infantil", "Gratis", "Vigilado", 
+	      "Taller","Urbano"]
+
+    $.each(tags,function(i,name){
+	var tag={Name:name}
+	$.ajax({
+    	    url:DOMAIN+"/points/tags/add",
+	    type: 'post',
+	    dataType: 'json',
+	    data: JSON.stringify(tag),
+    	    success: function(){
+		console.log("Añadida etiqueta "+name)
+	    },
+    	    error: function(){
+		console.log("Error añadiendo etiqueta "+name)
+	    }
+	})
+    })
+	}
 
 
 
