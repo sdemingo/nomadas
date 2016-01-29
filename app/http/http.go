@@ -1,6 +1,8 @@
 package http
 
 import (
+	"chex/model/users"
+	"errors"
 	"net/http"
 
 	"appengine/srv"
@@ -23,4 +25,11 @@ var helpTmpl = "app/tmpl/help.html"
 
 func Help(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
 	return helpTmpl, nil
+}
+
+func Welcome(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
+	if wr.NU.GetRole() < users.ROLE_GUEST {
+		return "", errors.New(users.ERR_NOTOPERATIONALLOWED)
+	}
+	return baseTmpl, nil
 }

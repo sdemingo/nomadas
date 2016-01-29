@@ -33,6 +33,11 @@ func AppHandler(w http.ResponseWriter, r *http.Request, whandler WrapperHandler)
 		return
 	}
 
+	if ok := routes[wr.R.URL.Path]; !ok {
+		http.NotFound(w, r)
+		return
+	}
+
 	rformat := r.Header.Get("Accept")
 	wr.JsonResponse = (strings.Index(rformat, JSON_ACCEPT_HEADER) >= 0)
 

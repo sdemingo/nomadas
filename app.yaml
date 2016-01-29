@@ -175,18 +175,8 @@ handlers:
   upload: static/(.+)/index.html
   expiration: "15m"
 
-#- url: /(.+)
-#  static_files: static/\1/index.html
-#  upload: static/(.+)/index.html
-#  expiration: "15m"
-
-
-# site root
 - url: /
-  static_files: app/tmpl/base.html
-  upload: static/index.html
-  expiration: "15m"
-  login: required
+  script: _go_app
 
 - url: /.+
   script: _go_app
