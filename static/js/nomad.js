@@ -1,7 +1,6 @@
 
 
 
-
 var nomadmap = (function(){
 
     var MARKERCOLOR = "FireBrick"
@@ -11,19 +10,58 @@ var nomadmap = (function(){
     var map
     var curMarker
     var lastLocation
+    var tagsSelected={}
 
 
     var addMarker = function(){
 
     }
     
+    
+    var newMarkerFormEvents = function(){
+	// load tags panel if extists
+	if ($(".tags-panel").length){
+	    $.ajax({
+    		url:DOMAIN+"/points/tags/list",
+		dataType: 'json',
+    		type: 'get',
+    		success: function (tags){
+		    $.each(tags,function(i){
+			var tag=tags[i]
+			console.log("Cargamos etiqueta "+tag.Name)
+			$(".tags-panel").append(
+			    $('<a href="#" class="label label-default">'+tag.Name+'</a>')
+			    .click(function(e){
+				e.stopPropagation();
+				e.preventDefault()
+				if (tagsSelected[tag.Id]){
+				    $(this).removeClass("label-primary")
+				    delete tagsSelected[tag.Id]
+				}else{
+				    $(this).addClass("label-primary")
+				    tagsSelected[tag.Id]=tag
+				}
+				console.log(tagsSelected)
+			    })
+			)
+		    })
+			},
+    		error: error
+	    }); 
+	}
+
+	// load position
+	$("#Lat").html(lastLocation.lat())
+	$("#Lon").html(lastLocation.lng())
+    }
+
     var newMarkerForm = function(){
 	$.ajax({
     	    url:DOMAIN+"/points/new",
     	    type: 'get',
     	    success: function (html){
 		showHTMLContent(html)
-		bindEventHandles()
+		newMarkerFormEvents()
 	    },
     	    error: error
 	}); 
@@ -77,21 +115,7 @@ var nomadmap = (function(){
 
     var bindEventHandles = function(){
 
-	// load tags panel if extists
-	if ($(".tags-panel").length){
-	    $.ajax({
-    		url:DOMAIN+"/points/tags/list",
-		dataType: 'json',
-    		type: 'get',
-    		success: function (tags){
-		    $.each(tags,function(i){
-			console.log("Cargamos etiqueta "+tags[i].Name)
-			$(".tags-panel").append('<span class="label label-default">'+tags[i].Name+'</span>')
-		    })
-		},
-    		error: error
-	    }); 
-	}
+
 
     }
 
