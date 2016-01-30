@@ -52,6 +52,11 @@ var nomadmap = (function(){
 	// load position
 	$("#Lat").html(lastLocation.lat())
 	$("#Lon").html(lastLocation.lng())
+
+	// buttons
+	$("#userUpdateCancel").click(function(){
+	    loadWelcomePanel()
+	})
     }
 
     var newMarkerForm = function(){

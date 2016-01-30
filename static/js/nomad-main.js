@@ -3,15 +3,18 @@ var DOMAIN=""
 
 
 
-$(document).ready(function () {
-    nomadmap.init()
-    
-    // load main panel
+function loadWelcomePanel(){
     $.ajax({
     	url:DOMAIN+"/users/me",
     	type: 'get',
     	success: showHTMLContent,
     	error: error
     });  
+}
+
+
+$(document).ready(function () {
+    nomadmap.init()
+    loadWelcomePanel()
 })
 
