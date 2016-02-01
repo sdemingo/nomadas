@@ -67,13 +67,6 @@ function showErrorMessage(text) {
     $("#errorDialog").modal("show")
 }
 
-
-
-function showHTMLContent(content){
-    $("#content").html(content)
-}
-
-
 function showConfirmMessage(text,actionButtonAnyHandler) {
     var modalData={
 	id:"confirmDialog",
@@ -89,6 +82,26 @@ function showConfirmMessage(text,actionButtonAnyHandler) {
     modal.init(modalData)
     $("#confirmDialog").modal("show")
 }
+
+function showInfoMessage(text) {
+    var modalData={
+	id:"dialog",
+	type:"info",
+	titleText:"Información",
+	bodyText:text
+    }
+
+    modal.init(modalData)
+    $("#dialog").modal("show")
+}
+
+
+function showHTMLContent(content){
+    $("#content").html(content)
+}
+
+
+
 
 
 $.fn.serializeObject = function()

@@ -11,11 +11,6 @@ var nomadmap = (function(){
     var lastLocation
     var tagsSelected={}
 
-
-    var addMarker = function(){
-
-    }
-    
     
     var newMarkerFormEvents = function(){
 	// load tags panel if extists
@@ -27,7 +22,6 @@ var nomadmap = (function(){
     		success: function (tags){
 		    $.each(tags,function(i){
 			var tag=tags[i]
-			console.log("Cargamos etiqueta "+tag.Name)
 			$(".tags-panel").append(
 			    $('<a href="#" class="label label-default">'+tag.Name+'</a>')
 			    .click(function(e){
@@ -40,7 +34,6 @@ var nomadmap = (function(){
 				    $(this).addClass("label-primary")
 				    tagsSelected[tag.Id]=tag
 				}
-				console.log(tagsSelected)
 			    })
 			)
 		    })
@@ -55,7 +48,18 @@ var nomadmap = (function(){
 
 	// buttons
 	$("#userUpdateCancel").click(function(){
+	    tagsSelected={}
 	    loadWelcomePanel()
+	})
+	$("#userUpdateSubmit").click(function(){
+	    var tmpUrl = $("form#newPoint").attr("action")
+	    var marker = readForm($("form#newPoint"))
+	    var tags = []
+	    for (var k in tagsSelected){
+		tags.push(tagsSelected[k].Name)
+	    }
+	    marker.Tags = tags.join(",")
+	    addMarker(marker,tmpUrl)  
 	})
     }
 
@@ -69,6 +73,37 @@ var nomadmap = (function(){
 	    },
     	    error: error
 	}); 
+    }
+
+    var addMarker = function(marker,tmpUrl){
+	$.ajax({
+    	    url:tmpUrl,
+    	    type: 'post',
+	    dataType: 'json',
+	    data: JSON.stringify(marker),
+    	    success: function (html){
+		loadWelcomePanel()
+		showInfoMessage("Punto creado con éxito")
+	    },
+    	    error: error
+	}); 
+    }
+
+
+    var readForm = function(form){
+	var m = $(form).serializeObject()
+	// m.Tags = m.Tags.split(",").map(function(e){
+	//     return e.trim()
+	// })
+	// m.Tags.clean("")
+
+	//validator.validate(m,types)
+	// if (validator.hasErrors()){
+	//     showErrorMessage("Existen campos mal formados o sin información")
+	//     return 
+	// }
+
+	return m
     }
 
 
@@ -97,7 +132,6 @@ var nomadmap = (function(){
 	
 	google.maps.event.addListener(m,"dblclick",function(e){
 	    if (!m.point){
-		console.log("Añadimos el current marker como nuevo punto al mapa")
 		newMarkerForm()
 	    }
 	})
