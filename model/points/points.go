@@ -14,9 +14,9 @@ type Point struct {
 	Name      string
 	Desc      string
 	TimeStamp time.Time `json:"`
-	Lat       float32
-	Lon       float32
-	ImageKey  string
+	Lat       float32   `json:",string"`
+	Lon       float32   `json:",string"`
+	ImageKey  string    `json:"`
 	Tags      []string
 }
 
@@ -46,9 +46,7 @@ func (v PointBuffer) Len() int {
 	return len(v)
 }
 
-func putPoint(wr srv.WrapperRequest, p *Point) error {
-
-	p.TimeStamp = time.Now()
+func addPoint(wr srv.WrapperRequest, p *Point) error {
 	q := data.NewConn(wr, "points")
 	err := q.Put(p)
 	if err != nil {
