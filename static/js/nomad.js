@@ -54,13 +54,23 @@ var nomadmap = (function(){
 	})
 	$("#userUpdateSubmit").click(function(){
 	    var tmpUrl = $("form#newPoint").attr("action")
+
+	    // read form and put it into formData
+	    var form = document.getElementById("newPoint")
+	    var formData = new FormData(form)
+	    
+	    // read marker fields and put them into json object
 	    var marker = readForm($("form#newPoint"))
 	    var tags = []
 	    for (var k in tagsSelected){
-		tags.push(tagsSelected[k].Name)
+	    	tags.push(tagsSelected[k].Name)
 	    }
-	    marker.Tags = tags.join(",")
-	    addMarker(marker,tmpUrl)  
+	    marker.Tags= tags
+	    marker.Lat = $("#Lat").html()
+	    marker.Lon = $("#Lon").html()
+	    
+	    formData.append("jsonPoint",JSON.stringify(marker))
+	    addMarker(formData,tmpUrl)  
 	})
     }
 
@@ -79,9 +89,12 @@ var nomadmap = (function(){
     var addMarker = function(marker,tmpUrl){
 	$.ajax({
     	    url:tmpUrl,
+	    //url:"/points/add",
     	    type: 'post',
-	    dataType: 'json',
-	    data: JSON.stringify(marker),
+            data: marker,
+            cache:false,
+            contentType: false,
+            processData: false,
     	    success: function (html){
 		loadWelcomePanel()
 		showInfoMessage("Punto creado con éxito")

@@ -61,6 +61,7 @@ func AppHandler(w http.ResponseWriter, r *http.Request, whandler WrapperHandler)
 
 	} else {
 		// HTML Response
+		w.Header().Set("Content-Type", "text/html")
 		tmpl := template.Must(template.ParseFiles(tmplName))
 		if err := tmpl.Execute(w, rdata); err != nil {
 			errorResponse(wr, w, err)
