@@ -69,6 +69,10 @@ var nomadmap = (function(){
 	    marker.Lon = $("#Lon").html()
 	    
 	    formData.append("jsonPoint",JSON.stringify(marker))
+	    if (!IsValidMarker(marker)){
+		showErrorMessage("El punto tiene campos no validos")
+		return
+	    }
 	    addMarker(formData,tmpUrl)  
 	})
     }
@@ -104,6 +108,13 @@ var nomadmap = (function(){
 	    },
     	    error: error
 	}); 
+    }
+
+    var IsValidMarker = function(m){
+	m.Name.trim()
+	m.Desc.trim()
+	return (m.Name!="") && 
+	    (m.Desc!="")
     }
 
 
