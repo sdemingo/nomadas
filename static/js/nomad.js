@@ -89,15 +89,19 @@ var nomadmap = (function(){
     var addMarker = function(marker,tmpUrl){
 	$.ajax({
     	    url:tmpUrl,
-	    //url:"/points/add",
     	    type: 'post',
             data: marker,
             cache:false,
             contentType: false,
             processData: false,
-    	    success: function (html){
+	    dataType: 'json',
+    	    success: function (response){
 		loadWelcomePanel()
-		showInfoMessage("Punto creado con éxito")
+		if (response.Error){
+		    showErrorMessage(response.Error)
+		}else{
+		    showInfoMessage("Punto creado con éxito")
+		}
 	    },
     	    error: error
 	}); 

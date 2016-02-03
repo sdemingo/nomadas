@@ -2,6 +2,7 @@ package points
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"appengine/data"
@@ -18,6 +19,15 @@ type Point struct {
 	Lon       float32   `json:",string"`
 	ImageKey  string    `json:"`
 	Tags      []string
+}
+
+func (p *Point) IsValid() bool {
+	strings.Trim(p.Name, " \t")
+
+	return (p.Name != "") &&
+		(p.Desc != "") &&
+		(p.Lat != 0.0) &&
+		(p.Lon != 0.0)
 }
 
 func (p *Point) ID() int64 {

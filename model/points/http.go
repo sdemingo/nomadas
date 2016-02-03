@@ -33,8 +33,6 @@ func NewPoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) 
 }
 
 func AddPoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
-	srv.Log(wr, "Me estan añadiendo un nuevo punto")
-
 	if wr.NU.GetRole() < users.ROLE_ADMIN {
 		return infoTmpl, fmt.Errorf("points: addpoint: %s", users.ERR_NOTOPERATIONALLOWED)
 	}
@@ -52,13 +50,19 @@ func AddPoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) 
 		return infoTmpl, fmt.Errorf("points: addpoint: %v", err)
 	}
 
+	if !point.IsValid() {
+		return infoTmpl, fmt.Errorf("points: addpoint: any point field has not valid value")
+	}
+
+	image := wr.MIMEChunks["Image"]
+	if len(image) > 0 {
+		point.ImageKey = string(image[0].BlobKey)
+	}
+
 	err = addPoint(wr, point)
 	if err != nil {
 		return infoTmpl, fmt.Errorf("points: addpoint: %v", err)
 	}
-
-	// TODO:
-	// assign point.ImageKey
 
 	tc["Content"] = point
 	return infoTmpl, nil
