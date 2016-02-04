@@ -15,6 +15,7 @@ function loadWelcomePanel(){
 
 $(document).ready(function () {
     nomadmap.init()
+    nomadmap.loadMarkers()
     loadWelcomePanel()
 })
 

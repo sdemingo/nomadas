@@ -74,5 +74,9 @@ func getPointById(wr srv.WrapperRequest, id int64) (*Point, error) {
 }
 
 func getPointsByOwner(wr srv.WrapperRequest, id int64) ([]*Point, error) {
-	return nil, nil
+	ps := NewPointBuffer()
+	q := data.NewConn(wr, "points")
+	q.AddFilter("UserId =", id)
+	q.GetMany(&ps)
+	return ps, nil
 }

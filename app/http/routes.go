@@ -40,6 +40,10 @@ func init() {
 		routes["/points/add"] = true
 		AppHandler(w, r, points.AddPoint)
 	})
+	http.HandleFunc("/points/list", func(w http.ResponseWriter, r *http.Request) {
+		routes["/points/list"] = true
+		AppHandler(w, r, points.GetListPoints)
+	})
 	http.HandleFunc("/points/tags/add", func(w http.ResponseWriter, r *http.Request) {
 		routes["/points/tags/add"] = true
 		AppHandler(w, r, points.AddTag)

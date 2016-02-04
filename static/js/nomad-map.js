@@ -12,7 +12,7 @@ var nomadmap = (function(){
     var tagsSelected={}
 
     
-    var newMarkerFormEvents = function(){
+    var newPointFormEvents = function(){
 	// load tags panel if extists
 	if ($(".tags-panel").length){
 	    $.ajax({
@@ -24,17 +24,17 @@ var nomadmap = (function(){
 			var tag=tags[i]
 			$(".tags-panel").append(
 			    $('<a href="#" class="label label-default">'+tag.Name+'</a>')
-			    .click(function(e){
-				e.stopPropagation();
-				e.preventDefault()
-				if (tagsSelected[tag.Id]){
-				    $(this).removeClass("label-primary")
-				    delete tagsSelected[tag.Id]
-				}else{
-				    $(this).addClass("label-primary")
-				    tagsSelected[tag.Id]=tag
-				}
-			    })
+				.click(function(e){
+				    e.stopPropagation();
+				    e.preventDefault()
+				    if (tagsSelected[tag.Id]){
+					$(this).removeClass("label-primary")
+					delete tagsSelected[tag.Id]
+				    }else{
+					$(this).addClass("label-primary")
+					tagsSelected[tag.Id]=tag
+				    }
+				})
 			)
 		    })
 			},
@@ -59,25 +59,25 @@ var nomadmap = (function(){
 	    var formData = new FormData(form)
 	    
 	    // read marker fields and put them into json object
-	    var marker = readForm($("form#newPoint"))
+	    var point = readForm($("form#newPoint"))
 	    var tags = []
 	    for (var k in tagsSelected){
 	    	tags.push(tagsSelected[k].Name)
 	    }
-	    marker.Tags= tags
-	    marker.Lat = $("#Lat").html()
-	    marker.Lon = $("#Lon").html()
+	    point.Tags= tags
+	    point.Lat = $("#Lat").html()
+	    point.Lon = $("#Lon").html()
 	    
-	    formData.append("jsonPoint",JSON.stringify(marker))
-	    if (!IsValidMarker(marker)){
+	    formData.append("jsonPoint",JSON.stringify(point))
+	    if (!IsValidPoint(point)){
 		showErrorMessage("El punto tiene campos no validos")
 		return
 	    }
-	    addMarker(formData,tmpUrl)  
+	    addPoint(formData,tmpUrl)  
 	})
     }
 
-    var newMarkerForm = function(){
+    var newPointForm = function(){
 	$.ajax({
     	    url:DOMAIN+"/points/new",
     	    type: 'get',
@@ -89,7 +89,7 @@ var nomadmap = (function(){
 	}); 
     }
 
-    var addMarker = function(marker,tmpUrl){
+    var addPoint = function(point,tmpUrl){
 	$.ajax({
     	    url:tmpUrl,
     	    type: 'post',
@@ -110,7 +110,31 @@ var nomadmap = (function(){
 	}); 
     }
 
-    var IsValidMarker = function(m){
+    var getPoints = function(tags){
+	$.ajax({
+    	    url:DOMAIN+"/points/list",
+    	    type: 'get',
+	    dataType: 'json',
+    	    success: function (response){
+		if (response.Error){
+		    showErrorMessage(response.Error)
+		}
+		showMarkers(response)
+	    },
+    	    error: error
+	}); 
+    }
+
+    var showMarkers = function(points){
+	for (var i=0;i<points.length;i++){
+	    var location = {lat: parseFloat(points[i].Lat), 
+	    		    lng: parseFloat(points[i].Lon)}
+	    var marker=newMarker(location, points[i].Name, MARKERCOLOR)
+	    marker.point=points[i]
+	}
+    }
+
+    var IsValidPoint = function(m){
 	m.Name.trim()
 	m.Desc.trim()
 	return (m.Name!="") && 
@@ -211,7 +235,8 @@ var nomadmap = (function(){
     }
 
     return{
-	init:init
+	init:init,
+	loadMarkers:getPoints
     }
 
 

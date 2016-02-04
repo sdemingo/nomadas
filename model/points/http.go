@@ -16,6 +16,18 @@ var newPointTmpl = "model/points/tmpl/newPoint.html"
 
 func GetListPoints(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
 
+	wr.Parse()
+
+	// TODO
+	// Check if the request has tags param for search
+
+	id := wr.NU.ID()
+	points, err := getPointsByOwner(wr, id)
+	if err != nil {
+		return infoTmpl, fmt.Errorf("points: getlistpoints: %v", err)
+	}
+
+	tc["Content"] = points
 	return infoTmpl, nil
 }
 
