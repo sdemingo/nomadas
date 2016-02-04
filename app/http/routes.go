@@ -36,6 +36,10 @@ func init() {
 		routes["/points/new"] = true
 		AppHandler(w, r, points.NewPoint)
 	})
+	http.HandleFunc("/points/get", func(w http.ResponseWriter, r *http.Request) {
+		routes["/points/get"] = true
+		AppHandler(w, r, points.GetOnePoint)
+	})
 	http.HandleFunc("/points/add", func(w http.ResponseWriter, r *http.Request) {
 		routes["/points/add"] = true
 		AppHandler(w, r, points.AddPoint)

@@ -125,6 +125,17 @@ var nomadmap = (function(){
 	}); 
     }
 
+    var getPoint = function(id){
+	$.ajax({
+    	    url:DOMAIN+"/points/get?id="+id,
+    	    type: 'get',
+    	    success: function (html){
+		showHTMLContent(html)
+	    },
+    	    error: error
+	}); 
+    }
+
     var showMarkers = function(points){
 	for (var i=0;i<points.length;i++){
 	    var location = {lat: parseFloat(points[i].Lat), 
@@ -178,7 +189,7 @@ var nomadmap = (function(){
 
 	google.maps.event.addListener(m,"click",function(e){
 	    if (m.point){
-		console.log("Queremos ver la info del punto "+m.point)
+		getPoint(m.point.Id)
 	    }
 	})
 	

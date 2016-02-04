@@ -70,13 +70,23 @@ func deletePoint(wr srv.WrapperRequest, p *Point) error {
 }
 
 func getPointById(wr srv.WrapperRequest, id int64) (*Point, error) {
-	return nil, nil
+	p := new(Point)
+	p.Id = id
+	q := data.NewConn(wr, "points")
+	err := q.Get(p)
+	if err != nil {
+		return nil, fmt.Errorf("getpointbyid: %v", err)
+	}
+	return p, nil
 }
 
 func getPointsByOwner(wr srv.WrapperRequest, id int64) ([]*Point, error) {
 	ps := NewPointBuffer()
 	q := data.NewConn(wr, "points")
 	q.AddFilter("UserId =", id)
-	q.GetMany(&ps)
+	err := q.GetMany(&ps)
+	if err != nil {
+		return nil, fmt.Errorf("getpointsbyowner: %v", err)
+	}
 	return ps, nil
 }

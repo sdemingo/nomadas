@@ -3,6 +3,7 @@ package points
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"time"
 
 	"model/users"
@@ -13,6 +14,7 @@ import (
 // Templates
 var infoTmpl = "app/tmpl/info.html"
 var newPointTmpl = "model/points/tmpl/newPoint.html"
+var viewPointTmpl = "model/points/tmpl/viewPoint.html"
 
 func GetListPoints(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
 
@@ -32,7 +34,21 @@ func GetListPoints(wr srv.WrapperRequest, tc map[string]interface{}) (string, er
 }
 
 func GetOnePoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
-	return infoTmpl, nil
+	if wr.NU.GetRole() < users.ROLE_ADMIN {
+		return viewPointTmpl, fmt.Errorf("points: getonepoint: %s", users.ERR_NOTOPERATIONALLOWED)
+	}
+
+	wr.Parse()
+	sid := wr.Values.Get("id")
+	id, err := strconv.ParseInt(sid, 10, 64)
+	if sid == "" || err != nil {
+		return viewPointTmpl, fmt.Errorf("points: getonepoint: bad id")
+	}
+
+	point, err := getPointById(wr, id)
+	tc["Content"] = point
+
+	return viewPointTmpl, nil
 }
 
 func NewPoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
