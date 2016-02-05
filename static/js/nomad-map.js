@@ -83,7 +83,7 @@ var nomadmap = (function(){
     	    type: 'get',
     	    success: function (html){
 		showHTMLContent(html)
-		newMarkerFormEvents()
+		newPointFormEvents()
 	    },
     	    error: error
 	}); 
@@ -93,7 +93,7 @@ var nomadmap = (function(){
 	$.ajax({
     	    url:tmpUrl,
     	    type: 'post',
-            data: marker,
+            data: point,
             cache:false,
             contentType: false,
             processData: false,
@@ -193,7 +193,7 @@ var nomadmap = (function(){
 	
 	google.maps.event.addListener(m,"dblclick",function(e){
 	    if (!m.point){
-		newMarkerForm()
+		newPointForm()
 	    }
 	})
 
