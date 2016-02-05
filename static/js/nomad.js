@@ -130,9 +130,7 @@ var nomadmap = (function(){
 	$.ajax({
     	    url:DOMAIN+"/points/get?id="+id,
     	    type: 'get',
-    	    success: function (html){
-		showHTMLContent(html)
-	    },
+    	    success: showHTMLContent,
     	    error: error
 	}); 
     }
@@ -534,7 +532,6 @@ $(function() {
 });
 
 var DOMAIN=""
-
 
 
 function loadWelcomePanel(){

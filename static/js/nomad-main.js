@@ -2,7 +2,6 @@
 var DOMAIN=""
 
 
-
 function loadWelcomePanel(){
     $.ajax({
     	url:DOMAIN+"/users/me",

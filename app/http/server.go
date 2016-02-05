@@ -33,9 +33,19 @@ func AppHandler(w http.ResponseWriter, r *http.Request, whandler WrapperHandler)
 		return
 	}
 
+	// Check if path exists in routes
 	if ok := routes[wr.R.URL.Path]; !ok {
 		http.NotFound(w, r)
 		return
+	}
+
+	// Check if it's an ajax request. Only accept ajax
+	// request less for root path
+	if r.Header.Get("X-Requested-With") != "XMLHttpRequest" {
+		if wr.R.URL.Path != "/" {
+			http.NotFound(w, r)
+			return
+		}
 	}
 
 	rformat := r.Header.Get("Accept")
@@ -111,7 +121,6 @@ func getCurrentUser(wr *srv.WrapperRequest) error {
 		// If the session users not in the datastore we use de admin
 		// users of the app
 		if wr.IsAdminRequest() {
-			//nu = nusers.New(u.Email, "Administrador", nusers.ROLE_ADMIN)
 			nu = GetDefaultUser(u.Email)
 		} else {
 			return errors.New("No user id found")

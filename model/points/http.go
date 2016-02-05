@@ -46,8 +46,11 @@ func GetOnePoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, erro
 	}
 
 	point, err := getPointById(wr, id)
-	tc["Content"] = point
+	if err != nil {
+		return viewPointTmpl, fmt.Errorf("points: getonepoint: %v", err)
+	}
 
+	tc["Content"] = point
 	return viewPointTmpl, nil
 }
 
