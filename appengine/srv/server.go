@@ -75,3 +75,7 @@ func RedirectUserLogin(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Location", url)
 	w.WriteHeader(http.StatusFound)
 }
+
+func SendBlob(w http.ResponseWriter, key string) {
+	blobstore.Send(w, appengine.BlobKey(key))
+}

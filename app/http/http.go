@@ -1,19 +1,25 @@
 package http
 
 import (
-	"chex/model/users"
 	"errors"
 	"net/http"
+
+	"model/users"
 
 	"appengine/srv"
 )
 
 func init() {
 	http.HandleFunc("/logout", logout)
+	http.HandleFunc("/blob", serveBlob)
 }
 
 func logout(w http.ResponseWriter, r *http.Request) {
 	srv.RedirectUserLogin(w, r)
+}
+
+func serveBlob(w http.ResponseWriter, r *http.Request) {
+	srv.SendBlob(w, r.FormValue("id"))
 }
 
 func RedirectToLogin(w http.ResponseWriter, r *http.Request) {

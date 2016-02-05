@@ -4,6 +4,9 @@
   <div class="panel-body">
     <p><strong>{{.Content.Lat}}, {{.Content.Lon}}</strong></p>
     <p>{{.Content.Desc}}</p>
+    {{if .Content.ImageKey}}
+    <img class="img-responsive" src="/blob?id={{.Content.ImageKey}}">
+    {{end}}
     <p><button class="btn btn-default" onclick="loadWelcomePanel()">Volver</button></p>
   </div>
 </div>

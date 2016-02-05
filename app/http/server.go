@@ -40,9 +40,11 @@ func AppHandler(w http.ResponseWriter, r *http.Request, whandler WrapperHandler)
 	}
 
 	// Check if it's an ajax request. Only accept ajax
-	// request less for root path
+	// request less for next routes
 	if r.Header.Get("X-Requested-With") != "XMLHttpRequest" {
-		if wr.R.URL.Path != "/" {
+		if wr.R.URL.Path != "/" &&
+			wr.R.URL.Path != "/logout" &&
+			wr.R.URL.Path != "/blob" {
 			http.NotFound(w, r)
 			return
 		}
