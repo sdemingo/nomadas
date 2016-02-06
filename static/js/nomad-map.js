@@ -7,6 +7,7 @@ var nomadmap = (function(){
     var MARKERCOLOR_CURRENT = "orange"
 
     var map
+    var points
     var curMarker
     var lastLocation
     var tagsSelected={}
@@ -51,6 +52,7 @@ var nomadmap = (function(){
 	    tagsSelected={}
 	    loadWelcomePanel()
 	})
+
 	$("#userUpdateSubmit").click(function(){
 	    var tmpUrl = $("form#newPoint").attr("action")
 
@@ -73,7 +75,8 @@ var nomadmap = (function(){
 		showErrorMessage("El punto tiene campos no validos")
 		return
 	    }
-	    addPoint(formData,tmpUrl)  
+	    addPoint(formData)  
+	    //requestUpload()
 	})
     }
 
@@ -86,12 +89,30 @@ var nomadmap = (function(){
 		newPointFormEvents()
 	    },
     	    error: error
-	}); 
+	})
     }
 
-    var addPoint = function(point,tmpUrl){
+    var addPoint = function(point){
+
+	var addPointUrl
+
+	// First request for a uploadHandler 
+	// with an async ajax
 	$.ajax({
-    	    url:tmpUrl,
+    	    url:DOMAIN+"/points/upload",
+    	    type: 'get',
+	    dataType: 'json',
+	    async: false,
+    	    success: function (url){
+		addPointUrl = url.Path
+	    },
+    	    error: error
+	})
+
+	// Now, using the temp url handler to 
+	// upload the point
+	$.ajax({
+    	    url:addPointUrl,
     	    type: 'post',
             data: point,
             cache:false,
@@ -103,6 +124,8 @@ var nomadmap = (function(){
 		if (response.Error){
 		    showErrorMessage(response.Error)
 		}else{
+		    points.push(response)
+		    showMarkers()
 		    showInfoMessage("Punto creado con éxito")
 		}
 	    },
@@ -119,7 +142,8 @@ var nomadmap = (function(){
 		if (response.Error){
 		    showErrorMessage(response.Error)
 		}
-		showMarkers(response)
+		points = points.concat(response)
+		showMarkers()
 	    },
     	    error: error
 	}); 
@@ -129,12 +153,15 @@ var nomadmap = (function(){
 	$.ajax({
     	    url:DOMAIN+"/points/get?id="+id,
     	    type: 'get',
-    	    success: showHTMLContent,
+    	    success: function(html){
+		showHTMLContent(html)
+		mainEvents()
+	    },
     	    error: error
 	}); 
     }
 
-    var showMarkers = function(points){
+    var showMarkers = function(){
 	for (var i=0;i<points.length;i++){
 	    var location = {lat: parseFloat(points[i].Lat), 
 	    		    lng: parseFloat(points[i].Lon)}
@@ -236,6 +263,7 @@ var nomadmap = (function(){
 	    }
 	}
 
+	points=[]
 	map = new google.maps.Map(document.getElementById("map"), mapOptions)
 
 	google.maps.event.addListener(map,"click",function(e){

@@ -55,12 +55,17 @@ func GetOnePoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, erro
 }
 
 func NewPoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
-	url, err := wr.GetMIMEHandler("/points/add")
+	return newPointTmpl, nil
+}
+
+func NewUploadHandler(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
+	u, err := wr.GetMIMEHandler("/points/add")
 	if err != nil {
 		return infoTmpl, fmt.Errorf("points: newpoint: %v", err)
 	}
-	tc["HandlerURL"] = url
-	return newPointTmpl, nil
+
+	tc["Content"] = u
+	return infoTmpl, nil
 }
 
 func AddPoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {

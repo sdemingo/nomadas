@@ -2,6 +2,10 @@
 var DOMAIN=""
 
 
+function mainEvents(){
+    $(".btn-home").click(loadWelcomePanel)
+}
+
 function loadWelcomePanel(){
     $.ajax({
     	url:DOMAIN+"/users/me",
