@@ -1,4 +1,10 @@
 
+<div class="panel panel-default btn-group" role="group">
+  <button type="button" id="userUpdateCancel" class="btn btn-default btn-home">Inicio</button>
+  <button type="button" id="userUpdateEdit" class="btn btn-default">Editar</button>
+  <button type="button" id="userUpdateDelete" class="btn btn-default">Borrar</button>
+</div>
+
 <div class="panel panel-default">
   <div class="panel-heading">{{.Content.Name}}</div>
   <div class="panel-body">
@@ -7,7 +13,6 @@
     {{if .Content.ImageKey}}
     <img class="img-responsive" src="/blob?id={{.Content.ImageKey}}">
     {{end}}
-    <p><button class="btn btn-default" onclick="loadWelcomePanel()">Volver</button></p>
   </div>
 </div>
 
