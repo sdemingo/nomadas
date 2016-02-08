@@ -154,7 +154,7 @@ func getPointTags(wr srv.WrapperRequest, p *Point) ([]string, error) {
 	q.AddFilter("PointId=", p.Id)
 	q.GetMany(&pt)
 	for i := range pt {
-		tag, err := getTagById(wr, pt[i].Id)
+		tag, err := getTagById(wr, pt[i].TagId)
 		if err != nil {
 			return nil, fmt.Errorf("getpointtags: %v", err)
 		}
