@@ -18,7 +18,7 @@ type Point struct {
 	Lat       float32   `json:",string"`
 	Lon       float32   `json:",string"`
 	ImageKey  string    `json:"`
-	Tags      []string
+	Tags      []string  `datastore:"-"`
 }
 
 func (p *Point) IsValid() bool {
@@ -62,6 +62,12 @@ func addPoint(wr srv.WrapperRequest, p *Point) error {
 	if err != nil {
 		return fmt.Errorf("putpoint: %v", err)
 	}
+
+	err = addPointTags(wr, p)
+	if err != nil {
+		return fmt.Errorf("putpoint: %v", err)
+	}
+
 	return nil
 }
 
@@ -77,6 +83,11 @@ func getPointById(wr srv.WrapperRequest, id int64) (*Point, error) {
 	if err != nil {
 		return nil, fmt.Errorf("getpointbyid: %v", err)
 	}
+
+	p.Tags, err = getPointTags(wr, p)
+	if err != nil {
+		return nil, fmt.Errorf("getpointbyid: %v", err)
+	}
 	return p, nil
 }
 
@@ -87,6 +98,13 @@ func getPointsByOwner(wr srv.WrapperRequest, id int64) ([]*Point, error) {
 	err := q.GetMany(&ps)
 	if err != nil {
 		return nil, fmt.Errorf("getpointsbyowner: %v", err)
+	}
+
+	for i := range ps {
+		ps[i].Tags, err = getPointTags(wr, ps[i])
+		if err != nil {
+			return nil, fmt.Errorf("getpointbyowner: %v", err)
+		}
 	}
 	return ps, nil
 }

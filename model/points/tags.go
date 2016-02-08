@@ -94,6 +94,19 @@ func getTagById(wr srv.WrapperRequest, id int64) (*Tag, error) {
 	return t, nil
 }
 
+// Return a tag
+func getTagByName(wr srv.WrapperRequest, name string) (*Tag, error) {
+	tags := NewTagBuffer()
+	q := data.NewConn(wr, "tags")
+	q.AddFilter("Name= ", name)
+	q.GetMany(&tags)
+	if tags.Len() == 0 {
+		return nil, fmt.Errorf("No tags found")
+	}
+
+	return tags[0], nil
+}
+
 // Return all tags stored in database by a user. If userId is less
 // than zero its return all tags in the database
 func getAllTags(wr srv.WrapperRequest, userId int64) (TagBuffer, error) {
@@ -116,13 +129,37 @@ func getPointsByTags(wr srv.WrapperRequest, tags []string) (PointBuffer, error) 
 }
 
 // Add the tags of the point to the database
-func addPointTags(wr srv.WrapperRequest, q *Point) error {
-
+func addPointTags(wr srv.WrapperRequest, p *Point) error {
+	q := data.NewConn(wr, "tags-points")
+	for _, tagName := range p.Tags {
+		tag, err := getTagByName(wr, tagName)
+		if err != nil {
+			return fmt.Errorf("addpointtags: %v", err)
+		}
+		pointTag := &PointTag{Id: 0, PointId: p.Id, TagId: tag.Id}
+		err = q.Put(pointTag)
+		if err != nil {
+			return fmt.Errorf("addpointtags: %v", err)
+		}
+	}
 	return nil
 }
 
 // Return the tags of the point
-func getPointTags(wr srv.WrapperRequest, q *Point) ([]string, error) {
-	return nil, nil
+func getPointTags(wr srv.WrapperRequest, p *Point) ([]string, error) {
+	tags := make([]string, 0)
+	pt := NewPointTagBuffer()
+
+	q := data.NewConn(wr, "tags-points")
+	q.AddFilter("PointId=", p.Id)
+	q.GetMany(&pt)
+	for i := range pt {
+		tag, err := getTagById(wr, pt[i].Id)
+		if err != nil {
+			return nil, fmt.Errorf("getpointtags: %v", err)
+		}
+		tags = append(tags, tag.Name)
+	}
+	return tags, nil
 
 }
