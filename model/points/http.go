@@ -104,6 +104,33 @@ func AddPoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) 
 	return infoTmpl, nil
 }
 
+func DeletePoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
+	if wr.NU.GetRole() < users.ROLE_ADMIN {
+		return infoTmpl, fmt.Errorf("points: deletepoint: %s", users.ERR_NOTOPERATIONALLOWED)
+	}
+
+	wr.Parse()
+	sid := wr.Values.Get("id")
+	id, err := strconv.ParseInt(sid, 10, 64)
+	if err != nil {
+		return viewPointTmpl, fmt.Errorf("points: deletepoint: bad id: %v", err)
+	}
+
+	point, err := getPointById(wr, id)
+	if err != nil {
+		return viewPointTmpl, fmt.Errorf("points: deletepoint: %v", err)
+	}
+
+	err = deletePoint(wr, point)
+	if err != nil {
+		return infoTmpl, fmt.Errorf("points: deletepoint: %v", err)
+	}
+
+	tc["Content"] = point
+
+	return infoTmpl, nil
+}
+
 func GetListTags(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
 	if wr.NU.GetRole() < users.ROLE_ADMIN {
 		return infoTmpl, fmt.Errorf("points: getlisttags: %s", users.ERR_NOTOPERATIONALLOWED)

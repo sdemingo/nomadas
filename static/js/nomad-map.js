@@ -7,10 +7,36 @@ var nomadmap = (function(){
     var MARKERCOLOR_CURRENT = "orange"
 
     var map
-    var points
+    var points=[]
+    var markers=[]
     var curMarker
     var lastLocation
     var tagsSelected={}
+
+    var initLoc = new google.maps.LatLng(40.4279613,0.2967822)
+
+    var mapOptions = {
+	zoom: 6,
+	center: {lat: -33, lng: 151},
+	disableDefaultUI: true,
+	center:initLoc,
+	disableDefaultUI: true,
+	zoomControl: false,
+	mapTypeControl: true,
+	mapTypeControlOptions: {
+	    style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+	    position: google.maps.ControlPosition.TOP_LEFT
+	}
+    }
+
+    var viewPointFormEvents = function(){
+	$("#userUpdateDelete").click(function(){
+	    var val=$("#pointId").html()
+	    if (val){
+		deletePoint(val)
+	    }
+	})
+    }
 
     
     var newPointFormEvents = function(){
@@ -133,6 +159,28 @@ var nomadmap = (function(){
 	}); 
     }
 
+    var deletePoint=function(id){
+	$.ajax({
+    	    url:DOMAIN+"/points/delete?id="+id,
+    	    type: 'get',
+	    dataType: 'json',
+    	    success: function(response){
+		loadWelcomePanel()
+		if (response.Error){
+		    showErrorMessage(response.Error)
+		}else{
+		    points = points.filter(function(it){
+			return it.Id != parseInt(id)
+		    })
+		    deleteMarkers()
+		    showMarkers()
+		    showInfoMessage("Punto borrado con éxito")
+		}
+	    },
+    	    error: error
+	}); 
+    }
+
     var getPoints = function(tags){
 	$.ajax({
     	    url:DOMAIN+"/points/list",
@@ -156,19 +204,13 @@ var nomadmap = (function(){
     	    success: function(html){
 		showHTMLContent(html)
 		mainEvents()
+		viewPointFormEvents()
 	    },
     	    error: error
 	}); 
     }
 
-    var showMarkers = function(){
-	for (var i=0;i<points.length;i++){
-	    var location = {lat: parseFloat(points[i].Lat), 
-	    		    lng: parseFloat(points[i].Lon)}
-	    var marker=newMarker(location, points[i].Name, MARKERCOLOR)
-	    marker.point=points[i]
-	}
-    }
+
 
     var IsValidPoint = function(m){
 	m.Name.trim()
@@ -194,6 +236,23 @@ var nomadmap = (function(){
 	return m
     }
 
+
+    var deleteMarkers= function(){
+	for (var i=0;i<markers.length;i++){
+	    markers[i].setMap(null)
+	}
+	markers=[]
+    }
+
+    var showMarkers = function(){
+	for (var i=0;i<points.length;i++){
+	    var location = {lat: parseFloat(points[i].Lat), 
+	    		    lng: parseFloat(points[i].Lon)}
+	    var marker=newMarker(location, points[i].Name, MARKERCOLOR)
+	    marker.point=points[i]
+	    markers.push(marker)
+	}
+    }
 
     var newMarker=function(location,name,color){
 	if (!color){
@@ -239,36 +298,16 @@ var nomadmap = (function(){
     }
 
 
-    var bindEventHandles = function(){
-
-
-
-    }
-
-    var init = function(){
-
-	var initLoc = new google.maps.LatLng(40.4279613,0.2967822)
-
-	var mapOptions = {
-	    zoom: 6,
-	    center: {lat: -33, lng: 151},
-	    disableDefaultUI: true,
-	    center:initLoc,
-	    disableDefaultUI: true,
-	    zoomControl: false,
-	    mapTypeControl: true,
-	    mapTypeControlOptions: {
-		style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-		position: google.maps.ControlPosition.TOP_LEFT
-	    }
-	}
-
-	points=[]
+    var initMap = function(){
 	map = new google.maps.Map(document.getElementById("map"), mapOptions)
-
 	google.maps.event.addListener(map,"click",function(e){
 	    setCurrentMarker(e.latLng)
 	})
+    }
+
+    var init = function(){
+	points=[]
+	initMap()
     }
 
     return{

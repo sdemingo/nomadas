@@ -40,6 +40,10 @@ func init() {
 		routes["/points/upload"] = true
 		AppHandler(w, r, points.NewUploadHandler)
 	})
+	http.HandleFunc("/points/delete", func(w http.ResponseWriter, r *http.Request) {
+		routes["/points/delete"] = true
+		AppHandler(w, r, points.DeletePoint)
+	})
 	http.HandleFunc("/points/get", func(w http.ResponseWriter, r *http.Request) {
 		routes["/points/get"] = true
 		AppHandler(w, r, points.GetOnePoint)

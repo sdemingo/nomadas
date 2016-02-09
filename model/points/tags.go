@@ -145,6 +145,22 @@ func addPointTags(wr srv.WrapperRequest, p *Point) error {
 	return nil
 }
 
+func deletePointTags(wr srv.WrapperRequest, p *Point) error {
+
+	pt := NewPointTagBuffer()
+	q := data.NewConn(wr, "tags-points")
+	q.AddFilter("PointId=", p.Id)
+	q.GetMany(&pt)
+
+	for i := range pt {
+		err := q.Delete(pt[i])
+		if err != nil {
+			return fmt.Errorf("deletepointtags: %v", err)
+		}
+	}
+	return nil
+}
+
 // Return the tags of the point
 func getPointTags(wr srv.WrapperRequest, p *Point) ([]string, error) {
 	tags := make([]string, 0)

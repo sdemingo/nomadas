@@ -72,6 +72,20 @@ func addPoint(wr srv.WrapperRequest, p *Point) error {
 }
 
 func deletePoint(wr srv.WrapperRequest, p *Point) error {
+	q := data.NewConn(wr, "points")
+
+	err := deletePointTags(wr, p)
+	if err != nil {
+		return fmt.Errorf("deletepoint: %v", err)
+	}
+
+	if p.ImageKey != "" {
+		q.DeleteBlob(p.ImageKey)
+	}
+	err = q.Delete(p)
+	if err != nil {
+		return fmt.Errorf("deletepoint: %v", err)
+	}
 	return nil
 }
 
