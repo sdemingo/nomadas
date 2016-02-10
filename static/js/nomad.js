@@ -31,16 +31,24 @@ var nomadmap = (function(){
     }
 
     var viewPointFormEvents = function(){
-	$("#userUpdateDelete").click(function(){
+	$("#btnMainPanel").click(loadWelcomePanel)
+	$("#btnDeletePoint").click(function(){
 	    var val=$("#pointId").html()
 	    if (val){
 		deletePoint(val)
 	    }
 	})
+
+	$("#btnEditPoint").click(function(){
+	    var val=$("#pointId").html()
+	    if (val){
+		editPointForm(val)
+	    }
+	})
     }
 
     
-    var newPointFormEvents = function(){
+    var editPointFormEvents = function(){
 	// load tags panel if extists
 	if ($(".tags-panel").length){
 	    $.ajax({
@@ -71,24 +79,28 @@ var nomadmap = (function(){
 	}
 
 	// load position
-	$("#Lat").html(lastLocation.lat())
-	$("#Lon").html(lastLocation.lng())
+	if ($("#Lat").html() == ""){
+	    $("#Lat").html(lastLocation.lat())
+	}
+	if ($("#Lon").html() == ""){
+	    $("#Lon").html(lastLocation.lng())
+	}
 
 	// buttons
-	$("#userUpdateCancel").click(function(){
+	$("#btnMainPanel").click(function(){
 	    tagsSelected={}
 	    loadWelcomePanel()
 	})
 
-	$("#userUpdateSubmit").click(function(){
-	    var tmpUrl = $("form#newPoint").attr("action")
+	$("#btnNewPoint").click(function(){
+	    var tmpUrl = $("#formNewPoint").attr("action")
 
 	    // read form and put it into formData
-	    var form = document.getElementById("newPoint")
+	    var form = document.getElementById("formNewPoint")
 	    var formData = new FormData(form)
 	    
 	    // read marker fields and put them into json object
-	    var point = readForm($("form#newPoint"))
+	    var point = readForm($("#formNewPoint"))
 	    var tags = []
 	    for (var k in tagsSelected){
 	    	tags.push(tagsSelected[k].Name)
@@ -103,17 +115,20 @@ var nomadmap = (function(){
 		return
 	    }
 	    addPoint(formData)  
-	    //requestUpload()
 	})
     }
 
-    var newPointForm = function(){
+    var editPointForm = function(id){
+	var urla=DOMAIN+"/points/edit"
+	if (id){
+	    urla=urla+"?id="+id
+	}
 	$.ajax({
-    	    url:DOMAIN+"/points/new",
+    	    url:urla,
     	    type: 'get',
     	    success: function (html){
 		showHTMLContent(html)
-		newPointFormEvents()
+		editPointFormEvents()
 	    },
     	    error: error
 	})
@@ -170,12 +185,9 @@ var nomadmap = (function(){
 		if (response.Error){
 		    showErrorMessage(response.Error)
 		}else{
-		    console.log(points)
 		    points = points.filter(function(it){
-			console.log(it.Id,parseInt(id))
 			return it.Id != parseInt(id)
 		    })
-		    console.log(points)
 		    deleteMarkers()
 		    showMarkers()
 		    showInfoMessage("Punto borrado con éxito")
@@ -207,7 +219,6 @@ var nomadmap = (function(){
     	    type: 'get',
     	    success: function(html){
 		showHTMLContent(html)
-		mainEvents()
 		viewPointFormEvents()
 	    },
     	    error: error
@@ -283,7 +294,7 @@ var nomadmap = (function(){
 	
 	google.maps.event.addListener(m,"dblclick",function(e){
 	    if (!m.point){
-		newPointForm()
+		editPointForm()
 	    }
 	})
 
@@ -603,10 +614,6 @@ $(function() {
 
 var DOMAIN=""
 
-
-function mainEvents(){
-    $(".btn-home").click(loadWelcomePanel)
-}
 
 function loadWelcomePanel(){
     $.ajax({

@@ -55,6 +55,24 @@ func GetOnePoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, erro
 }
 
 func NewPoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
+	if wr.NU.GetRole() < users.ROLE_ADMIN {
+		return infoTmpl, fmt.Errorf("points: newpoint: %s", users.ERR_NOTOPERATIONALLOWED)
+	}
+
+	wr.Parse()
+	sid := wr.Values.Get("id")
+	if sid != "" {
+		id, err := strconv.ParseInt(sid, 10, 64)
+		if err != nil {
+			return viewPointTmpl, fmt.Errorf("points: newpoint: bad id: %v", err)
+		}
+		point, err := getPointById(wr, id)
+		if err != nil {
+			return viewPointTmpl, fmt.Errorf("points: getonepoint: %v", err)
+		}
+
+		tc["Content"] = point
+	}
 	return newPointTmpl, nil
 }
 

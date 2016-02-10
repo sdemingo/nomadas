@@ -32,8 +32,8 @@ func init() {
 	})
 
 	// Points and tags
-	http.HandleFunc("/points/new", func(w http.ResponseWriter, r *http.Request) {
-		routes["/points/new"] = true
+	http.HandleFunc("/points/edit", func(w http.ResponseWriter, r *http.Request) {
+		routes["/points/edit"] = true
 		AppHandler(w, r, points.NewPoint)
 	})
 	http.HandleFunc("/points/upload", func(w http.ResponseWriter, r *http.Request) {

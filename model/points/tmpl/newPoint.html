@@ -1,20 +1,29 @@
 
 <div class="panel panel-default btn-group" role="group">
-  <button type="button" id="userUpdateCancel" class="btn btn-default">Inicio</button>
-  <button type="button" id="userUpdateSubmit" class="btn btn-default">Crear</button>
+  <button type="button" id="btnMainPanel" class="btn btn-default">Inicio</button>
+  <button type="button" id="btnNewPoint" class="btn btn-default">Crear</button>
 </div>
 
-<form id="newPoint" method="post" enctype="multipart/form-data">
+<form id="formNewPoint" method="post" enctype="multipart/form-data">
   <div class="form-group">
     <label>Nombre</label>
-    <input type="text" class="form-control" name="Name" placeholder="Nuevo Punto" xs>
+    {{if .Content.Name}}
+    <input type="text" class="form-control" name="Name" value="{{.Content.Name}}">
+    {{else}}
+    <input type="text" class="form-control" name="Name" placeholder="Nuevo Punto">
+    {{end}}
   </div>
 
+  {{if .Content}}
+  <p><strong>Posición: </strong> <span id="Lat">{{.Content.Lat}}</span>, <span id="Lon">{{.Content.Lon}}</span></p>
+  {{else}}
   <p><strong>Posición: </strong> <span id="Lat"></span>, <span id="Lon"></span></p>
+  {{end}}
 
   <div class="form-group">
     <label>Descripción:</label>
     <textarea name="Desc" class="form-control">
+      {{.Content.Desc}}
     </textarea>
   </div>
 
