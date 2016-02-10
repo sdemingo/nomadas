@@ -10,3 +10,16 @@ func (op *DataConn) DeleteBlob(key string) error {
 	blobkey := appengine.BlobKey(key)
 	return blobstore.Delete(c, blobkey)
 }
+
+func (op *DataConn) ReadBlob(key string) ([]byte, error) {
+	c := op.Wreq.C
+	blobkey := appengine.BlobKey(key)
+	info, err := blobstore.Stat(c, blobkey)
+	if err != nil {
+		return nil, err
+	}
+	blobBytes := make([]byte, info.Size)
+	blobReader := blobstore.NewReader(c, blobkey)
+	blobReader.Read(blobBytes)
+	return blobBytes, nil
+}

@@ -6,6 +6,7 @@ import (
 
 	"model/users"
 
+	"appengine/data"
 	"appengine/srv"
 )
 
@@ -19,7 +20,10 @@ func logout(w http.ResponseWriter, r *http.Request) {
 }
 
 func serveBlob(w http.ResponseWriter, r *http.Request) {
-	srv.SendBlob(w, r.FormValue("id"))
+	wr := srv.NewWrapperRequest(r)
+	q := data.NewConn(wr, "")
+	bytes, _ := q.ReadBlob(r.FormValue("id"))
+	w.Write(bytes)
 }
 
 func RedirectToLogin(w http.ResponseWriter, r *http.Request) {
