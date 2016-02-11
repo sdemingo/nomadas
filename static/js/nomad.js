@@ -168,7 +168,7 @@ var nomadmap = (function(){
 		}else{
 		    points.push(response)
 		    showMarkers()
-		    showInfoMessage("Punto creado con éxito")
+		    showInfoMessage("Punto guardado con éxito")
 		}
 	    },
     	    error: error
