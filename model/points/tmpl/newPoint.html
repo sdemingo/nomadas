@@ -5,6 +5,9 @@
 </div>
 
 <form id="formNewPoint" method="post" enctype="multipart/form-data">
+  {{if .Content}}
+  <input type="hidden" name="Id" value="{{.Content.Id}}">
+  {{end}}
   <div class="form-group">
     <label>Nombre</label>
     {{if .Content.Name}}

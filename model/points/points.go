@@ -10,7 +10,7 @@ import (
 )
 
 type Point struct {
-	Id        int64 `datastore:"-"`
+	Id        int64 `json:",string" datastore:"-"`
 	UserId    int64
 	Name      string
 	Desc      string

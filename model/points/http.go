@@ -96,8 +96,27 @@ func AddPoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) 
 		return infoTmpl, fmt.Errorf("points: addpoint: %v", err)
 	}
 
-	point := new(Point)
-	point.TimeStamp = time.Now()
+	var point *Point
+	var oldImageKey string
+
+	sid := wr.Values.Get("Id")
+	if sid != "" {
+		// Editing a point with id. Recover last commited
+		id, err := strconv.ParseInt(sid, 10, 64)
+		if err != nil {
+			return viewPointTmpl, fmt.Errorf("points: addpoint: bad id: %v", err)
+		}
+		point, err = getPointById(wr, id)
+		if err != nil {
+			return viewPointTmpl, fmt.Errorf("points: addpoint: %v", err)
+		}
+		oldImageKey = point.ImageKey
+	} else {
+		// Creating a new point
+		point = new(Point)
+		point.TimeStamp = time.Now()
+	}
+
 	point.UserId = wr.NU.ID()
 	err = json.Unmarshal([]byte(wr.Values.Get("jsonPoint")), point)
 	if err != nil {
@@ -111,6 +130,8 @@ func AddPoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) 
 	image := wr.MIMEChunks["Image"]
 	if len(image) > 0 {
 		point.ImageKey = string(image[0].BlobKey)
+	} else {
+		point.ImageKey = oldImageKey
 	}
 
 	err = addPoint(wr, point)
