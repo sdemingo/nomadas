@@ -28,7 +28,7 @@ function firstbootApp(){
 	    console.log("Añadido usuario por defecto")
 	},
     	error: function(){
-		console.log("Error añadiendo usuario por defecto")
+	    console.log("Error añadiendo usuario por defecto")
 	}
     })
 
@@ -98,6 +98,15 @@ function showInfoMessage(text) {
 
 function showHTMLContent(content){
     $("#content").html(content)
+}
+
+function moveTo(id){
+    var windowsize = $(window).width();
+    if (windowsize <=  480){
+	$("html, body").animate({
+            scrollTop: $(id).offset().top
+	}, 500);
+    }
 }
 
 

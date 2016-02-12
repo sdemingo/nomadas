@@ -6,7 +6,10 @@ function loadWelcomePanel(){
     $.ajax({
     	url:DOMAIN+"/users/me",
     	type: 'get',
-    	success: showHTMLContent,
+    	success: function(html){
+	    showHTMLContent(html)
+	    moveTo("html")
+	},
     	error: error
     });  
 }

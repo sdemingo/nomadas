@@ -132,6 +132,7 @@ var nomadmap = (function(){
     	    type: 'get',
     	    success: function (html){
 		showHTMLContent(html)
+		moveTo("#content")
 		editPointFormEvents()
 	    },
     	    error: error
@@ -223,6 +224,7 @@ var nomadmap = (function(){
     	    type: 'get',
     	    success: function(html){
 		showHTMLContent(html)
+		moveTo("#content")
 		viewPointFormEvents()
 	    },
     	    error: error
@@ -366,7 +368,7 @@ function firstbootApp(){
 	    console.log("Añadido usuario por defecto")
 	},
     	error: function(){
-		console.log("Error añadiendo usuario por defecto")
+	    console.log("Error añadiendo usuario por defecto")
 	}
     })
 
@@ -436,6 +438,15 @@ function showInfoMessage(text) {
 
 function showHTMLContent(content){
     $("#content").html(content)
+}
+
+function moveTo(id){
+    var windowsize = $(window).width();
+    if (windowsize <=  480){
+	$("html, body").animate({
+            scrollTop: $(id).offset().top
+	}, 500);
+    }
 }
 
 
@@ -623,7 +634,10 @@ function loadWelcomePanel(){
     $.ajax({
     	url:DOMAIN+"/users/me",
     	type: 'get',
-    	success: showHTMLContent,
+    	success: function(html){
+	    showHTMLContent(html)
+	    moveTo("html")
+	},
     	error: error
     });  
 }

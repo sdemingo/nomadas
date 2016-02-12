@@ -131,6 +131,7 @@ var nomadmap = (function(){
     	    type: 'get',
     	    success: function (html){
 		showHTMLContent(html)
+		moveTo("#content")
 		editPointFormEvents()
 	    },
     	    error: error
@@ -222,6 +223,7 @@ var nomadmap = (function(){
     	    type: 'get',
     	    success: function(html){
 		showHTMLContent(html)
+		moveTo("#content")
 		viewPointFormEvents()
 	    },
     	    error: error
