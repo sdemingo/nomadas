@@ -73,6 +73,13 @@ func NewPoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) 
 
 		tc["Content"] = point
 	}
+
+	tags, err := getAllTags(wr, -1)
+	if err != nil {
+		return infoTmpl, fmt.Errorf("points: getlisttags: %v", err)
+	}
+	tc["AllTagsNames"] = tags
+
 	return newPointTmpl, nil
 }
 
@@ -96,8 +103,18 @@ func AddPoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) 
 		return infoTmpl, fmt.Errorf("points: addpoint: %v", err)
 	}
 
-	var point *Point
-	var oldImageKey string
+	// Creating a new point
+	point := new(Point)
+	point.TimeStamp = time.Now()
+
+	point.UserId = wr.NU.ID()
+	err = json.Unmarshal([]byte(wr.Values.Get("jsonPoint")), point)
+	if err != nil {
+		return infoTmpl, fmt.Errorf("points: addpoint: %v", err)
+	}
+	if !point.IsValid() {
+		return infoTmpl, fmt.Errorf("points: addpoint: any point field has not valid value")
+	}
 
 	sid := wr.Values.Get("Id")
 	if sid != "" {
@@ -106,37 +123,15 @@ func AddPoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) 
 		if err != nil {
 			return viewPointTmpl, fmt.Errorf("points: addpoint: bad id: %v", err)
 		}
-		point, err = getPointById(wr, id)
+		err = updatePoint(wr, id, point)
 		if err != nil {
-			return viewPointTmpl, fmt.Errorf("points: addpoint: %v", err)
+			return infoTmpl, fmt.Errorf("points: addpoint: %v", err)
 		}
-		oldImageKey = point.ImageKey
 	} else {
-		// Creating a new point
-		point = new(Point)
-		point.TimeStamp = time.Now()
-	}
-
-	point.UserId = wr.NU.ID()
-	err = json.Unmarshal([]byte(wr.Values.Get("jsonPoint")), point)
-	if err != nil {
-		return infoTmpl, fmt.Errorf("points: addpoint: %v", err)
-	}
-
-	if !point.IsValid() {
-		return infoTmpl, fmt.Errorf("points: addpoint: any point field has not valid value")
-	}
-
-	image := wr.MIMEChunks["Image"]
-	if len(image) > 0 {
-		point.ImageKey = string(image[0].BlobKey)
-	} else {
-		point.ImageKey = oldImageKey
-	}
-
-	err = addPoint(wr, point)
-	if err != nil {
-		return infoTmpl, fmt.Errorf("points: addpoint: %v", err)
+		err = addPoint(wr, point)
+		if err != nil {
+			return infoTmpl, fmt.Errorf("points: addpoint: %v", err)
+		}
 	}
 
 	tc["Content"] = point

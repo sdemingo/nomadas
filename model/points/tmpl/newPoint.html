@@ -6,7 +6,7 @@
 
 <form id="formNewPoint" method="post" enctype="multipart/form-data">
   {{if .Content}}
-  <input type="hidden" name="Id" value="{{.Content.Id}}">
+  <input type="hidden" id="Id" name="Id" value="{{.Content.Id}}">
   {{end}}
   <div class="form-group">
     <label>Nombre</label>
@@ -40,5 +40,19 @@
 
   <div class="form-group tags-panel">
     <p><label>Categorias:</label></p>
+    {{if .Content}}
+      {{$point := .Content}}
+      {{range .AllTagsNames}}
+       {{if  $point.HasTag .Name}}
+       <a href="#" class="label label-default label-primary">{{.Name}}</a>
+       {{else}}
+       <a href="#" class="label label-default">{{.Name}}</a>       
+       {{end}}
+      {{end}}
+    {{else}}
+      {{range .AllTagsNames}}
+        <a href="#" class="label label-default">{{.Name}}</a>
+      {{end}}
+    {{end}}
   </div>
 </form>

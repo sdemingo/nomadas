@@ -49,6 +49,8 @@ var nomadmap = (function(){
 
     
     var editPointFormEvents = function(){
+	tagsSelected={}
+	
 	// load tags panel if extists
 	if ($(".tags-panel").length){
 	    $.ajax({
@@ -56,24 +58,26 @@ var nomadmap = (function(){
 		dataType: 'json',
     		type: 'get',
     		success: function (tags){
-		    $.each(tags,function(i){
-			var tag=tags[i]
-			$(".tags-panel").append(
-			    $('<a href="#" class="label label-default">'+tag.Name+'</a>')
-				.click(function(e){
-				    e.stopPropagation();
-				    e.preventDefault()
-				    if (tagsSelected[tag.Id]){
-					$(this).removeClass("label-primary")
-					delete tagsSelected[tag.Id]
-				    }else{
-					$(this).addClass("label-primary")
-					tagsSelected[tag.Id]=tag
-				    }
-				})
-			)
-		    })
-			},
+		    $(".tags-panel .label")		     		
+			.click(function(e){
+			    var tagName=$(this).html()
+		    	    e.stopPropagation();
+		    	    e.preventDefault()
+		    	    if (tagsSelected[tagName]){
+		    		$(this).removeClass("label-primary")
+		    		delete tagsSelected[tagName]
+		    	    }else{
+		    		$(this).addClass("label-primary")
+		    		tagsSelected[tagName]=1
+		    	    }
+		    	})
+
+		    // mark as selected labels from the server template
+		    $(".tags-panel .label-primary").each(function(e){
+			var tagName=$(this).html()
+			tagsSelected[tagName]=1
+		    })	
+		},
     		error: error
 	    }); 
 	}
@@ -102,10 +106,10 @@ var nomadmap = (function(){
 	    // read marker fields and put them into json object
 	    var point = readForm($("#formNewPoint"))
 	    var tags = []
-	    for (var k in tagsSelected){
-	    	tags.push(tagsSelected[k].Name)
+	    for (var key in tagsSelected){
+	    	tags.push(key)
 	    }
-	    point.Tags= tags
+	    point.Tags = tags
 	    point.Lat = $("#Lat").html()
 	    point.Lon = $("#Lon").html()
 	    

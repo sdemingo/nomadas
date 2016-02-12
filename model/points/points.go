@@ -30,6 +30,15 @@ func (p *Point) IsValid() bool {
 		(p.Lon != 0.0)
 }
 
+func (p *Point) HasTag(tag string) bool {
+	for _, t := range p.Tags {
+		if tag == t {
+			return true
+		}
+	}
+	return false
+}
+
 func (p *Point) ID() int64 {
 	return p.Id
 }
@@ -58,6 +67,12 @@ func (v PointBuffer) Len() int {
 
 func addPoint(wr srv.WrapperRequest, p *Point) error {
 	q := data.NewConn(wr, "points")
+
+	image := wr.MIMEChunks["Image"]
+	if len(image) > 0 {
+		p.ImageKey = string(image[0].BlobKey)
+	}
+
 	err := q.Put(p)
 	if err != nil {
 		return fmt.Errorf("putpoint: %v", err)
@@ -86,6 +101,44 @@ func deletePoint(wr srv.WrapperRequest, p *Point) error {
 	if err != nil {
 		return fmt.Errorf("deletepoint: %v", err)
 	}
+	return nil
+}
+
+func updatePoint(wr srv.WrapperRequest, id int64, newp *Point) error {
+
+	oldp, err := getPointById(wr, id)
+	if err != nil {
+		return fmt.Errorf("updatepoint: %v", err)
+	}
+	oldp.Desc = newp.Desc
+	oldp.Name = newp.Name
+
+	// update tags
+	err = deletePointTags(wr, oldp)
+	if err != nil {
+		return fmt.Errorf("updatepoint: %v", err)
+	}
+	oldp.Tags = newp.Tags
+	err = addPointTags(wr, oldp)
+	if err != nil {
+		return fmt.Errorf("updatepoint: %v", err)
+	}
+
+	// update image
+	image := wr.MIMEChunks["Image"]
+	if len(image) > 0 {
+		q := data.NewConn(wr, "")
+		newImageKey := string(image[0].BlobKey)
+		q.DeleteBlob(oldp.ImageKey)
+		oldp.ImageKey = newImageKey
+	}
+
+	q := data.NewConn(wr, "points")
+	err = q.Put(oldp)
+	if err != nil {
+		return fmt.Errorf("updatepoint: %v", err)
+	}
+
 	return nil
 }
 
