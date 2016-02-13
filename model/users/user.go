@@ -5,25 +5,28 @@ import (
 	"strconv"
 	"time"
 
+	appusers "app/users"
+
 	"appengine/data"
 	"appengine/srv"
 )
 
 const (
-	ROLE_GUEST = iota //0
-	ROLE_ADMIN = iota //1
+	//ROLE_GUEST = iota //0
+	//ROLE_ADMIN = iota //1
 
 	MAXSZUSERNAME = 100
 
-	ERR_NOTVALIDUSER        = "Usuario no valido"
-	ERR_DUPLICATEDUSER      = "Usuario duplicado"
-	ERR_USERNOTFOUND        = "Usuario no encontrado"
-	ERR_NOTOPERATIONALLOWED = "Operación no permitida"
+	ERR_NOTVALIDUSER   = "Usuario no valido"
+	ERR_DUPLICATEDUSER = "Usuario duplicado"
+	ERR_USERNOTFOUND   = "Usuario no encontrado"
 )
 
+/*
 var roleNames = []string{
 	ROLE_GUEST: "Invitado",
 	ROLE_ADMIN: "Administrador"}
+*/
 
 type NUser struct {
 	Id        int64 `json:",string" datastore:"-"`
@@ -45,8 +48,8 @@ func (n *NUser) GetInfo() map[string]string {
 	info := make(map[string]string)
 
 	info["Username"] = n.Name
-	if int(n.Role) < len(roleNames) {
-		info["RoleName"] = roleNames[n.Role]
+	if int(n.Role) < len(appusers.RoleNames) {
+		info["RoleName"] = appusers.RoleNames[n.Role]
 	} else {
 		info["RoleName"] = ""
 	}

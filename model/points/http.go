@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"time"
 
-	"model/users"
+	"app/users"
 
 	"appengine/srv"
 )
@@ -74,7 +74,7 @@ func NewPoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) 
 		tc["Content"] = point
 	}
 
-	tags, err := getAllTags(wr, -1)
+	tags, err := GetAllTags(wr, -1)
 	if err != nil {
 		return infoTmpl, fmt.Errorf("points: getlisttags: %v", err)
 	}
@@ -171,7 +171,7 @@ func GetListTags(wr srv.WrapperRequest, tc map[string]interface{}) (string, erro
 	}
 
 	wr.R.ParseForm()
-	tags, err := getAllTags(wr, -1)
+	tags, err := GetAllTags(wr, -1)
 	if err != nil {
 		return infoTmpl, fmt.Errorf("points: getlisttags: %v", err)
 	}

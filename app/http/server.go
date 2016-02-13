@@ -140,7 +140,7 @@ func GetDefaultUser(email string) appusers.AppUser {
 	n.Id = -1
 	n.Mail = email
 	n.Name = "Administrador"
-	n.Role = users.ROLE_ADMIN
+	n.Role = appusers.ROLE_ADMIN
 
 	return n
 }

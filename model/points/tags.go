@@ -109,7 +109,7 @@ func getTagByName(wr srv.WrapperRequest, name string) (*Tag, error) {
 
 // Return all tags stored in database by a user. If userId is less
 // than zero its return all tags in the database
-func getAllTags(wr srv.WrapperRequest, userId int64) (TagBuffer, error) {
+func GetAllTags(wr srv.WrapperRequest, userId int64) (TagBuffer, error) {
 	var err error
 
 	tags := NewTagBuffer()

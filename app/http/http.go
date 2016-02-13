@@ -4,7 +4,7 @@ import (
 	"errors"
 	"net/http"
 
-	"model/users"
+	"app/users"
 
 	"appengine/data"
 	"appengine/srv"

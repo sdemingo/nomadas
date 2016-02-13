@@ -6,6 +6,9 @@ import (
 	"strconv"
 	"strings"
 
+	appusers "app/users"
+	"model/points"
+
 	"appengine/srv"
 )
 
@@ -21,8 +24,8 @@ func Main(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
 }
 
 func GetList(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
-	if wr.NU.GetRole() < ROLE_ADMIN {
-		return viewTmpl, fmt.Errorf("users: getlist: %s", ERR_NOTOPERATIONALLOWED)
+	if wr.NU.GetRole() < appusers.ROLE_ADMIN {
+		return viewTmpl, fmt.Errorf("users: getlist: %s", appusers.ERR_NOTOPERATIONALLOWED)
 	}
 
 	wr.R.ParseForm()
@@ -52,9 +55,16 @@ func GetOne(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
 		} else {
 			tc["Content"] = wr.NU
 		}
+
+		tags, err := points.GetAllTags(wr, -1)
+		if err != nil {
+			return infoTmpl, fmt.Errorf("users: getone: %v", err)
+		}
+		tc["AllTagsNames"] = tags
+
 	} else {
-		if wr.NU.GetRole() < ROLE_ADMIN {
-			return infoTmpl, fmt.Errorf("users: getone: %s", ERR_NOTOPERATIONALLOWED)
+		if wr.NU.GetRole() < appusers.ROLE_ADMIN {
+			return infoTmpl, fmt.Errorf("users: getone: %s", appusers.ERR_NOTOPERATIONALLOWED)
 		}
 
 		id, err = strconv.ParseInt(wr.R.Form["id"][0], 10, 64)
@@ -80,8 +90,8 @@ func New(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
 }
 
 func Add(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
-	if wr.NU.GetRole() < ROLE_ADMIN {
-		return viewTmpl, fmt.Errorf("users: add: %s", ERR_NOTOPERATIONALLOWED)
+	if wr.NU.GetRole() < appusers.ROLE_ADMIN {
+		return viewTmpl, fmt.Errorf("users: add: %s", appusers.ERR_NOTOPERATIONALLOWED)
 	}
 
 	nu := new(NUser)
