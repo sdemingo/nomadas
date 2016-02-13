@@ -26,8 +26,15 @@
 
 
 <div class="panel panel-default">
-  <div class="panel-heading">Últimos checkins</div>
+  <div class="panel-heading">Lugares</div>
   <div class="panel-body">
-    
+    <p><strong>Marcados: </strong> 0</p>
+    <div class="form-group tags-panel">
+    <p><label>Filtrar por categorias:</label></p>
+     {{range .AllTagsNames}}
+        <a href="#" class="label label-default">{{.Name}}</a>
+    {{end}}
+    </div>
   </div>
 </div>
+
