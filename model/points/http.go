@@ -15,6 +15,7 @@ import (
 var infoTmpl = "app/tmpl/info.html"
 var newPointTmpl = "model/points/tmpl/newPoint.html"
 var viewPointTmpl = "model/points/tmpl/viewPoint.html"
+var exportPointTmpl = "model/points/tmpl/exportPoint.html"
 
 func GetListPoints(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
 
@@ -31,6 +32,25 @@ func GetListPoints(wr srv.WrapperRequest, tc map[string]interface{}) (string, er
 
 	tc["Content"] = points
 	return infoTmpl, nil
+}
+
+func ExportListPoints(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
+	if wr.NU.GetRole() < users.ROLE_ADMIN {
+		return exportPointTmpl, fmt.Errorf("points: exportpoints: %s", users.ERR_NOTOPERATIONALLOWED)
+	}
+
+	wr.Parse()
+	id := wr.NU.ID()
+	points, err := getPointsByOwner(wr, id)
+	if err != nil {
+		return exportPointTmpl, fmt.Errorf("points: exportpoints: %v", err)
+	}
+
+	wr.RW.Header().Set("Content-Disposition", "attachment; filename=points.html")
+	//wr.RW.Header().Set("Content-Type", wr.R.Header.Get("Content-Type"))
+
+	tc["Content"] = points
+	return exportPointTmpl, nil
 }
 
 func GetOnePoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {

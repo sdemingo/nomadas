@@ -56,6 +56,10 @@ func init() {
 		routes["/points/list"] = true
 		AppHandler(w, r, points.GetListPoints)
 	})
+	http.HandleFunc("/points/export", func(w http.ResponseWriter, r *http.Request) {
+		routes["/points/export"] = true
+		AppHandler(w, r, points.ExportListPoints)
+	})
 	http.HandleFunc("/points/tags/add", func(w http.ResponseWriter, r *http.Request) {
 		routes["/points/tags/add"] = true
 		AppHandler(w, r, points.AddTag)

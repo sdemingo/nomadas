@@ -44,6 +44,7 @@ func AppHandler(w http.ResponseWriter, r *http.Request, whandler WrapperHandler)
 	if r.Header.Get("X-Requested-With") != "XMLHttpRequest" {
 		if wr.R.URL.Path != "/" &&
 			wr.R.URL.Path != "/logout" &&
+			wr.R.URL.Path != "/points/export" &&
 			wr.R.URL.Path != "/blob" {
 			http.NotFound(w, r)
 			return
@@ -64,16 +65,18 @@ func AppHandler(w http.ResponseWriter, r *http.Request, whandler WrapperHandler)
 
 	if wr.JsonResponse {
 		// Json Response
+		w.Header().Set("Content-Type", "application/json")
 		jbody, err := json.Marshal(rdata["Content"])
 		if err != nil {
 			errorResponse(wr, w, err)
 			return
 		}
+		srv.Log(wr, string(jbody[:len(jbody)]))
 		fmt.Fprintf(w, "%s", string(jbody[:len(jbody)]))
 
 	} else {
 		// HTML Response
-		w.Header().Set("Content-Type", "text/html")
+		w.Header().Set("Content-Type", "text/html;charset=utf-8")
 		tmpl := template.Must(template.ParseFiles(tmplName))
 		if err := tmpl.Execute(w, rdata); err != nil {
 			errorResponse(wr, w, err)
