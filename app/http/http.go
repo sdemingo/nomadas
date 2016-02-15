@@ -20,7 +20,7 @@ func logout(w http.ResponseWriter, r *http.Request) {
 }
 
 func serveBlob(w http.ResponseWriter, r *http.Request) {
-	wr := srv.NewWrapperRequest(r)
+	wr := srv.NewWrapperRequest(w, r)
 	q := data.NewConn(wr, "")
 	bytes, _ := q.ReadBlob(r.FormValue("id"))
 	w.Write(bytes)

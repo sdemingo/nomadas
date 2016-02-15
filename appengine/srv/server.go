@@ -13,6 +13,7 @@ import (
 
 type WrapperRequest struct {
 	R          *http.Request
+	RW         http.ResponseWriter
 	C          appengine.Context
 	U          *user.User
 	NU         users.AppUser
@@ -22,9 +23,9 @@ type WrapperRequest struct {
 	JsonResponse bool
 }
 
-func NewWrapperRequest(r *http.Request) WrapperRequest {
+func NewWrapperRequest(wr http.ResponseWriter, r *http.Request) WrapperRequest {
 	c := appengine.NewContext(r)
-	return WrapperRequest{r, c, user.Current(c), nil, nil, nil, false}
+	return WrapperRequest{r, wr, c, user.Current(c), nil, nil, nil, false}
 }
 
 func (wr WrapperRequest) IsAdminRequest() bool {
@@ -60,7 +61,7 @@ func Log(wr WrapperRequest, msg string) {
 }
 
 func RedirectUserLogin(w http.ResponseWriter, r *http.Request) {
-	wr := NewWrapperRequest(r)
+	wr := NewWrapperRequest(w, r)
 	var url string
 	var err error
 	if wr.U != nil {

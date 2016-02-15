@@ -26,7 +26,7 @@ type ErrorResponse struct {
 type WrapperHandler func(wr srv.WrapperRequest, tc map[string]interface{}) (string, error)
 
 func AppHandler(w http.ResponseWriter, r *http.Request, whandler WrapperHandler) {
-	wr := srv.NewWrapperRequest(r)
+	wr := srv.NewWrapperRequest(w, r)
 	err := getCurrentUser(&wr)
 	if err != nil {
 		RedirectToLogin(w, wr.R)
