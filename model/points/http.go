@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"time"
 
-	"app/users"
+	"app/core"
 
 	"appengine/srv"
 )
@@ -35,8 +35,8 @@ func GetListPoints(wr srv.WrapperRequest, tc map[string]interface{}) (string, er
 }
 
 func ExportListPoints(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
-	if wr.NU.GetRole() < users.ROLE_ADMIN {
-		return exportPointTmpl, fmt.Errorf("points: exportpoints: %s", users.ERR_NOTOPERATIONALLOWED)
+	if wr.NU.GetRole() < core.ROLE_ADMIN {
+		return exportPointTmpl, fmt.Errorf("points: exportpoints: %s", core.ERR_NOTOPERATIONALLOWED)
 	}
 
 	wr.Parse()
@@ -54,8 +54,8 @@ func ExportListPoints(wr srv.WrapperRequest, tc map[string]interface{}) (string,
 }
 
 func GetOnePoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
-	if wr.NU.GetRole() < users.ROLE_ADMIN {
-		return viewPointTmpl, fmt.Errorf("points: getonepoint: %s", users.ERR_NOTOPERATIONALLOWED)
+	if wr.NU.GetRole() < core.ROLE_ADMIN {
+		return viewPointTmpl, fmt.Errorf("points: getonepoint: %s", core.ERR_NOTOPERATIONALLOWED)
 	}
 
 	wr.Parse()
@@ -75,8 +75,8 @@ func GetOnePoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, erro
 }
 
 func NewPoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
-	if wr.NU.GetRole() < users.ROLE_ADMIN {
-		return infoTmpl, fmt.Errorf("points: newpoint: %s", users.ERR_NOTOPERATIONALLOWED)
+	if wr.NU.GetRole() < core.ROLE_ADMIN {
+		return infoTmpl, fmt.Errorf("points: newpoint: %s", core.ERR_NOTOPERATIONALLOWED)
 	}
 
 	wr.Parse()
@@ -114,8 +114,8 @@ func NewUploadHandler(wr srv.WrapperRequest, tc map[string]interface{}) (string,
 }
 
 func AddPoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
-	if wr.NU.GetRole() < users.ROLE_ADMIN {
-		return infoTmpl, fmt.Errorf("points: addpoint: %s", users.ERR_NOTOPERATIONALLOWED)
+	if wr.NU.GetRole() < core.ROLE_ADMIN {
+		return infoTmpl, fmt.Errorf("points: addpoint: %s", core.ERR_NOTOPERATIONALLOWED)
 	}
 
 	err := wr.ParseMIMEChunks()
@@ -159,8 +159,8 @@ func AddPoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) 
 }
 
 func DeletePoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
-	if wr.NU.GetRole() < users.ROLE_ADMIN {
-		return infoTmpl, fmt.Errorf("points: deletepoint: %s", users.ERR_NOTOPERATIONALLOWED)
+	if wr.NU.GetRole() < core.ROLE_ADMIN {
+		return infoTmpl, fmt.Errorf("points: deletepoint: %s", core.ERR_NOTOPERATIONALLOWED)
 	}
 
 	wr.Parse()
@@ -186,8 +186,8 @@ func DeletePoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, erro
 }
 
 func GetListTags(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
-	if wr.NU.GetRole() < users.ROLE_ADMIN {
-		return infoTmpl, fmt.Errorf("points: getlisttags: %s", users.ERR_NOTOPERATIONALLOWED)
+	if wr.NU.GetRole() < core.ROLE_ADMIN {
+		return infoTmpl, fmt.Errorf("points: getlisttags: %s", core.ERR_NOTOPERATIONALLOWED)
 	}
 
 	wr.R.ParseForm()
@@ -201,8 +201,8 @@ func GetListTags(wr srv.WrapperRequest, tc map[string]interface{}) (string, erro
 }
 
 func AddTag(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
-	if wr.NU.GetRole() < users.ROLE_ADMIN {
-		return infoTmpl, fmt.Errorf("points: addtag: %s", users.ERR_NOTOPERATIONALLOWED)
+	if wr.NU.GetRole() < core.ROLE_ADMIN {
+		return infoTmpl, fmt.Errorf("points: addtag: %s", core.ERR_NOTOPERATIONALLOWED)
 	}
 
 	tag := new(Tag)

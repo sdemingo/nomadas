@@ -8,7 +8,8 @@ import (
 	"net/http"
 	"strings"
 
-	appusers "app/users"
+	"app/core"
+
 	"model/users"
 
 	"appengine/data"
@@ -107,7 +108,7 @@ func errorResponse(wr srv.WrapperRequest, w http.ResponseWriter, err error) {
 func getCurrentUser(wr *srv.WrapperRequest) error {
 
 	//var nu nusers.NUser
-	var nu appusers.AppUser
+	var nu core.AppUser
 
 	nus := users.NewNUserBuffer()
 	u := wr.U
@@ -135,12 +136,12 @@ func getCurrentUser(wr *srv.WrapperRequest) error {
 	return err
 }
 
-func GetDefaultUser(email string) appusers.AppUser {
+func GetDefaultUser(email string) core.AppUser {
 	n := new(users.NUser)
 	n.Id = -1
 	n.Mail = email
 	n.Name = "Administrador"
-	n.Role = appusers.ROLE_ADMIN
+	n.Role = core.ROLE_ADMIN
 
 	return n
 }

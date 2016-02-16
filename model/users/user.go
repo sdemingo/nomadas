@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	appusers "app/users"
+	"app/core"
 
 	"appengine/data"
 	"appengine/srv"
@@ -48,8 +48,8 @@ func (n *NUser) GetInfo() map[string]string {
 	info := make(map[string]string)
 
 	info["Username"] = n.Name
-	if int(n.Role) < len(appusers.RoleNames) {
-		info["RoleName"] = appusers.RoleNames[n.Role]
+	if int(n.Role) < len(core.RoleNames) {
+		info["RoleName"] = core.RoleNames[n.Role]
 	} else {
 		info["RoleName"] = ""
 	}

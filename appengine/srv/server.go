@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"app/users"
+	"app/core"
 
 	"appengine"
 	"appengine/blobstore"
@@ -16,7 +16,7 @@ type WrapperRequest struct {
 	RW         http.ResponseWriter
 	C          appengine.Context
 	U          *user.User
-	NU         users.AppUser
+	NU         core.AppUser
 	Values     url.Values
 	MIMEChunks map[string][]*blobstore.BlobInfo
 

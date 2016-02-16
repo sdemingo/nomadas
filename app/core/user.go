@@ -1,4 +1,4 @@
-package users
+package core
 
 const (
 	ROLE_GUEST = iota //0

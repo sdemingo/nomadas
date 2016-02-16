@@ -4,7 +4,7 @@ import (
 	"errors"
 	"net/http"
 
-	"app/users"
+	"app/core"
 
 	"appengine/data"
 	"appengine/srv"
@@ -38,8 +38,8 @@ func Help(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
 }
 
 func Welcome(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
-	if wr.NU.GetRole() < users.ROLE_GUEST {
-		return "", errors.New(users.ERR_NOTOPERATIONALLOWED)
+	if wr.NU.GetRole() < core.ROLE_GUEST {
+		return "", errors.New(core.ERR_NOTOPERATIONALLOWED)
 	}
 	return baseTmpl, nil
 }
