@@ -12,21 +12,12 @@ import (
 )
 
 const (
-	//ROLE_GUEST = iota //0
-	//ROLE_ADMIN = iota //1
-
 	MAXSZUSERNAME = 100
 
 	ERR_NOTVALIDUSER   = "Usuario no valido"
 	ERR_DUPLICATEDUSER = "Usuario duplicado"
 	ERR_USERNOTFOUND   = "Usuario no encontrado"
 )
-
-/*
-var roleNames = []string{
-	ROLE_GUEST: "Invitado",
-	ROLE_ADMIN: "Administrador"}
-*/
 
 type NUser struct {
 	Id        int64 `json:",string" datastore:"-"`

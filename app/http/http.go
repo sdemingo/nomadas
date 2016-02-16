@@ -21,6 +21,15 @@ func logout(w http.ResponseWriter, r *http.Request) {
 
 func serveBlob(w http.ResponseWriter, r *http.Request) {
 	wr := srv.NewWrapperRequest(w, r)
+
+	if !core.AppConfig.PublicBlob {
+		err := getCurrentUser(&wr)
+		if err != nil {
+			RedirectToLogin(w, wr.R)
+			return
+		}
+	}
+
 	q := data.NewConn(wr, "")
 	bytes, _ := q.ReadBlob(r.FormValue("id"))
 	w.Write(bytes)
