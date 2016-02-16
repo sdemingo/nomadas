@@ -9,8 +9,17 @@ import (
 
 var routes map[string]bool
 
+var directRoutes map[string]bool
+
 func init() {
 	routes = make(map[string]bool)
+
+	directRoutes = map[string]bool{
+		"/":              true,
+		"/logout":        true,
+		"/blob":          true,
+		"/points/export": true,
+	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		routes["/"] = true
