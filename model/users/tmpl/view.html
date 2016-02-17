@@ -1,3 +1,10 @@
+
+<div class="panel panel-default btn-group" role="group">
+  <button type="button" id="btnSearchPanel" class="btn btn-default">
+    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+  </button>
+</div>
+
 {{if eq .Content.Id -1}}
 <div class="panel panel-danger">
   <div class="panel-heading">Atención</div>
@@ -18,23 +25,34 @@
 <div class="panel panel-default">
   <div class="panel-heading">Bienvenido {{.Content.Name}}</div>
   <div class="panel-body">
-    <p><strong>Rol: </strong>{{.Content.GetInfo.RoleName}} </p>
-    <p><strong>Email: </strong>{{.Content.GetEmail}} </p>
-    <p><strong>Alta: </strong>{{.Content.GetInfo.TimeStamp}} </p>
+
+    <p>Hola <strong>{{.Content.Name}}</strong>. Bienvenido a Nomadas App.<p>
+
+      <p>Nomadas App es una aplicación para gestionar una colección de
+      puntos donde tu y otros usuarios recomiendan e intercambian
+      lugares donde acampar, pecnotar y aparcar vuestras campers.</p>
+ 
+
+
+      
   </div>
 </div>
 
+<div class="text-center">
+  <img id="main-logo" src="/images/logo-round.png"  alt=""> 
+</div>
 
+<!-- 
 <div class="panel panel-default">
   <div class="panel-heading">Lugares</div>
   <div class="panel-body">
     <p><strong>Marcados: </strong> 0</p>
     <div class="form-group tags-panel">
-    <p><label>Filtrar por categorias:</label></p>
+      <p><label>Filtrar por categorias:</label></p>
      {{range .AllTagsNames}}
-        <a href="#" class="label label-default">{{.Name}}</a>
+      <a href="#" class="label label-default">{{.Name}}</a>
     {{end}}
     </div>
   </div>
 </div>
-
+ -->
