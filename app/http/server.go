@@ -69,7 +69,6 @@ func AppHandler(w http.ResponseWriter, r *http.Request, whandler WrapperHandler)
 			errorResponse(wr, w, err)
 			return
 		}
-		srv.Log(wr, string(jbody[:len(jbody)]))
 		fmt.Fprintf(w, "%s", string(jbody[:len(jbody)]))
 
 	} else {

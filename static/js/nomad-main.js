@@ -3,8 +3,8 @@ var DOMAIN=""
 
 
 function mainEvents(){
-    $("#btnMainPanel").click(loadWelcomePanel)
-    $("#btnAdminPanel").click(loadAdminPanel)
+    $("#btnMainPanel").off("click").click(loadWelcomePanel)
+    $("#btnAdminPanel").off("click").click(loadAdminPanel)
 }
 
 
