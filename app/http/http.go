@@ -2,9 +2,11 @@ package http
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 
 	"app/core"
+	"model/points"
 
 	"appengine/data"
 	"appengine/srv"
@@ -41,6 +43,7 @@ func RedirectToLogin(w http.ResponseWriter, r *http.Request) {
 
 var baseTmpl = "app/tmpl/base.html"
 var helpTmpl = "app/tmpl/help.html"
+var adminTmpl = "app/tmpl/admin.html"
 
 func Help(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
 	return helpTmpl, nil
@@ -51,4 +54,17 @@ func Welcome(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
 		return "", errors.New(core.ERR_NOTOPERATIONALLOWED)
 	}
 	return baseTmpl, nil
+}
+
+func Admin(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
+	if wr.NU.GetRole() < core.ROLE_ADMIN {
+		return "", errors.New(core.ERR_NOTOPERATIONALLOWED)
+	}
+
+	tags, err := points.GetAllTags(wr, -1)
+	if err != nil {
+		return adminTmpl, fmt.Errorf("app: admin: %v", err)
+	}
+	tc["AllTagsNames"] = tags
+	return adminTmpl, nil
 }

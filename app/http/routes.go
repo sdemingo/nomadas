@@ -17,6 +17,7 @@ func init() {
 	directRoutes = map[string]bool{
 		"/":              true,
 		"/logout":        true,
+		"/admin":         true,
 		"/blob":          true,
 		"/points/export": true,
 	}
@@ -28,6 +29,10 @@ func init() {
 	http.HandleFunc("/help", func(w http.ResponseWriter, r *http.Request) {
 		routes["/help"] = true
 		AppHandler(w, r, Help)
+	})
+	http.HandleFunc("/admin", func(w http.ResponseWriter, r *http.Request) {
+		routes["/admin"] = true
+		AppHandler(w, r, Admin)
 	})
 
 	// Users routes

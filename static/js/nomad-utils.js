@@ -98,7 +98,9 @@ function showInfoMessage(text) {
 
 function showHTMLContent(content){
     $("#content").html(content)
+    mainEvents()
 }
+
 
 function moveTo(id){
     var windowsize = $(window).width();

@@ -30,7 +30,6 @@ var nomadmap = (function(){
     }
 
     var viewPointFormEvents = function(){
-	$("#btnMainPanel").click(loadWelcomePanel)
 	$("#btnDeletePoint").click(function(){
 	    var val=$("#pointId").html()
 	    if (val){

@@ -31,7 +31,6 @@ var nomadmap = (function(){
     }
 
     var viewPointFormEvents = function(){
-	$("#btnMainPanel").click(loadWelcomePanel)
 	$("#btnDeletePoint").click(function(){
 	    var val=$("#pointId").html()
 	    if (val){
@@ -438,7 +437,9 @@ function showInfoMessage(text) {
 
 function showHTMLContent(content){
     $("#content").html(content)
+    mainEvents()
 }
+
 
 function moveTo(id){
     var windowsize = $(window).width();
@@ -630,7 +631,16 @@ $(function() {
 var DOMAIN=""
 
 
-function loadWelcomePanel(){
+function mainEvents(){
+    $("#btnMainPanel").click(loadWelcomePanel)
+    $("#btnAdminPanel").click(loadAdminPanel)
+}
+
+
+function loadWelcomePanel(e){
+    if (e) {
+	e.preventDefault()
+    }
     $.ajax({
     	url:DOMAIN+"/users/me",
     	type: 'get',
@@ -642,6 +652,21 @@ function loadWelcomePanel(){
     });  
 }
 
+
+function loadAdminPanel(e){
+    if (e) {
+	e.preventDefault()
+    }
+    $.ajax({
+    	url:DOMAIN+"/admin",
+    	type: 'get',
+    	success: function(html){
+	    showHTMLContent(html)
+	    moveTo("html")
+	},
+    	error: error
+    });  
+}
 
 $(document).ready(function () {
     nomadmap.init()
