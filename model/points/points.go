@@ -2,11 +2,14 @@ package points
 
 import (
 	"fmt"
+	"html/template"
 	"strings"
 	"time"
 
 	"appengine/data"
 	"appengine/srv"
+
+	"github.com/russross/blackfriday"
 )
 
 type Point struct {
@@ -37,6 +40,11 @@ func (p *Point) HasTag(tag string) bool {
 		}
 	}
 	return false
+}
+
+func (p *Point) GetHTMLDesc() template.HTML {
+	in := []byte(p.Desc)
+	return template.HTML(string(blackfriday.MarkdownBasic(in)))
 }
 
 func (p *Point) ID() int64 {
