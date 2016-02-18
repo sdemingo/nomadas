@@ -4,30 +4,39 @@
 var nomadconfig = (function(){
 
     var importPoints = function(){
-            
+        
 	var check=window.File && window.FileReader && window.FileList && window.Blob
 	if (!check){
-            alert('The File APIs are not fully supported in this browser.')
+	    showErrorMessage("FileReader API are not fully supported in this browser")
             return
 	}   
 
 	var input = document.getElementById("importFile")
-	if (!input) {
-            alert("Um, couldn't find the fileinput element.");
+	if ((!input) || (!input.files) || (!input.files[0])){
+	    showErrorMessage("Please select a file before clicking load button")
+	    return
 	}
-	else if (!input.files) {
-            alert("This browser doesn't seem to support the `files` property of file inputs.");
-	}
-	else if (!input.files[0]) {
-            alert("Please select a file before clicking 'Load'");               
-	}
-	else {
-            file = input.files[0]
-            fr = new FileReader()
-            fr.onload = function(){
-		alert(JSON.parse(fr.result))
+
+        file = input.files[0]
+        fr = new FileReader()
+	fr.readAsText(file)
+        fr.onload = function(){
+	    try{
+		var points=JSON.parse(fr.result)
+		if (!points){
+		    showErrorMessage("JSON points file is bad formatted")
+		    return
+		}
+	    }catch(err){
+		showErrorMessage("JSON points file is bad formatted. "+err)
+		return
 	    }
-            fr.readAsText(file)
+
+	    for (var i=0;i<points.length;i++){
+		nomadmap.sendPoint(points[i])
+	    }
+
+	    showInfoMessage("Se van a añadir "+points.length+" puntos. Esta operación puede tardar un tiempo")
 	}
     }
 
@@ -59,7 +68,7 @@ var nomadmap = (function(){
     var initLoc = new google.maps.LatLng(40.4279613,0.2967822)
 
     var mapOptions = {
-	zoom: 6,
+	zoom: 5,
 	center: {lat: -33, lng: 151},
 	disableDefaultUI: true,
 	center:initLoc,
@@ -180,7 +189,7 @@ var nomadmap = (function(){
 	})
     }
 
-    var addPoint = function(point){
+    var addPoint = function(point,nodialog){
 
 	var addPointUrl
 
@@ -209,12 +218,14 @@ var nomadmap = (function(){
 	    dataType: 'json',
     	    success: function (response){
 		loadWelcomePanel()
-		if (response.Error){
+		if ((response.Error) && (!nodialog)){
 		    showErrorMessage(response.Error)
 		}else{
 		    points.push(response)
 		    showMarkers()
-		    showInfoMessage("Punto guardado con éxito")
+		    if (!nodialog){
+			showInfoMessage("Punto guardado con éxito")
+		    }
 		}
 	    },
     	    error: error
@@ -374,7 +385,12 @@ var nomadmap = (function(){
 
     return{
 	init:init,
-	loadMarkers:getPoints
+	loadMarkers:getPoints,
+	sendPoint:function(point){
+	    var nullFormData = new FormData()
+	    nullFormData.append("jsonPoint",JSON.stringify(point))
+	    addPoint(nullFormData,true)
+	} 
     }
 
 

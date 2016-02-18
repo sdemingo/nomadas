@@ -11,20 +11,32 @@ var nomadconfig = (function(){
 	}   
 
 	var input = document.getElementById("importFile")
-	if (!input) || (!input.files) || (!input.files[0]){
+	if ((!input) || (!input.files) || (!input.files[0])){
 	    showErrorMessage("Please select a file before clicking load button")
 	    return
 	}
 
         file = input.files[0]
         fr = new FileReader()
+	fr.readAsText(file)
         fr.onload = function(){
-	    var points=JSON.parse(fr.result)
-	    console.log("Lanzo "+points.length+" peticiones de ajax")
-	    // TODO
-	    // POST all points in one or many ajax request
+	    try{
+		var points=JSON.parse(fr.result)
+		if (!points){
+		    showErrorMessage("JSON points file is bad formatted")
+		    return
+		}
+	    }catch(err){
+		showErrorMessage("JSON points file is bad formatted. "+err)
+		return
+	    }
+
+	    for (var i=0;i<points.length;i++){
+		nomadmap.sendPoint(points[i])
+	    }
+
+	    showInfoMessage("Se van a añadir "+points.length+" puntos. Esta operación puede tardar un tiempo")
 	}
-        fr.readAsText(file)
     }
 
 

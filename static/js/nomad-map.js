@@ -16,7 +16,7 @@ var nomadmap = (function(){
     var initLoc = new google.maps.LatLng(40.4279613,0.2967822)
 
     var mapOptions = {
-	zoom: 6,
+	zoom: 5,
 	center: {lat: -33, lng: 151},
 	disableDefaultUI: true,
 	center:initLoc,
@@ -137,7 +137,7 @@ var nomadmap = (function(){
 	})
     }
 
-    var addPoint = function(point){
+    var addPoint = function(point,nodialog){
 
 	var addPointUrl
 
@@ -166,12 +166,14 @@ var nomadmap = (function(){
 	    dataType: 'json',
     	    success: function (response){
 		loadWelcomePanel()
-		if (response.Error){
+		if ((response.Error) && (!nodialog)){
 		    showErrorMessage(response.Error)
 		}else{
 		    points.push(response)
 		    showMarkers()
-		    showInfoMessage("Punto guardado con éxito")
+		    if (!nodialog){
+			showInfoMessage("Punto guardado con éxito")
+		    }
 		}
 	    },
     	    error: error
@@ -331,7 +333,12 @@ var nomadmap = (function(){
 
     return{
 	init:init,
-	loadMarkers:getPoints
+	loadMarkers:getPoints,
+	sendPoint:function(point){
+	    var nullFormData = new FormData()
+	    nullFormData.append("jsonPoint",JSON.stringify(point))
+	    addPoint(nullFormData,true)
+	} 
     }
 
 
