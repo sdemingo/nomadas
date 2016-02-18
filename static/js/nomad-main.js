@@ -34,6 +34,7 @@ function loadAdminPanel(e){
     	success: function(html){
 	    showHTMLContent(html)
 	    moveTo("html")
+	    nomadconfig.init()
 	},
     	error: error
     });  

@@ -1,6 +1,48 @@
 
 
 
+var nomadconfig = (function(){
+
+    var importPoints = function(){
+            
+	var check=window.File && window.FileReader && window.FileList && window.Blob
+	if (!check){
+            alert('The File APIs are not fully supported in this browser.')
+            return
+	}   
+
+	var input = document.getElementById("importFile")
+	if (!input) {
+            alert("Um, couldn't find the fileinput element.");
+	}
+	else if (!input.files) {
+            alert("This browser doesn't seem to support the `files` property of file inputs.");
+	}
+	else if (!input.files[0]) {
+            alert("Please select a file before clicking 'Load'");               
+	}
+	else {
+            file = input.files[0]
+            fr = new FileReader()
+            fr.onload = function(){
+		alert(JSON.parse(fr.result))
+	    }
+            fr.readAsText(file)
+	}
+    }
+
+
+    var init = function(){
+	$("#btnImportFile").off("click").on("click",importPoints)
+    }
+
+    return{
+	init:init
+    }
+
+})()
+
+
 var nomadmap = (function(){
 
     var MARKERCOLOR = "FireBrick"
@@ -663,6 +705,7 @@ function loadAdminPanel(e){
     	success: function(html){
 	    showHTMLContent(html)
 	    moveTo("html")
+	    nomadconfig.init()
 	},
     	error: error
     });  

@@ -40,7 +40,11 @@
     <form id="importPointsForm" role="form">
       <div class="form-group">
 	<!-- <label for="ejemplo_archivo_1">Adjuntar un archivo</label> -->
-	<input type="file" id="importFile" name="importFile"/>
+	<input type="file" id="importFile"/>
+	<button type="button" id="btnImportFile" class="btn btn-default pull-right">
+	  <span class="glyphicon glyphicon-open" aria-hidden="true"></span>
+	</button>
+
 	<p class="help-block">Revise la <a href="/help">documentación</a> para confirmar el formato correcto.</p>
       </div>
     </form>
@@ -49,24 +53,24 @@
 
 <!-- 
 <div class="panel panel-default">
-  <div class="panel-heading">Administración de Etiquetas</div>
-  <div class="panel-body">
-    <form id="tagsConfigForm">
-      <input class="form-control" type="text" id="newTag" name="newTag" placeholder="Etiqueta nueva"/>
-    </form>
+<div class="panel-heading">Administración de Etiquetas</div>
+<div class="panel-body">
+<form id="tagsConfigForm">
+<input class="form-control" type="text" id="newTag" name="newTag" placeholder="Etiqueta nueva"/>
+</form>
 
-    <ul class="list-group">
-    {{range .AllTagsNames}}
-      <li class="list-group-item"><span class="label label-default">{{.Name}}</span>
-	<a class="pull-right" href="/points/tags/edit?id={{.Id}}">
-	  <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-	</a> 
-	<a class="pull-right" href="/points/tags/delete?id={{.Id}}">
-	  <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-	</a>
-      </li>
-    {{end}}
-    </ul>
-  </div>
+<ul class="list-group">
+{{range .AllTagsNames}}
+<li class="list-group-item"><span class="label label-default">{{.Name}}</span>
+<a class="pull-right" href="/points/tags/edit?id={{.Id}}">
+<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+</a> 
+<a class="pull-right" href="/points/tags/delete?id={{.Id}}">
+<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+</a>
+</li>
+{{end}}
+</ul>
 </div>
-  -->
+</div>
+-->
