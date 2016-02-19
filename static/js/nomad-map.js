@@ -48,6 +48,11 @@ var nomadmap = (function(){
 	    //var val=$("#pointId").html()
 	    showErrorMessage("Esta opción aún no está implementada")
 	})
+
+	$("#btnCheckInPoint").click(function(){
+	    //var val=$("#pointId").html()
+	    showErrorMessage("Esta opción aún no está implementada")
+	})
     }
 
     
