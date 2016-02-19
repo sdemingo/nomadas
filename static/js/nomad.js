@@ -41,8 +41,35 @@ var nomadconfig = (function(){
     }
 
 
+    var sendConfig = function(){
+	var config={}
+	config.PublicBlob = $("#PublicBlob").prop("checked")
+
+	$.ajax({
+    	    url:DOMAIN+"/admin",
+    	    type: 'post',
+            data: JSON.stringify(config),
+	    dataType: 'json',
+    	    success: function (response){
+		loadWelcomePanel()
+		if (response.Error){
+		    showErrorMessage(response.Error)
+		}else{
+		    showInfoMessage("Configuración actualizada con éxito")
+		}
+	    },
+    	    error: error
+	});
+    }
+
+    var readForm = function(form){
+	var f = $(form).serializeObject()
+	return f
+    }
+
     var init = function(){
 	$("#btnImportFile").off("click").on("click",importPoints)
+	$("#btnNewConfig").off("click").on("click",sendConfig)
     }
 
     return{

@@ -1,6 +1,7 @@
 package http
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -61,10 +62,29 @@ func Admin(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
 		return "", errors.New(core.ERR_NOTOPERATIONALLOWED)
 	}
 
-	tags, err := points.GetAllTags(wr, -1)
-	if err != nil {
-		return adminTmpl, fmt.Errorf("app: admin: %v", err)
+	if wr.R.Method == "GET" {
+		tags, err := points.GetAllTags(wr, -1)
+		if err != nil {
+			return adminTmpl, fmt.Errorf("app: admin: %v", err)
+		}
+		tc["AllTagsNames"] = tags
+		tc["AppConfig"] = core.AppConfig
+
+		return adminTmpl, nil
 	}
-	tc["AllTagsNames"] = tags
+
+	if wr.R.Method == "POST" {
+		config := new(core.Config)
+		decoder := json.NewDecoder(wr.R.Body)
+		err := decoder.Decode(config)
+		if err != nil {
+			return adminTmpl, fmt.Errorf("app: admin: %v", err)
+		}
+
+		core.AppConfig = *config
+
+		tc["Content"] = config
+	}
+
 	return adminTmpl, nil
 }
