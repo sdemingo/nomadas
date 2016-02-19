@@ -43,6 +43,11 @@ var nomadmap = (function(){
 		editPointForm(val)
 	    }
 	})
+
+	$("#btnSendPoint").click(function(){
+	    //var val=$("#pointId").html()
+	    showErrorMessage("Esta opción aún no está implementada")
+	})
     }
 
     
