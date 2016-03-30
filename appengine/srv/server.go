@@ -1,6 +1,7 @@
 package srv
 
 import (
+	"fmt"
 	"net/http"
 	"net/url"
 
@@ -38,20 +39,27 @@ func (wr *WrapperRequest) Parse() {
 }
 
 func (wr *WrapperRequest) ParseMIMEChunks() error {
+	var MaxBlobSize = int64(400 * 1024)
 	var err error
 	wr.MIMEChunks, wr.Values, err = blobstore.ParseUpload(wr.R)
+
+	for _, mimeBlob := range wr.MIMEChunks {
+		for _, blob := range mimeBlob {
+			c := wr.C
+			info, err := blobstore.Stat(c, blob.BlobKey)
+			if err != nil || info.Size > MaxBlobSize {
+				blobstore.Delete(c, blob.BlobKey)
+				return fmt.Errorf("Image not valid")
+			}
+		}
+	}
 	return err
 }
 
 // Return a valid handler to receive the MIME HTTP request. It's be used
 // once as the appengine blobstore model require.
 func (wr WrapperRequest) GetMIMEHandler(baseURL string) (*url.URL, error) {
-	var blobMaxBytesSize = int64(500 * 1025)
-	opt := blobstore.UploadURLOptions{
-		MaxUploadBytes:        blobMaxBytesSize,
-		MaxUploadBytesPerBlob: blobMaxBytesSize,
-		StorageBucket:         ""}
-	uploadURL, err := blobstore.UploadURL(wr.C, baseURL, &opt)
+	uploadURL, err := blobstore.UploadURL(wr.C, baseURL, nil)
 	return uploadURL, err
 
 }
