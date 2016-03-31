@@ -9,7 +9,8 @@ import (
 	"app/core"
 	"model/points"
 
-	"appengine/data"
+	"appengine"
+	"appengine/blobstore"
 	"appengine/srv"
 )
 
@@ -33,9 +34,7 @@ func serveBlob(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	q := data.NewConn(wr, "")
-	bytes, _ := q.ReadBlob(r.FormValue("id"))
-	w.Write(bytes)
+	blobstore.Send(w, appengine.BlobKey(r.FormValue("id")))
 }
 
 func RedirectToLogin(w http.ResponseWriter, r *http.Request) {

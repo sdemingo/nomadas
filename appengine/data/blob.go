@@ -11,6 +11,7 @@ func (op *DataConn) DeleteBlob(key string) error {
 	return blobstore.Delete(c, blobkey)
 }
 
+/*
 func (op *DataConn) ReadBlob(key string) ([]byte, error) {
 	c := op.Wreq.C
 	blobkey := appengine.BlobKey(key)
@@ -23,6 +24,7 @@ func (op *DataConn) ReadBlob(key string) ([]byte, error) {
 	blobReader.Read(blobBytes)
 	return blobBytes, nil
 }
+*/
 
 func (op *DataConn) Size(key string) (int64, error) {
 	c := op.Wreq.C
