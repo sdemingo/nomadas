@@ -14,7 +14,7 @@ function error (data){
 
 function firstbootApp(){
     var firstUser={
-	Mail:"admin@example.com",
+	Mail:"admin@example.com",  // put here the gmail user admin account
 	Name:"Sergio",
 	Role:"1"
     }
@@ -32,9 +32,9 @@ function firstbootApp(){
 	}
     })
 
-    var tags=["Vaciado","Aguas","Gasolinera","Merendero",
+    var tags=["Vaciado WC","Aguas","Gasolinera","Merendero",
 	      "Zona Infantil", "Gratis", "Vigilado", 
-	      "Taller","Urbano"]
+	      "Taller","Urbano","Playa"]
 
     $.each(tags,function(i,name){
 	var tag={Name:name}
