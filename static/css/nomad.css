@@ -1,4 +1,8 @@
 
+html{
+    overflow-y: scroll;
+}
+
 html, body, .container, .tab-content, .tab-pane, .row {
     height: 100%;
 }
@@ -72,7 +76,9 @@ form.disabled {
 }
 
 
-/* modal headers */
+
+
+/* modal headers */7
 
 .modal-header-success {
     color:#fff;
