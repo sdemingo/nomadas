@@ -65,7 +65,7 @@ func GetOnePoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, erro
 		return viewPointTmpl, fmt.Errorf("points: getonepoint: bad id")
 	}
 
-	point, err := getPointById(wr, id)
+	point, err := GetPointById(wr, id)
 	if err != nil {
 		return viewPointTmpl, fmt.Errorf("points: getonepoint: %v", err)
 	}
@@ -86,7 +86,7 @@ func NewPoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) 
 		if err != nil {
 			return viewPointTmpl, fmt.Errorf("points: newpoint: bad id: %v", err)
 		}
-		point, err := getPointById(wr, id)
+		point, err := GetPointById(wr, id)
 		if err != nil {
 			return viewPointTmpl, fmt.Errorf("points: getonepoint: %v", err)
 		}
@@ -170,7 +170,7 @@ func DeletePoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, erro
 		return viewPointTmpl, fmt.Errorf("points: deletepoint: bad id: %v", err)
 	}
 
-	point, err := getPointById(wr, id)
+	point, err := GetPointById(wr, id)
 	if err != nil {
 		return viewPointTmpl, fmt.Errorf("points: deletepoint: %v", err)
 	}

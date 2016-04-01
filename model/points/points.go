@@ -114,7 +114,7 @@ func deletePoint(wr srv.WrapperRequest, p *Point) error {
 
 func updatePoint(wr srv.WrapperRequest, id int64, newp *Point) error {
 
-	oldp, err := getPointById(wr, id)
+	oldp, err := GetPointById(wr, id)
 	if err != nil {
 		return fmt.Errorf("updatepoint: %v", err)
 	}
@@ -150,7 +150,7 @@ func updatePoint(wr srv.WrapperRequest, id int64, newp *Point) error {
 	return nil
 }
 
-func getPointById(wr srv.WrapperRequest, id int64) (*Point, error) {
+func GetPointById(wr srv.WrapperRequest, id int64) (*Point, error) {
 	p := new(Point)
 	p.Id = id
 	q := data.NewConn(wr, "points")
