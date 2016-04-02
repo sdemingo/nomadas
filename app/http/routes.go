@@ -3,6 +3,7 @@ package http
 import (
 	"net/http"
 
+	"model/checkins"
 	"model/points"
 	"model/users"
 )
@@ -81,5 +82,11 @@ func init() {
 	http.HandleFunc("/points/tags/list", func(w http.ResponseWriter, r *http.Request) {
 		routes["/points/tags/list"] = true
 		AppHandler(w, r, points.GetListTags)
+	})
+
+	// Checkins
+	http.HandleFunc("/checkins/edit", func(w http.ResponseWriter, r *http.Request) {
+		routes["/checkins/edit"] = true
+		AppHandler(w, r, checkins.NewCheckin)
 	})
 }
