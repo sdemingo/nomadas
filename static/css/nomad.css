@@ -78,6 +78,12 @@ form.disabled {
 
 
 
+.ui-datepicker-calendar {
+    display: none;
+}
+
+
+
 /* modal headers */7
 
 .modal-header-success {

@@ -50,8 +50,33 @@ var nomadmap = (function(){
 	})
 
 	$("#btnCheckInPoint").click(function(){
-	    //var val=$("#pointId").html()
-	    showErrorMessage("Esta opción aún no está implementada")
+	    var val=$("#pointId").html()
+	    //showErrorMessage("Esta opción aún no está implementada")
+	    if (val){
+		checkinForm(val)
+	    }
+	})
+    }
+
+
+    var checkinFormEvents = function(){
+
+    }
+
+    var checkinForm = function(id){
+	var urla=DOMAIN+"/checkins/edit"
+	if (id){
+	    urla=urla+"?id="+id
+	}
+	$.ajax({
+    	    url:urla,
+    	    type: 'get',
+    	    success: function (html){
+		showHTMLContent(html)
+		moveTo("#content")
+		editPointFormEvents()
+	    },
+    	    error: error
 	})
     }
 
@@ -85,7 +110,7 @@ var nomadmap = (function(){
 			var tagName=$(this).html()
 			tagsSelected[tagName]=1
 		    })	
-		},
+			},
     		error: error
 	    }); 
 	}
