@@ -51,7 +51,6 @@ var nomadmap = (function(){
 
 	$("#btnCheckInPoint").click(function(){
 	    var val=$("#pointId").html()
-	    //showErrorMessage("Esta opción aún no está implementada")
 	    if (val){
 		checkinForm(val)
 	    }
@@ -60,7 +59,9 @@ var nomadmap = (function(){
 
 
     var checkinFormEvents = function(){
-
+	$("#btnNewCheckin").click(function(){
+	    addCheckin()
+	})
     }
 
     var checkinForm = function(id){
@@ -74,12 +75,27 @@ var nomadmap = (function(){
     	    success: function (html){
 		showHTMLContent(html)
 		moveTo("#content")
-		editPointFormEvents()
+		checkinFormEvents()
 	    },
     	    error: error
 	})
     }
 
+
+    var addCheckin = function(){
+	var checkin = readForm($("#formNewCheckin"))
+	$.ajax({
+    	    url:DOMAIN+"/checkins/new",
+    	    type: 'post',
+	    dataType: 'json',
+	    data: JSON.stringify(checkin),
+    	    success: function (url){
+		showInfoMessage("Checkin guardado con éxito")
+		loadWelcomePanel()
+	    },
+    	    error: error
+	})
+    }
     
     var editPointFormEvents = function(){
 	tagsSelected={}
