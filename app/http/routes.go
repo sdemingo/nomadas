@@ -89,4 +89,8 @@ func init() {
 		routes["/checkins/edit"] = true
 		AppHandler(w, r, checkins.NewCheckin)
 	})
+	http.HandleFunc("/checkins/new", func(w http.ResponseWriter, r *http.Request) {
+		routes["/checkins/new"] = true
+		AppHandler(w, r, checkins.AddCheckin)
+	})
 }
