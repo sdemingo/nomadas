@@ -2,13 +2,17 @@ package checkins
 
 import (
 	"fmt"
+	"sort"
 	"time"
 
 	"appengine/data"
 	"appengine/srv"
 )
 
-const CHECKINDATEFORMAT = "January 2006"
+const (
+	CHECKINDATEFORMAT = "January 2006"
+	MAXCHECKINSTOSHOW = 5
+)
 
 type Checkin struct {
 	Id        int64 `json:",string" datastore:"-"`
@@ -49,6 +53,14 @@ func (c CheckinBuffer) Len() int {
 	return len(c)
 }
 
+func (c CheckinBuffer) Less(i, j int) bool {
+	return c[i].TimeStamp.After(c[j].TimeStamp)
+}
+
+func (c CheckinBuffer) Swap(i, j int) {
+	c[i], c[j] = c[j], c[i]
+}
+
 func addCheckin(wr srv.WrapperRequest, c *Checkin) error {
 
 	q := data.NewConn(wr, "checkins")
@@ -69,6 +81,8 @@ func GetCheckinsByPoint(wr srv.WrapperRequest, id int64) ([]*Checkin, error) {
 	if err != nil {
 		return nil, fmt.Errorf("getcheckinsbypoint: %v", err)
 	}
+
+	sort.Sort(cs)
 
 	return cs, nil
 }

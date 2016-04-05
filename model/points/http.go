@@ -72,9 +72,12 @@ func GetOnePoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, erro
 	}
 
 	checks, err := checkins.GetCheckinsByPoint(wr, id)
-
-	tc["Content"] = point
 	tc["Checkins"] = checks
+	tc["Content"] = point
+
+	if len(checks) > checkins.MAXCHECKINSTOSHOW {
+		tc["Checkins"] = checks[:checkins.MAXCHECKINSTOSHOW]
+	}
 
 	return viewPointTmpl, nil
 }
