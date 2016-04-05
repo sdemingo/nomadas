@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"app/core"
+	"model/checkins"
 
 	"appengine/srv"
 )
@@ -70,7 +71,11 @@ func GetOnePoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, erro
 		return viewPointTmpl, fmt.Errorf("points: getonepoint: %v", err)
 	}
 
+	checks, err := checkins.GetCheckinsByPoint(wr, id)
+
 	tc["Content"] = point
+	tc["Checkins"] = checks
+
 	return viewPointTmpl, nil
 }
 

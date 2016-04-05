@@ -32,6 +32,22 @@
       <span class="label label-default">{{.}}</span>
     {{end}}
     </div>
+
   </div>
 
+</div>
+
+
+<div class="panel panel-default">
+  <div class="panel-heading">Últimas visitas</div>
+  <div class="panel-body">
+    <ul class="list-group">
+      {{range .Checkins}}
+      <li class="list-group-item">
+      {{.GetTimeStamp}}
+	<div><small><i>{{.Desc}}</i></small></div>
+      </li>
+      {{end}}
+    </ul>
+  </div>
 </div>

@@ -10,7 +10,7 @@
 
 <form id="formNewCheckin" method="post" enctype="multipart/form-data">
   {{if .Content}}
-  <input type="hidden" id="PointId" name="PointId" value="{{.Content.Id}}">
+  <input type="hidden" id="PointId" name="PointId" value="{{.Content}}">
   {{end}}
   <div class="form-group">
     <label>Fecha</label>

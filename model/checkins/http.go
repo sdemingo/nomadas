@@ -3,11 +3,9 @@ package checkins
 import (
 	"encoding/json"
 	"fmt"
-	"strconv"
 	"time"
 
 	"app/core"
-	"model/points"
 
 	"appengine/srv"
 )
@@ -24,20 +22,10 @@ func NewCheckin(wr srv.WrapperRequest, tc map[string]interface{}) (string, error
 	}
 
 	wr.Parse()
-	sid := wr.Values.Get("id")
-	if sid != "" {
-		id, err := strconv.ParseInt(sid, 10, 64)
-		if err != nil {
-			return infoTmpl, fmt.Errorf("checkins: newcheckin: bad point id: %v", err)
-		}
-		point, err := points.GetPointById(wr, id)
-		if err != nil {
-			return infoTmpl, fmt.Errorf("checkins: getonepoint: %v", err)
-		}
 
-		tc["Content"] = point
-	}
+	pointId := wr.Values.Get("id")
 
+	tc["Content"] = pointId
 	return newCheckinTmpl, nil
 }
 
