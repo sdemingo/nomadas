@@ -41,7 +41,14 @@ func AddCheckin(wr srv.WrapperRequest, tc map[string]interface{}) (string, error
 		return infoTmpl, fmt.Errorf("checkins: addcheckinss: %v", err)
 	}
 
+	info := wr.NU.GetInfo()
 	checkin.UserId = wr.NU.ID()
+	if _, ok := info["Username"]; !ok {
+		checkin.UserName = "Anónimo"
+	} else {
+		checkin.UserName = info["Username"]
+	}
+
 	checkin.TimeStamp, _ = time.Parse(CHECKINDATEFORMAT, checkin.RawStamp)
 
 	err = addCheckin(wr, checkin)

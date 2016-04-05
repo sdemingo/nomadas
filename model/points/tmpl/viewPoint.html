@@ -37,17 +37,18 @@
 
 </div>
 
-
+{{if .Checkins}}
 <div class="panel panel-default">
   <div class="panel-heading">Últimas visitas</div>
   <div class="panel-body">
     <ul class="list-group">
       {{range .Checkins}}
       <li class="list-group-item">
-      {{.GetTimeStamp}}
+      {{.GetTimeStamp}} por {{.UserName}}
 	<div><small><i>{{.Desc}}</i></small></div>
       </li>
       {{end}}
     </ul>
   </div>
 </div>
+{{end}}

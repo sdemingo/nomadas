@@ -17,6 +17,7 @@ const (
 type Checkin struct {
 	Id        int64 `json:",string" datastore:"-"`
 	UserId    int64
+	UserName  string
 	PointId   int64     `json:",string"`
 	RawStamp  string    `datastore:"-"`
 	TimeStamp time.Time `json:",`
