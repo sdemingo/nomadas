@@ -79,6 +79,87 @@ var nomadconfig = (function(){
 })()
 
 
+var nomadcheckins = (function(){
+
+    var MAXDESCSIZE = 200
+
+    var checkinFormEvents = function(){
+	$("#btnNewCheckin").click(function(){
+	    addCheckin()
+	})
+
+	$("#Desc").each(function() {
+	    var $this = $(this);
+	    var maxLength = MAXDESCSIZE
+	    $this.attr('maxlength', null);
+	    
+	    var el = $("<span class=\"character-count\">" + maxLength + "/" + MAXDESCSIZE+"</span>");
+	    el.insertAfter($this);
+	    
+	    $this.bind('keyup', function() {
+		var cc = $this.val().length;
+		el.text(maxLength - cc + "/"+MAXDESCSIZE);
+		if(maxLength < cc) {
+		    el.css('color', 'red');
+		} else {
+		    el.css('color', '');
+		}
+	    })
+	});
+    }
+    
+
+    var checkinForm = function(id){
+	var urla=DOMAIN+"/checkins/edit"
+	if (id){
+	    urla=urla+"?id="+id
+	}
+	$.ajax({
+    	    url:urla,
+    	    type: 'get',
+    	    success: function (html){
+		showHTMLContent(html)
+		moveTo("#content")
+		checkinFormEvents()
+	    },
+    	    error: error
+	})
+    }
+
+
+    var addCheckin = function(){
+	var checkin = readForm($("#formNewCheckin"))
+	if ( checkin.Desc.length > MAXDESCSIZE){
+	    showErrorMessage("La descripción es demasiado larga")
+	    return 
+	}
+
+	$.ajax({
+    	    url:DOMAIN+"/checkins/new",
+    	    type: 'post',
+	    dataType: 'json',
+	    data: JSON.stringify(checkin),
+    	    success: function (url){
+		showInfoMessage("Checkin guardado con éxito")
+		loadWelcomePanel()
+	    },
+    	    error: error
+	})
+    }
+
+
+    var init = function(){
+
+    }
+
+    return{
+	init:init,
+	add:checkinForm
+    }
+
+})()
+
+
 var nomadmap = (function(){
 
     var MARKERCOLOR = "FireBrick"
@@ -131,50 +212,11 @@ var nomadmap = (function(){
 	$("#btnCheckInPoint").click(function(){
 	    var val=$("#pointId").html()
 	    if (val){
-		checkinForm(val)
+		nomadcheckins.add(val)
 	    }
 	})
     }
 
-
-    var checkinFormEvents = function(){
-	$("#btnNewCheckin").click(function(){
-	    addCheckin()
-	})
-    }
-
-    var checkinForm = function(id){
-	var urla=DOMAIN+"/checkins/edit"
-	if (id){
-	    urla=urla+"?id="+id
-	}
-	$.ajax({
-    	    url:urla,
-    	    type: 'get',
-    	    success: function (html){
-		showHTMLContent(html)
-		moveTo("#content")
-		checkinFormEvents()
-	    },
-    	    error: error
-	})
-    }
-
-
-    var addCheckin = function(){
-	var checkin = readForm($("#formNewCheckin"))
-	$.ajax({
-    	    url:DOMAIN+"/checkins/new",
-    	    type: 'post',
-	    dataType: 'json',
-	    data: JSON.stringify(checkin),
-    	    success: function (url){
-		showInfoMessage("Checkin guardado con éxito")
-		loadWelcomePanel()
-	    },
-    	    error: error
-	})
-    }
     
     var editPointFormEvents = function(){
 	tagsSelected={}
@@ -368,23 +410,6 @@ var nomadmap = (function(){
 	m.Desc.trim()
 	return (m.Name!="") && 
 	    (m.Desc!="")
-    }
-
-
-    var readForm = function(form){
-	var m = $(form).serializeObject()
-	// m.Tags = m.Tags.split(",").map(function(e){
-	//     return e.trim()
-	// })
-	// m.Tags.clean("")
-
-	//validator.validate(m,types)
-	// if (validator.hasErrors()){
-	//     showErrorMessage("Existen campos mal formados o sin información")
-	//     return 
-	// }
-
-	return m
     }
 
 
@@ -587,7 +612,21 @@ function moveTo(id){
 }
 
 
+function readForm (form){
+    var m = $(form).serializeObject()
+    // m.Tags = m.Tags.split(",").map(function(e){
+    //     return e.trim()
+    // })
+    // m.Tags.clean("")
 
+    //validator.validate(m,types)
+    // if (validator.hasErrors()){
+    //     showErrorMessage("Existen campos mal formados o sin información")
+    //     return 
+    // }
+
+    return m
+}
 
 
 $.fn.serializeObject = function()
@@ -806,6 +845,7 @@ function loadAdminPanel(e){
 }
 
 $(document).ready(function () {
+    nomadcheckins.init()
     nomadmap.init()
     nomadmap.loadMarkers()
     loadWelcomePanel()

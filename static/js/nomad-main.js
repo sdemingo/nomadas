@@ -41,6 +41,7 @@ function loadAdminPanel(e){
 }
 
 $(document).ready(function () {
+    nomadcheckins.init()
     nomadmap.init()
     nomadmap.loadMarkers()
     loadWelcomePanel()

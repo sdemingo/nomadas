@@ -112,7 +112,21 @@ function moveTo(id){
 }
 
 
+function readForm (form){
+    var m = $(form).serializeObject()
+    // m.Tags = m.Tags.split(",").map(function(e){
+    //     return e.trim()
+    // })
+    // m.Tags.clean("")
 
+    //validator.validate(m,types)
+    // if (validator.hasErrors()){
+    //     showErrorMessage("Existen campos mal formados o sin información")
+    //     return 
+    // }
+
+    return m
+}
 
 
 $.fn.serializeObject = function()

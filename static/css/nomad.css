@@ -82,7 +82,9 @@ form.disabled {
     display: none;
 }
 
-
+.character-count{
+    font-size:0.9em;
+}
 
 /* modal headers */7
 
