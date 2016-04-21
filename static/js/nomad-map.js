@@ -33,7 +33,9 @@ var nomadmap = (function(){
 	$("#btnDeletePoint").click(function(){
 	    var val=$("#pointId").html()
 	    if (val){
-		deletePoint(val)
+		showConfirmMessage("¿Desea completar el borrado del punto?",function(){
+		    deletePoint(val)
+		})
 	    }
 	})
 
