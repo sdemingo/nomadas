@@ -1,5 +1,31 @@
 
+function localStringDate(datestr){
+    if (!datestr){
+	return
+    }
+    datestr=datestr.replace("Monday","Lunes")
+	.replace("Tuesday","Martes")
+	.replace("Wednesday","Miércoles")
+	.replace("Thursday","Jueves")
+	.replace("Friday","Viernes")
+	.replace("Saturday","Sábado")
+	.replace("Sunday","Domingo")
 
+	.replace("January","Enero")
+	.replace("February","Febrero")
+	.replace("March","Marzo")
+	.replace("April","Abril")
+	.replace("May","Mayo")
+	.replace("June","Junio")
+	.replace("July","Julio")
+	.replace("Augoust","Agosto")
+	.replace("September","Septiembre")
+	.replace("October","Octubre")
+	.replace("November","Noviembre")
+	.replace("December","Diciembre")
+
+    return datestr
+}
 
 function error (data){
     var msg = data.Error

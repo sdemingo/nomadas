@@ -3,6 +3,7 @@ package checkins
 import (
 	"fmt"
 	"sort"
+	"strings"
 	"time"
 
 	"appengine/data"
@@ -13,6 +14,21 @@ const (
 	CHECKINDATEFORMAT = "January 2006"
 	MAXCHECKINSTOSHOW = 5
 )
+
+var localMonths = map[string]string{
+	"January":   "Enero",
+	"February":  "Febrero",
+	"March":     "Marzo",
+	"April":     "Abril",
+	"May":       "Mayo",
+	"June":      "Junio",
+	"July":      "Julio",
+	"Augoust":   "Agosto",
+	"September": "Septiembre",
+	"October":   "Octubre",
+	"November":  "Noviembre",
+	"December":  "Diciembre",
+}
 
 type Checkin struct {
 	Id        int64 `json:",string" datastore:"-"`
@@ -25,7 +41,13 @@ type Checkin struct {
 }
 
 func (c *Checkin) GetTimeStamp() string {
-	return c.TimeStamp.Format(CHECKINDATEFORMAT)
+	s := c.TimeStamp.Format(CHECKINDATEFORMAT)
+	for eM, lM := range localMonths {
+		if strings.Contains(s, eM) {
+			s = strings.Replace(s, eM, lM, 1)
+		}
+	}
+	return s
 }
 
 func (c *Checkin) ID() int64 {

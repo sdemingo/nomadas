@@ -43,7 +43,7 @@
   <div class="panel-body">
     <ul class="list-group">
       {{range .Checkins}}
-      <li class="list-group-item">
+      <li class="list-group-item date">
       {{.GetTimeStamp}} por {{.UserName}}
 	<div><small><i>{{.Desc}}</i></small></div>
       </li>
@@ -52,3 +52,6 @@
   </div>
 </div>
 {{end}}
+
+
+
