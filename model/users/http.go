@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"app/core"
+	"model/checkins"
 	"model/points"
 
 	"appengine/srv"
@@ -56,6 +57,13 @@ func GetOne(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
 			tc["Content"] = wr.NU
 		}
 
+		tc["TotalCheckins"] = 0
+		tc["TotalPoints"] = 0
+
+		// fetch all checkins to show lastest
+		fetchUsersCheckins(wr, tc)
+
+		// fetch all tags for point searches
 		tags, err := points.GetAllTags(wr, -1)
 		if err != nil {
 			return infoTmpl, fmt.Errorf("users: getone: %v", err)
@@ -110,4 +118,34 @@ func Add(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
 	tc["Content"] = nu
 
 	return infoTmpl, nil
+}
+
+func fetchUsersCheckins(wr srv.WrapperRequest, tc map[string]interface{}) {
+	cs, err := checkins.GetCheckinsByUser(wr, wr.NU.ID())
+	if err != nil {
+		return
+	}
+	if len(cs) > 5 {
+		cs = cs[:5]
+	}
+
+	tc["Checkins"] = cs
+	tc["TotalCheckins"] = len(cs)
+
+	pointNames := make([]string, 0)
+	for _, c := range cs {
+		p, err := points.GetPointById(wr, c.PointId)
+		if err != nil {
+			pointNames = append(pointNames, "Desconocido")
+		} else {
+			pointNames = append(pointNames, p.Name)
+		}
+	}
+
+	tc["PointNames"] = pointNames
+	ps, err := points.GetPointsByOwner(wr, wr.NU.ID())
+	if err != nil {
+		return
+	}
+	tc["TotalPoints"] = len(ps)
 }

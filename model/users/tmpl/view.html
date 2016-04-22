@@ -22,37 +22,46 @@
 </div>
 {{end}}
 
-<div class="panel panel-default">
+<div class="panel panel-default user-panel">
   <div class="panel-heading">Bienvenido {{.Content.Name}}</div>
   <div class="panel-body">
 
-    <p>Hola <strong>{{.Content.Name}}</strong>. Bienvenido a Nomadas App.<p>
+    <img id="main-logo" class="pull-right" src="/images/logo-round.png"  alt=""> 
 
-      <p>Nomadas App es una aplicación para gestionar una colección de
+    <p>Hola <strong>{{.Content.Name}}</strong>. Bienvenido a Nomadas App.</p>
+
+    <p>Nomadas App es una aplicación para gestionar una colección de
       puntos donde tu y otros usuarios recomiendan e intercambian
       lugares donde acampar, pecnotar y aparcar vuestras campers.</p>
- 
+    
 
-
-      
   </div>
 </div>
 
-<div class="text-center">
-  <img id="main-logo" src="/images/logo-round.png"  alt=""> 
-</div>
-
-<!-- 
 <div class="panel panel-default">
-  <div class="panel-heading">Lugares</div>
+  <div class="panel-heading">Actividad</div>
   <div class="panel-body">
-    <p><strong>Marcados: </strong> 0</p>
-    <div class="form-group tags-panel">
+  
+  <p>Tienes creados <span id="total-points">{{.TotalPoints}}</span> puntos y <span
+  id="total-regs">{{.TotalCheckins}}</span> registros. Pulsa el botón para tus últimos
+  lugares visitados:
+
+    <p><button class="btn btn-info" data-toggle="collapse" data-target="#last-regs">Últimos registros</button></p>
+    <ul id="last-regs" class="list-group collapse">
+      {{$checkins:=.Checkins}}
+      {{range $i,$c:= .Checkins}}
+      {{$pname := index $.PointNames $i}}
+      <li class="list-group-item">{{.GetTimeStamp}} en {{$pname}}</li>
+      {{end}}
+    </ul>
+
+
+    <!--  <div class="form-group tags-panel">
       <p><label>Filtrar por categorias:</label></p>
-     {{range .AllTagsNames}}
+{{range .AllTagsNames}}
       <a href="#" class="label label-default">{{.Name}}</a>
-    {{end}}
-    </div>
+{{end}}
+    </div>-->
   </div>
 </div>
- -->
+

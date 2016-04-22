@@ -87,3 +87,17 @@ func GetCheckinsByPoint(wr srv.WrapperRequest, id int64) ([]*Checkin, error) {
 
 	return cs, nil
 }
+
+func GetCheckinsByUser(wr srv.WrapperRequest, id int64) ([]*Checkin, error) {
+	cs := NewCheckinBuffer()
+	q := data.NewConn(wr, "checkins")
+	q.AddFilter("UserId =", id)
+	err := q.GetMany(&cs)
+	if err != nil {
+		return nil, fmt.Errorf("getcheckinsbyuser: %v", err)
+	}
+
+	sort.Sort(cs)
+
+	return cs, nil
+}

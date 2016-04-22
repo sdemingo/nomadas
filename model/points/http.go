@@ -26,7 +26,7 @@ func GetListPoints(wr srv.WrapperRequest, tc map[string]interface{}) (string, er
 	// Check if the request has tags param for search
 
 	id := wr.NU.ID()
-	points, err := getPointsByOwner(wr, id)
+	points, err := GetPointsByOwner(wr, id)
 	if err != nil {
 		return infoTmpl, fmt.Errorf("points: getlistpoints: %v", err)
 	}
@@ -42,7 +42,7 @@ func ExportListPoints(wr srv.WrapperRequest, tc map[string]interface{}) (string,
 
 	wr.Parse()
 	id := wr.NU.ID()
-	points, err := getPointsByOwner(wr, id)
+	points, err := GetPointsByOwner(wr, id)
 	if err != nil {
 		return exportPointTmpl, fmt.Errorf("points: exportpoints: %v", err)
 	}
