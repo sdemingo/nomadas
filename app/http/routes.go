@@ -93,4 +93,8 @@ func init() {
 		routes["/checkins/new"] = true
 		AppHandler(w, r, checkins.AddCheckin)
 	})
+	http.HandleFunc("/checkins/delete", func(w http.ResponseWriter, r *http.Request) {
+		routes["/checkins/delete"] = true
+		AppHandler(w, r, checkins.DeleteCheckin)
+	})
 }

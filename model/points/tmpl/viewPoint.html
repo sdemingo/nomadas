@@ -45,6 +45,11 @@
       {{range .Checkins}}
       <li class="list-group-item date">
       {{.GetTimeStamp}} por {{.UserName}}
+	<div class="pull-right">
+	  <a id="btnDeleteCheckin" href="/checkins/delete?id={{.Id}}">
+	  <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+	  </a>
+	</div>
 	<div><small><i>{{.Desc}}</i></small></div>
       </li>
       {{end}}

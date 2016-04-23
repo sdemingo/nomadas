@@ -3,6 +3,7 @@ package checkins
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"time"
 
 	"app/core"
@@ -57,5 +58,32 @@ func AddCheckin(wr srv.WrapperRequest, tc map[string]interface{}) (string, error
 	}
 
 	tc["Content"] = checkin
+	return infoTmpl, nil
+}
+
+func DeleteCheckin(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
+	if wr.NU.GetRole() < core.ROLE_ADMIN {
+		return infoTmpl, fmt.Errorf("checkins: deletecheckin: %s", core.ERR_NOTOPERATIONALLOWED)
+	}
+
+	wr.Parse()
+	sid := wr.Values.Get("id")
+	id, err := strconv.ParseInt(sid, 10, 64)
+	if err != nil {
+		return infoTmpl, fmt.Errorf("checkins: deletecheckin: bad id: %v", err)
+	}
+
+	c, err := GetCheckinById(wr, id)
+	if err != nil {
+		return infoTmpl, fmt.Errorf("checkins: deletecheckin: %v", err)
+	}
+
+	err = deleteCheckin(wr, c)
+	if err != nil {
+		return infoTmpl, fmt.Errorf("checkins: deletecheckin: %v", err)
+	}
+
+	tc["Content"] = c
+
 	return infoTmpl, nil
 }
