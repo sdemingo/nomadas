@@ -68,6 +68,18 @@ var nomadcheckins = (function(){
 	})
     }
 
+    var deleteCheckin = function(id){
+	$.ajax({
+    	    url:DOMAIN+"/checkins/delete?id="+id,
+    	    type: 'get',
+    	    success: function (url){
+		showInfoMessage("Checkin borrado con éxito")
+		loadWelcomePanel()
+	    },
+    	    error: error
+	})
+    }
+
 
     var init = function(){
 
@@ -75,7 +87,8 @@ var nomadcheckins = (function(){
 
     return{
 	init:init,
-	add:checkinForm
+	add:checkinForm,
+	del:deleteCheckin
     }
 
 })()

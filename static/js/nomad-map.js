@@ -57,6 +57,17 @@ var nomadmap = (function(){
 		nomadcheckins.add(val)
 	    }
 	})
+
+	$("#btnDeleteCheckin").click(function(e){
+	    e.stopPropagation()
+	    e.preventDefault()
+	    var id=$(this).attr("href").split("=")[1]
+	    if (id){
+		showConfirmMessage("¿Desea completar el borrado del registro?",function(){
+		    nomadcheckins.del(id)
+		})
+	    }
+	})
     }
 
     
@@ -73,7 +84,7 @@ var nomadmap = (function(){
 		    $(".tags-panel .label")		     		
 			.click(function(e){
 			    var tagName=$(this).html()
-		    	    e.stopPropagation();
+		    	    e.stopPropagation()
 		    	    e.preventDefault()
 		    	    if (tagsSelected[tagName]){
 		    		$(this).removeClass("label-primary")

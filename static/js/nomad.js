@@ -147,6 +147,18 @@ var nomadcheckins = (function(){
 	})
     }
 
+    var deleteCheckin = function(id){
+	$.ajax({
+    	    url:DOMAIN+"/checkins/delete?id="+id,
+    	    type: 'get',
+    	    success: function (url){
+		showInfoMessage("Checkin borrado con éxito")
+		loadWelcomePanel()
+	    },
+    	    error: error
+	})
+    }
+
 
     var init = function(){
 
@@ -154,7 +166,8 @@ var nomadcheckins = (function(){
 
     return{
 	init:init,
-	add:checkinForm
+	add:checkinForm,
+	del:deleteCheckin
     }
 
 })()
@@ -217,6 +230,17 @@ var nomadmap = (function(){
 		nomadcheckins.add(val)
 	    }
 	})
+
+	$("#btnDeleteCheckin").click(function(e){
+	    e.stopPropagation()
+	    e.preventDefault()
+	    var id=$(this).attr("href").split("=")[1]
+	    if (id){
+		showConfirmMessage("¿Desea completar el borrado del registro?",function(){
+		    nomadcheckins.del(id)
+		})
+	    }
+	})
     }
 
     
@@ -233,7 +257,7 @@ var nomadmap = (function(){
 		    $(".tags-panel .label")		     		
 			.click(function(e){
 			    var tagName=$(this).html()
-		    	    e.stopPropagation();
+		    	    e.stopPropagation()
 		    	    e.preventDefault()
 		    	    if (tagsSelected[tagName]){
 		    		$(this).removeClass("label-primary")
@@ -501,7 +525,33 @@ var nomadmap = (function(){
 
 })()
 
+function localStringDate(datestr){
+    if (!datestr){
+	return
+    }
+    datestr=datestr.replace("Monday","Lunes")
+	.replace("Tuesday","Martes")
+	.replace("Wednesday","Miércoles")
+	.replace("Thursday","Jueves")
+	.replace("Friday","Viernes")
+	.replace("Saturday","Sábado")
+	.replace("Sunday","Domingo")
 
+	.replace("January","Enero")
+	.replace("February","Febrero")
+	.replace("March","Marzo")
+	.replace("April","Abril")
+	.replace("May","Mayo")
+	.replace("June","Junio")
+	.replace("July","Julio")
+	.replace("Augoust","Agosto")
+	.replace("September","Septiembre")
+	.replace("October","Octubre")
+	.replace("November","Noviembre")
+	.replace("December","Diciembre")
+
+    return datestr
+}
 
 function error (data){
     var msg = data.Error
