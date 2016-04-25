@@ -97,13 +97,25 @@ func addCheckin(wr srv.WrapperRequest, c *Checkin) error {
 }
 
 func deleteCheckin(wr srv.WrapperRequest, c *Checkin) error {
-	// TODO
+	q := data.NewConn(wr, "checkins")
+
+	err := q.Delete(c)
+	if err != nil {
+		return fmt.Errorf("deletecheckin: %v", err)
+	}
 	return nil
 }
 
 func GetCheckinById(wr srv.WrapperRequest, id int64) (*Checkin, error) {
-	// TODO
-	return nil, nil
+	c := new(Checkin)
+	c.Id = id
+	q := data.NewConn(wr, "checkins")
+	err := q.Get(c)
+	if err != nil {
+		return nil, fmt.Errorf("getcheckinbyid: %v", err)
+	}
+
+	return c, nil
 }
 
 func GetCheckinsByPoint(wr srv.WrapperRequest, id int64) ([]*Checkin, error) {
