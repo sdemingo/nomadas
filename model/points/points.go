@@ -22,6 +22,7 @@ type Point struct {
 	Lon       float32   `json:",string"`
 	ImageKey  string    `json:"`
 	Tags      []string  `datastore:"-"`
+	NChecks   int       `datastore:"-"`
 }
 
 func (p *Point) IsValid() bool {

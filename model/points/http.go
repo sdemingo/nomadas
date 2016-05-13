@@ -31,6 +31,11 @@ func GetListPoints(wr srv.WrapperRequest, tc map[string]interface{}) (string, er
 		return infoTmpl, fmt.Errorf("points: getlistpoints: %v", err)
 	}
 
+	for i := range points {
+		checks, _ := checkins.GetCheckinsByPoint(wr, points[i].Id)
+		points[i].NChecks = len(checks)
+	}
+
 	tc["Content"] = points
 	return infoTmpl, nil
 }
@@ -72,6 +77,7 @@ func GetOnePoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, erro
 	}
 
 	checks, err := checkins.GetCheckinsByPoint(wr, id)
+	point.NChecks = len(checks)
 	tc["Checkins"] = checks
 	tc["Content"] = point
 

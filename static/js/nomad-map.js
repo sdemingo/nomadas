@@ -277,7 +277,12 @@ var nomadmap = (function(){
 	for (var i=0;i<points.length;i++){
 	    var location = {lat: parseFloat(points[i].Lat), 
 	    		    lng: parseFloat(points[i].Lon)}
-	    var marker=newMarker(location, points[i].Name, MARKERCOLOR)
+	    var color=MARKERCOLOR
+	    if (points[i].NChecks>0){
+		color=MARKERCOLOR_VISITED
+	    }
+	    console.log(points[i].NChecks)
+	    var marker=newMarker(location, points[i].Name, color)
 	    marker.point=points[i]
 	    markers.push(marker)
 	}
@@ -285,7 +290,7 @@ var nomadmap = (function(){
 
     var newMarker=function(location,name,color){
 	if (!color){
-	    color = MARKERCOLOR_VISITED
+	    color = MARKERCOLOR
 	}
 
 	var m = new google.maps.Marker({
