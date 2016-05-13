@@ -44,13 +44,16 @@
     <ul class="list-group">
       {{range .Checkins}}
       <li class="list-group-item date">
-      {{.GetTimeStamp}} por {{.UserName}}
+	{{.GetTimeStamp}} por {{.UserName}}
 	<div class="pull-right">
 	  <a id="btnDeleteCheckin" href="/checkins/delete?id={{.Id}}">
 	  <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
 	  </a>
 	</div>
+	{{if .Desc}}
+	<hr>
 	<div><small><i>{{.Desc}}</i></small></div>
+	{{end}}
       </li>
       {{end}}
     </ul>
