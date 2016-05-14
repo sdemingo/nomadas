@@ -669,19 +669,9 @@ function moveTo(id){
 }
 
 
+
 function readForm (form){
     var m = $(form).serializeObject()
-    // m.Tags = m.Tags.split(",").map(function(e){
-    //     return e.trim()
-    // })
-    // m.Tags.clean("")
-
-    //validator.validate(m,types)
-    // if (validator.hasErrors()){
-    //     showErrorMessage("Existen campos mal formados o sin información")
-    //     return 
-    // }
-
     return m
 }
 
@@ -866,6 +856,19 @@ var DOMAIN=""
 function mainEvents(){
     $("#btnMainPanel").off("click").click(loadWelcomePanel)
     $("#btnAdminPanel").off("click").click(loadAdminPanel)
+    $(".tags-panel a.label").click(selectTag)
+}
+
+
+// Mark tag as selected 
+var selectTag = function(event){
+    event.preventDefault()
+    var element = $(this)
+    if (element.hasClass("label-primary")) {
+        element.removeClass("label-primary");
+    }else{
+	element.addClass("label-primary");
+    }
 }
 
 

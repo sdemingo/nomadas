@@ -227,7 +227,8 @@ var nomadmap = (function(){
 	}); 
     }
 
-    var getPoints = function(tags){
+
+    var getPoints = function(tags,cb){
 	$.ajax({
     	    url:DOMAIN+"/points/list",
     	    type: 'get',
@@ -238,6 +239,9 @@ var nomadmap = (function(){
 		}
 		points = points.concat(response)
 		showMarkers()
+		if (cb){
+		    cb()
+		}
 	    },
     	    error: error
 	}); 
