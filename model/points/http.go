@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"app/core"
@@ -22,8 +23,7 @@ func GetListPoints(wr srv.WrapperRequest, tc map[string]interface{}) (string, er
 
 	wr.Parse()
 
-	// TODO
-	// Check if the request has tags param for search
+	wr.R.ParseForm()
 
 	id := wr.NU.ID()
 	points, err := GetPointsByOwner(wr, id)
@@ -34,6 +34,13 @@ func GetListPoints(wr srv.WrapperRequest, tc map[string]interface{}) (string, er
 	for i := range points {
 		checks, _ := checkins.GetCheckinsByPoint(wr, points[i].Id)
 		points[i].NChecks = len(checks)
+	}
+
+	// Filter points by tag if it's necesary
+	if len(wr.R.Form["tags"]) > 0 && wr.R.Form["tags"][0] != "" {
+		tags := strings.Split(wr.R.Form["tags"][0], ",")
+		srv.Log(wr, fmt.Sprintf("%q", tags))
+		filterPoints(points, tags)
 	}
 
 	tc["Content"] = points

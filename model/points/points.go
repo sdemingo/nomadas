@@ -151,6 +151,11 @@ func updatePoint(wr srv.WrapperRequest, id int64, newp *Point) error {
 	return nil
 }
 
+func filterPoints(points []*Point, tags []string) {
+	// TODO:
+	// select points of the array which all tags in the tags array
+}
+
 func GetPointById(wr srv.WrapperRequest, id int64) (*Point, error) {
 	p := new(Point)
 	p.Id = id
