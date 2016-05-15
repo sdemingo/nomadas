@@ -400,17 +400,27 @@ var nomadmap = (function(){
 	}); 
     }
 
-    var getPoints = function(tags){
+
+    var getPoints = function(tags,cb){
+	var dataTags
+	if ((tags) && (tags.length>0)){
+	    dataTags={tags:tags.join(",")}
+	}
+
 	$.ajax({
     	    url:DOMAIN+"/points/list",
     	    type: 'get',
 	    dataType: 'json',
+	    data: dataTags,
     	    success: function (response){
 		if (response.Error){
 		    showErrorMessage(response.Error)
 		}
 		points = points.concat(response)
 		showMarkers()
+		if (cb){
+		    cb()
+		}
 	    },
     	    error: error
 	}); 
@@ -454,7 +464,7 @@ var nomadmap = (function(){
 	    if (points[i].NChecks>0){
 		color=MARKERCOLOR_VISITED
 	    }
-	    console.log(points[i].NChecks)
+
 	    var marker=newMarker(location, points[i].Name, color)
 	    marker.point=points[i]
 	    markers.push(marker)
@@ -857,6 +867,7 @@ function mainEvents(){
     $("#btnMainPanel").off("click").click(loadWelcomePanel)
     $("#btnAdminPanel").off("click").click(loadAdminPanel)
     $(".tags-panel a.label").click(selectTag)
+    $(".tags-panel a.label").on("click",launchSearchByTag)
 }
 
 
@@ -868,6 +879,33 @@ var selectTag = function(event){
         element.removeClass("label-primary");
     }else{
 	element.addClass("label-primary");
+    }
+}
+
+
+// Recover clicked tags and launch a search by these tags
+var launchSearchByTag = function(event){
+    var tags=[]
+    $(".tags-panel .results").empty()
+    $(".tags-panel").find(".label-primary").each(function(){
+	tags.push($(this).html())
+    });
+
+    if (tags.length>0){
+    	nomadmap.loadMarkers(tags,launchSearchResponse)
+    }
+}
+
+// Callback after the list quest request
+var launchSearchResponse = function(response){
+    if ((!response) || (response.length==0) || !Array.isArray(response)){
+    	$(".tags-panel .results")
+    	    .append("<span class=\"list-group-item\">No hubo resultados</span>")
+    }else{
+    	response.forEach(function(e){
+    	    $(".tags-panel .results")
+    		.append("<li class=\"list-group-item\"><a href=\"/points/get?id="+e.Id+"\" >"+resume(e.Name)+"</a></li>")
+    	})
     }
 }
 

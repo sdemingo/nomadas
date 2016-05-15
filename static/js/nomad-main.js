@@ -6,7 +6,7 @@ function mainEvents(){
     $("#btnMainPanel").off("click").click(loadWelcomePanel)
     $("#btnAdminPanel").off("click").click(loadAdminPanel)
     $(".tags-panel a.label").click(selectTag)
-    $(".tags-panel a.tags").on("click",launchSearchByTag)
+    $(".tags-panel a.label").on("click",launchSearchByTag)
 }
 
 
@@ -26,23 +26,23 @@ var selectTag = function(event){
 var launchSearchByTag = function(event){
     var tags=[]
     $(".tags-panel .results").empty()
-    $(".tags-panel .tags").find(".label-primary").each(function(){
+    $(".tags-panel").find(".label-primary").each(function(){
 	tags.push($(this).html())
-    })
+    });
 
-	if (tags.length>0){
-	    getPoints(tags,launchSearchResponse)
-	}
+    if (tags.length>0){
+    	nomadmap.loadMarkers(tags,launchSearchResponse)
+    }
 }
 
 // Callback after the list quest request
 var launchSearchResponse = function(response){
     if ((!response) || (response.length==0) || !Array.isArray(response)){
-    	$(settings.panel+" .results")
+    	$(".tags-panel .results")
     	    .append("<span class=\"list-group-item\">No hubo resultados</span>")
     }else{
     	response.forEach(function(e){
-    	    $(settings.panel+" .results")
+    	    $(".tags-panel .results")
     		.append("<li class=\"list-group-item\"><a href=\"/points/get?id="+e.Id+"\" >"+resume(e.Name)+"</a></li>")
     	})
     }

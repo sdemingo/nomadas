@@ -229,10 +229,16 @@ var nomadmap = (function(){
 
 
     var getPoints = function(tags,cb){
+	var dataTags
+	if ((tags) && (tags.length>0)){
+	    dataTags={tags:tags.join(",")}
+	}
+
 	$.ajax({
     	    url:DOMAIN+"/points/list",
     	    type: 'get',
 	    dataType: 'json',
+	    data: dataTags,
     	    success: function (response){
 		if (response.Error){
 		    showErrorMessage(response.Error)
@@ -285,7 +291,7 @@ var nomadmap = (function(){
 	    if (points[i].NChecks>0){
 		color=MARKERCOLOR_VISITED
 	    }
-	    console.log(points[i].NChecks)
+
 	    var marker=newMarker(location, points[i].Name, color)
 	    marker.point=points[i]
 	    markers.push(marker)
