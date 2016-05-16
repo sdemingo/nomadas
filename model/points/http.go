@@ -39,8 +39,7 @@ func GetListPoints(wr srv.WrapperRequest, tc map[string]interface{}) (string, er
 	// Filter points by tag if it's necesary
 	if len(wr.R.Form["tags"]) > 0 && wr.R.Form["tags"][0] != "" {
 		tags := strings.Split(wr.R.Form["tags"][0], ",")
-		srv.Log(wr, fmt.Sprintf("%q", tags))
-		filterPoints(points, tags)
+		points = filterPoints(points, tags)
 	}
 
 	tc["Content"] = points

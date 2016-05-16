@@ -151,9 +151,24 @@ func updatePoint(wr srv.WrapperRequest, id int64, newp *Point) error {
 	return nil
 }
 
-func filterPoints(points []*Point, tags []string) {
+func filterPoints(points []*Point, tags []string) []*Point {
 	// TODO:
 	// select points of the array which all tags in the tags array
+
+	selects := make([]*Point, 0)
+	for i := range points {
+		f := 0
+		for _, tag := range tags {
+			if points[i].HasTag(tag) {
+				f++
+			}
+		}
+		if f == len(tags) {
+			selects = append(selects, points[i])
+		}
+	}
+
+	return selects
 }
 
 func GetPointById(wr srv.WrapperRequest, id int64) (*Point, error) {

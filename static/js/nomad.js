@@ -180,7 +180,7 @@ var nomadmap = (function(){
     var MARKERCOLOR_CURRENT = "orange"
 
     var map
-    var points=[]
+    var allPoints=[]
     var markers=[]
     var curMarker
     var lastLocation
@@ -367,8 +367,8 @@ var nomadmap = (function(){
 		if ((response.Error) && (!nodialog)){
 		    showErrorMessage(response.Error)
 		}else{
-		    points.push(response)
-		    showMarkers()
+		    allPoints.push(response)
+		    showMarkers(response)
 		    if (!nodialog){
 			showInfoMessage("Punto guardado con éxito")
 		    }
@@ -388,7 +388,7 @@ var nomadmap = (function(){
 		if (response.Error){
 		    showErrorMessage(response.Error)
 		}else{
-		    points = points.filter(function(it){
+		    allPoints = allPoints.filter(function(it){
 			return it.Id != parseInt(id)
 		    })
 		    deleteMarkers()
@@ -401,7 +401,7 @@ var nomadmap = (function(){
     }
 
 
-    var getPoints = function(tags,cb){
+    var getPoints = function(tags){
 	var dataTags
 	if ((tags) && (tags.length>0)){
 	    dataTags={tags:tags.join(",")}
@@ -416,11 +416,16 @@ var nomadmap = (function(){
 		if (response.Error){
 		    showErrorMessage(response.Error)
 		}
-		points = points.concat(response)
-		showMarkers()
-		if (cb){
-		    cb()
-		}
+		allPoints = allPoints.concat(response)
+
+		deleteMarkers()
+		showMarkers(response)
+
+		// var msg="Encontrados "+response.length+" puntos"
+		// if (response.length==1){
+		//     msg="Encontrado 1 punto"
+		// }
+		// $(".results").html(msg)
 	    },
     	    error: error
 	}); 
@@ -456,7 +461,11 @@ var nomadmap = (function(){
 	markers=[]
     }
 
-    var showMarkers = function(){
+    var showMarkers = function(pointsToShow){
+	var points = allPoints
+	if (pointsToShow){
+	    points=pointsToShow
+	}
 	for (var i=0;i<points.length;i++){
 	    var location = {lat: parseFloat(points[i].Lat), 
 	    		    lng: parseFloat(points[i].Lon)}
@@ -465,7 +474,7 @@ var nomadmap = (function(){
 		color=MARKERCOLOR_VISITED
 	    }
 
-	    var marker=newMarker(location, points[i].Name, color)
+	    var marker=newMarker(location,points[i].Name, color)
 	    marker.point=points[i]
 	    markers.push(marker)
 	}
@@ -523,7 +532,7 @@ var nomadmap = (function(){
     }
 
     var init = function(){
-	points=[]
+	allPoints=[]
 	initMap()
     }
 
@@ -891,23 +900,21 @@ var launchSearchByTag = function(event){
 	tags.push($(this).html())
     });
 
-    if (tags.length>0){
-    	nomadmap.loadMarkers(tags,launchSearchResponse)
-    }
+    nomadmap.loadMarkers(tags)
 }
 
 // Callback after the list quest request
-var launchSearchResponse = function(response){
-    if ((!response) || (response.length==0) || !Array.isArray(response)){
-    	$(".tags-panel .results")
-    	    .append("<span class=\"list-group-item\">No hubo resultados</span>")
-    }else{
-    	response.forEach(function(e){
-    	    $(".tags-panel .results")
-    		.append("<li class=\"list-group-item\"><a href=\"/points/get?id="+e.Id+"\" >"+resume(e.Name)+"</a></li>")
-    	})
-    }
-}
+// var launchSearchResponse = function(points){
+//     if ((!response) || (response.length==0) || !Array.isArray(response)){
+//     	$(".tags-panel .results")
+//     	    .append("<span class=\"list-group-item\">No hubo resultados</span>")
+//     }else{
+//     	response.forEach(function(e){
+//     	    $(".tags-panel .results")
+//     		.append("<li class=\"list-group-item\"><a href=\"/points/get?id="+e.Id+"\" >"+resume(e.Name)+"</a></li>")
+//     	})
+//     }
+// }
 
 
 function loadWelcomePanel(e){

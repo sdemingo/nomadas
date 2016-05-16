@@ -30,22 +30,7 @@ var launchSearchByTag = function(event){
 	tags.push($(this).html())
     });
 
-    if (tags.length>0){
-    	nomadmap.loadMarkers(tags,launchSearchResponse)
-    }
-}
-
-// Callback after the list quest request
-var launchSearchResponse = function(response){
-    if ((!response) || (response.length==0) || !Array.isArray(response)){
-    	$(".tags-panel .results")
-    	    .append("<span class=\"list-group-item\">No hubo resultados</span>")
-    }else{
-    	response.forEach(function(e){
-    	    $(".tags-panel .results")
-    		.append("<li class=\"list-group-item\"><a href=\"/points/get?id="+e.Id+"\" >"+resume(e.Name)+"</a></li>")
-    	})
-    }
+    nomadmap.loadMarkers(tags)
 }
 
 
