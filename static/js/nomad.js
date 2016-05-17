@@ -421,11 +421,7 @@ var nomadmap = (function(){
 		deleteMarkers()
 		showMarkers(response)
 
-		// var msg="Encontrados "+response.length+" puntos"
-		// if (response.length==1){
-		//     msg="Encontrado 1 punto"
-		// }
-		// $(".results").html(msg)
+		$(".results .showed").html(response.length)
 	    },
     	    error: error
 	}); 
@@ -902,19 +898,6 @@ var launchSearchByTag = function(event){
 
     nomadmap.loadMarkers(tags)
 }
-
-// Callback after the list quest request
-// var launchSearchResponse = function(points){
-//     if ((!response) || (response.length==0) || !Array.isArray(response)){
-//     	$(".tags-panel .results")
-//     	    .append("<span class=\"list-group-item\">No hubo resultados</span>")
-//     }else{
-//     	response.forEach(function(e){
-//     	    $(".tags-panel .results")
-//     		.append("<li class=\"list-group-item\"><a href=\"/points/get?id="+e.Id+"\" >"+resume(e.Name)+"</a></li>")
-//     	})
-//     }
-// }
 
 
 function loadWelcomePanel(e){

@@ -248,11 +248,7 @@ var nomadmap = (function(){
 		deleteMarkers()
 		showMarkers(response)
 
-		// var msg="Encontrados "+response.length+" puntos"
-		// if (response.length==1){
-		//     msg="Encontrado 1 punto"
-		// }
-		// $(".results").html(msg)
+		$(".results .showed").html(response.length)
 	    },
     	    error: error
 	}); 
