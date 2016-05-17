@@ -182,6 +182,7 @@ var nomadmap = (function(){
     var map
     var allPoints=[]
     var markers=[]
+    var markerCluster
     var curMarker
     var lastLocation
     var tagsSelected={}
@@ -419,7 +420,9 @@ var nomadmap = (function(){
 		allPoints = allPoints.concat(response)
 
 		deleteMarkers()
-		showMarkers(response)
+
+		var clustering=!((tags) && (tags.length>0))
+		showMarkers(response,clustering)
 
 		$(".results .showed").html(response.length)
 	    },
@@ -455,9 +458,13 @@ var nomadmap = (function(){
 	    markers[i].setMap(null)
 	}
 	markers=[]
+
+	if (markerCluster){
+	    markerCluster.clearMarkers()
+	}
     }
 
-    var showMarkers = function(pointsToShow){
+    var showMarkers = function(pointsToShow,clustering){
 	var points = allPoints
 	if (pointsToShow){
 	    points=pointsToShow
@@ -474,7 +481,39 @@ var nomadmap = (function(){
 	    marker.point=points[i]
 	    markers.push(marker)
 	}
+
+
+       mcOptions = {styles: [{
+	 height: 53,
+	 url: "/images/m1.png",
+	 width: 53
+       },
+			     {
+	   height: 56,
+	   url: "/images/m2.png",
+	   width: 56
+	 },
+			     {
+	   height: 66,
+	   url: "/images/m3.png",
+	   width: 66
+	 },
+			     {
+	   height: 78,
+	   url: "/images/m4.png",
+	   width: 78
+	 },
+			     {
+	   height: 90,
+	   url: "/images/m5.png",
+	   width: 90
+	 }]}
+
+	if (clustering){
+	    markerCluster = new MarkerClusterer(map, markers,mcOptions);
+	}
     }
+
 
     var newMarker=function(location,name,color){
 	if (!color){
