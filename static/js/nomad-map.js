@@ -280,7 +280,11 @@ var nomadmap = (function(){
     var refreshMap = function(clustering,pointsToShow){
 	deleteMarkers()
 	showMarkers(clustering,pointsToShow)
-	$(".results .showed").html(response.length)
+	if (pointsToShow){
+	    $(".results .showed").html(pointsToShow.length)
+	}else{
+	    $(".results .showed").html(allPoints.length)
+	}
     }
 
     var deleteMarkers= function(){

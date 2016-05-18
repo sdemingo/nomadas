@@ -372,8 +372,6 @@ var nomadmap = (function(){
 		    showMarkers(response)
 		    if (!nodialog){
 			showInfoMessage("Punto guardado con éxito")
-			// TODO:
-			// refresh the map
 			refreshMap(true)
 		    }
 		}
@@ -398,6 +396,8 @@ var nomadmap = (function(){
 		    deleteMarkers()
 		    showMarkers()
 		    showInfoMessage("Punto borrado con éxito")
+		    // TODO:
+		    // refresh the map
 		}
 	    },
     	    error: error
@@ -453,7 +453,11 @@ var nomadmap = (function(){
     var refreshMap = function(clustering,pointsToShow){
 	deleteMarkers()
 	showMarkers(clustering,pointsToShow)
-	$(".results .showed").html(response.length)
+	if (pointsToShow){
+	    $(".results .showed").html(pointsToShow.length)
+	}else{
+	    $(".results .showed").html(allPoints.length)
+	}
     }
 
     var deleteMarkers= function(){
