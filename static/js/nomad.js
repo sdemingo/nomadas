@@ -372,6 +372,9 @@ var nomadmap = (function(){
 		    showMarkers(response)
 		    if (!nodialog){
 			showInfoMessage("Punto guardado con éxito")
+			// TODO:
+			// refresh the map
+			refreshMap(true)
 		    }
 		}
 	    },
@@ -418,13 +421,8 @@ var nomadmap = (function(){
 		    showErrorMessage(response.Error)
 		}
 		allPoints = allPoints.concat(response)
-
-		deleteMarkers()
-
 		var clustering=!((tags) && (tags.length>0))
-		showMarkers(response,clustering)
-
-		$(".results .showed").html(response.length)
+		refreshMap(clustering,response)
 	    },
     	    error: error
 	}); 
@@ -452,6 +450,11 @@ var nomadmap = (function(){
 	    (m.Desc!="")
     }
 
+    var refreshMap = function(clustering,pointsToShow){
+	deleteMarkers()
+	showMarkers(clustering,pointsToShow)
+	$(".results .showed").html(response.length)
+    }
 
     var deleteMarkers= function(){
 	for (var i=0;i<markers.length;i++){
@@ -464,7 +467,7 @@ var nomadmap = (function(){
 	}
     }
 
-    var showMarkers = function(pointsToShow,clustering){
+    var showMarkers = function(clustering,pointsToShow){
 	var points = allPoints
 	if (pointsToShow){
 	    points=pointsToShow
@@ -483,31 +486,31 @@ var nomadmap = (function(){
 	}
 
 
-       mcOptions = {styles: [{
-	 height: 53,
-	 url: "/images/m1.png",
-	 width: 53
-       },
-			     {
-	   height: 56,
-	   url: "/images/m2.png",
-	   width: 56
-	 },
-			     {
-	   height: 66,
-	   url: "/images/m3.png",
-	   width: 66
-	 },
-			     {
-	   height: 78,
-	   url: "/images/m4.png",
-	   width: 78
-	 },
-			     {
-	   height: 90,
-	   url: "/images/m5.png",
-	   width: 90
-	 }]}
+	mcOptions = {styles: [{
+	    height: 53,
+	    url: "/images/m1.png",
+	    width: 53
+	},
+			      {
+				  height: 56,
+				  url: "/images/m2.png",
+				  width: 56
+			      },
+			      {
+				  height: 66,
+				  url: "/images/m3.png",
+				  width: 66
+			      },
+			      {
+				  height: 78,
+				  url: "/images/m4.png",
+				  width: 78
+			      },
+			      {
+				  height: 90,
+				  url: "/images/m5.png",
+				  width: 90
+			      }]}
 
 	if (clustering){
 	    markerCluster = new MarkerClusterer(map, markers,mcOptions);
