@@ -1,8 +1,8 @@
 
 <!--  <div class="panel panel-default btn-group" role="group">
-  <button type="button" id="btnSearchPanel" class="btn btn-default">
-    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-  </button>
+<button type="button" id="btnSearchPanel" class="btn btn-default">
+<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+</button>
 </div>-->
 
 {{if eq .Content.Id -1}}
@@ -55,21 +55,16 @@
 
 
 <div class="panel panel-default">
-  <div class="panel-heading">Actividad</div>
+  <div class="panel-heading">Últimos registros</div>
   <div class="panel-body">
     
-    <p>Tienes creados <span id="total-points">{{.TotalPoints}}</span> puntos y <span
-  id="total-regs">{{.TotalCheckins}}</span> registros. Pulsa el botón para tus últimos
-  lugares visitados:
-
-      <p><button class="btn btn-info" data-toggle="collapse" data-target="#last-regs">Últimos registros</button></p>
-      <ul id="last-regs" class="list-group collapse">
+    <ul class="list-group">
       {{$checkins:=.Checkins}}
       {{range $i,$c:= .Checkins}}
       {{$pname := index $.PointNames $i}}
-	<li class="list-group-item">{{.GetTimeStamp}} en {{$pname}}</li>
+      <li class="list-group-item">{{.GetTimeStamp}} en {{$pname}}</li>
       {{end}}
-      </ul>
+    </ul>
 
   </div>
 </div>
