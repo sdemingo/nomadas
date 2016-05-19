@@ -30,7 +30,7 @@ var launchSearchByTag = function(event){
 	tags.push($(this).html())
     });
 
-    nomadmap.loadMarkers(tags)
+    nomadpoints.loadPoints(tags)
 }
 
 
@@ -68,8 +68,9 @@ function loadAdminPanel(e){
 
 $(document).ready(function () {
     nomadcheckins.init()
+    nomadpoints.init()
     nomadmap.init()
-    nomadmap.loadMarkers()
+    nomadpoints.loadPoints()
     loadWelcomePanel()
 })
 

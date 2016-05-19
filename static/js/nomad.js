@@ -173,35 +173,12 @@ var nomadcheckins = (function(){
 })()
 
 
-var nomadmap = (function(){
 
-    var MARKERCOLOR = "FireBrick"
-    var MARKERCOLOR_VISITED = "green"
-    var MARKERCOLOR_CURRENT = "orange"
+var nomadpoints = (function(){
 
-    var map
-    var allPoints=[]
-    var markers=[]
-    var markerCluster
-    var curMarker
-    var lastLocation
     var tagsSelected={}
+    var allPoints=[]
 
-    var initLoc = new google.maps.LatLng(40.4279613,0.2967822)
-
-    var mapOptions = {
-	zoom: 5,
-	center: {lat: -33, lng: 151},
-	disableDefaultUI: true,
-	center:initLoc,
-	disableDefaultUI: true,
-	zoomControl: false,
-	mapTypeControl: true,
-	mapTypeControlOptions: {
-	    style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-	    position: google.maps.ControlPosition.TOP_LEFT
-	}
-    }
 
     var viewPointFormEvents = function(){
 	$("#btnDeletePoint").click(function(){
@@ -280,6 +257,7 @@ var nomadmap = (function(){
 	}
 
 	// load position
+	var lastLocation=nomadmap.getLocation()
 	if ($("#Lat").html() == ""){
 	    $("#Lat").html(lastLocation.lat())
 	}
@@ -368,11 +346,17 @@ var nomadmap = (function(){
 		if ((response.Error) && (!nodialog)){
 		    showErrorMessage(response.Error)
 		}else{
-		    allPoints.push(response)
-		    showMarkers(response)
+		    
+		    var pos = searchPoint(allPoints,response.Id)
+		    if (pos<0){
+			allPoints.push(response)
+		    }else{
+			allPoints[pos]=response
+		    }
+
 		    if (!nodialog){
 			showInfoMessage("Punto guardado con éxito")
-			refreshMap(true)
+			nomadmap.update(allPoints)
 		    }
 		}
 	    },
@@ -393,11 +377,9 @@ var nomadmap = (function(){
 		    allPoints = allPoints.filter(function(it){
 			return it.Id != parseInt(id)
 		    })
-		    deleteMarkers()
-		    showMarkers()
+		    nomadmap.update(allPoints)
 		    showInfoMessage("Punto borrado con éxito")
-		    // TODO:
-		    // refresh the map
+
 		}
 	    },
     	    error: error
@@ -422,7 +404,7 @@ var nomadmap = (function(){
 		}
 		allPoints = allPoints.concat(response)
 		var clustering=!((tags) && (tags.length>0))
-		refreshMap(clustering,response)
+		nomadmap.update(allPoints)
 	    },
     	    error: error
 	}); 
@@ -442,6 +424,19 @@ var nomadmap = (function(){
     }
 
 
+    var searchPoint = function(allPoints,id){
+	if ((!allPoints) || (!id)){
+	    return -1
+	}
+	for (var i=0;i<allPoints.length;i++){
+	    if (allPoints[i].Id == id){
+		return i
+	    }
+	}
+	return -1
+    }
+
+
 
     var IsValidPoint = function(m){
 	m.Name.trim()
@@ -450,13 +445,59 @@ var nomadmap = (function(){
 	    (m.Desc!="")
     }
 
-    var refreshMap = function(clustering,pointsToShow){
+
+    var init = function(){
+
+    }
+
+    return{
+	init:init,
+	loadPoints:getPoints,
+	loadPoint:getPoint,
+	editPoint:editPointForm,
+	sendPoint:function(point){
+	    var nullFormData = new FormData()
+	    nullFormData.append("jsonPoint",JSON.stringify(point))
+	    addPoint(nullFormData,true)
+	} 
+    }
+})()
+
+
+var nomadmap = (function(){
+
+    var MARKERCOLOR = "FireBrick"
+    var MARKERCOLOR_VISITED = "green"
+    var MARKERCOLOR_CURRENT = "orange"
+
+    var map
+    var markers=[]
+    var markerCluster
+    var curMarker
+    var lastLocation
+
+    var initLoc = new google.maps.LatLng(40.4279613,0.2967822)
+
+    var mapOptions = {
+	zoom: 5,
+	center: {lat: -33, lng: 151},
+	disableDefaultUI: true,
+	center:initLoc,
+	disableDefaultUI: true,
+	zoomControl: false,
+	mapTypeControl: true,
+	mapTypeControlOptions: {
+	    style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+	    position: google.maps.ControlPosition.TOP_LEFT
+	}
+    }
+
+
+    var refreshMap = function(clustering,points){
 	deleteMarkers()
-	showMarkers(clustering,pointsToShow)
-	if (pointsToShow){
-	    $(".results .showed").html(pointsToShow.length)
-	}else{
-	    $(".results .showed").html(allPoints.length)
+	showMarkers(clustering,points)
+	if (points){
+	    $(".results .showed").html(points.length)
 	}
     }
 
@@ -465,17 +506,13 @@ var nomadmap = (function(){
 	    markers[i].setMap(null)
 	}
 	markers=[]
-
 	if (markerCluster){
 	    markerCluster.clearMarkers()
 	}
     }
 
-    var showMarkers = function(clustering,pointsToShow){
-	var points = allPoints
-	if (pointsToShow){
-	    points=pointsToShow
-	}
+    var showMarkers = function(clustering,points){
+
 	for (var i=0;i<points.length;i++){
 	    var location = {lat: parseFloat(points[i].Lat), 
 	    		    lng: parseFloat(points[i].Lon)}
@@ -484,6 +521,7 @@ var nomadmap = (function(){
 		color=MARKERCOLOR_VISITED
 	    }
 
+	    console.log("Creo marker para id "+points[i].Id)
 	    var marker=newMarker(location,points[i].Name, color)
 	    marker.point=points[i]
 	    markers.push(marker)
@@ -541,13 +579,15 @@ var nomadmap = (function(){
 
 	google.maps.event.addListener(m,"click",function(e){
 	    if (m.point){
-		getPoint(m.point.Id)
+		//getPoint(m.point.Id)
+		nomadpoints.loadPoint(m.point.Id)
 	    }
 	})
 	
 	google.maps.event.addListener(m,"dblclick",function(e){
 	    if (!m.point){
-		editPointForm()
+		//editPointForm()
+		nomadpoints.editPoint()
 	    }
 	})
 
@@ -565,6 +605,10 @@ var nomadmap = (function(){
 	}
     }
 
+    var getCurrentLocation = function(){
+	return lastLocation
+    }
+
 
     var initMap = function(){
 	map = new google.maps.Map(document.getElementById("map"), mapOptions)
@@ -574,18 +618,16 @@ var nomadmap = (function(){
     }
 
     var init = function(){
-	allPoints=[]
 	initMap()
     }
 
     return{
 	init:init,
-	loadMarkers:getPoints,
-	sendPoint:function(point){
-	    var nullFormData = new FormData()
-	    nullFormData.append("jsonPoint",JSON.stringify(point))
-	    addPoint(nullFormData,true)
-	} 
+	getLocation:getCurrentLocation,
+	addMarker:newMarker,
+	update:function(points){
+	    refreshMap(true,points)
+	}
     }
 
 
@@ -942,7 +984,7 @@ var launchSearchByTag = function(event){
 	tags.push($(this).html())
     });
 
-    nomadmap.loadMarkers(tags)
+    nomadpoints.loadPoints(tags)
 }
 
 
@@ -980,8 +1022,9 @@ function loadAdminPanel(e){
 
 $(document).ready(function () {
     nomadcheckins.init()
+    nomadpoints.init()
     nomadmap.init()
-    nomadmap.loadMarkers()
+    nomadpoints.loadPoints()
     loadWelcomePanel()
 })
 
