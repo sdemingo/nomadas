@@ -402,9 +402,12 @@ var nomadpoints = (function(){
 		if (response.Error){
 		    showErrorMessage(response.Error)
 		}
-		allPoints = allPoints.concat(response)
-		var clustering=!((tags) && (tags.length>0))
-		nomadmap.update(allPoints)
+		var reqFilteredPoints = ((tags) && (tags.length>0))
+		if (!reqFilteredPoints){
+		    allPoints = response
+		}
+		nomadmap.update(response)
+		
 	    },
     	    error: error
 	}); 
