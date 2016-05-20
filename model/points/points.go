@@ -17,6 +17,7 @@ type Point struct {
 	UserId    int64
 	Name      string
 	Desc      string
+	Public    bool      `json:",string"`
 	TimeStamp time.Time `json:"`
 	Lat       float32   `json:",string"`
 	Lon       float32   `json:",string"`
@@ -200,6 +201,24 @@ func GetPointsByOwner(wr srv.WrapperRequest, id int64) ([]*Point, error) {
 		ps[i].Tags, err = getPointTags(wr, ps[i])
 		if err != nil {
 			return nil, fmt.Errorf("getpointbyowner: %v", err)
+		}
+	}
+	return ps, nil
+}
+
+func GetAllPublicPoints(wr srv.WrapperRequest, id int64) ([]*Point, error) {
+	ps := NewPointBuffer()
+	q := data.NewConn(wr, "points")
+	q.AddFilter("Public =", true)
+	err := q.GetMany(&ps)
+	if err != nil {
+		return nil, fmt.Errorf("getallpublicpoints: %v", err)
+	}
+
+	for i := range ps {
+		ps[i].Tags, err = getPointTags(wr, ps[i])
+		if err != nil {
+			return nil, fmt.Errorf("getallpublicpoints: %v", err)
 		}
 	}
 	return ps, nil
