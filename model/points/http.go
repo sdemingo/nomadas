@@ -146,8 +146,16 @@ func AddPoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) 
 	// Creating a new point
 	point := new(Point)
 	point.TimeStamp = time.Now()
+	point.Public = true
 
+	info := wr.NU.GetInfo()
 	point.UserId = wr.NU.ID()
+	if _, ok := info["Username"]; !ok {
+		point.UserName = "Anónimo"
+	} else {
+		point.UserName = info["Username"]
+	}
+
 	err = json.Unmarshal([]byte(wr.Values.Get("jsonPoint")), point)
 	if err != nil {
 		return infoTmpl, fmt.Errorf("points: addpoint: %v", err)

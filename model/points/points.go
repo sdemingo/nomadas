@@ -6,15 +6,20 @@ import (
 	"strings"
 	"time"
 
+	"app/core"
+
 	"appengine/data"
 	"appengine/srv"
 
 	"github.com/russross/blackfriday"
 )
 
+const POINTDATEFORMAT = "2 January 2006"
+
 type Point struct {
 	Id        int64 `json:",string" datastore:"-"`
 	UserId    int64
+	UserName  string
 	Name      string
 	Desc      string
 	Public    bool      `json:",string"`
@@ -33,6 +38,11 @@ func (p *Point) IsValid() bool {
 		(p.Desc != "") &&
 		(p.Lat != 0.0) &&
 		(p.Lon != 0.0)
+}
+
+func (p *Point) GetTimeStamp() string {
+	s := p.TimeStamp.Format(POINTDATEFORMAT)
+	return core.GetLocalDateNames(s)
 }
 
 func (p *Point) HasTag(tag string) bool {
@@ -185,6 +195,7 @@ func GetPointById(wr srv.WrapperRequest, id int64) (*Point, error) {
 	if err != nil {
 		return nil, fmt.Errorf("getpointbyid: %v", err)
 	}
+
 	return p, nil
 }
 
