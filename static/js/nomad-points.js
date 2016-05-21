@@ -124,6 +124,8 @@ var nomadpoints = (function(){
 	})
 
 	$("#btnVisibility").click(function(){
+	    showErrorMessage("Esta opción aún no está implementada")
+	    /*
 	    var vis=$(this).find(".text").html()
 	    if (vis == "Público"){
 	    	$("#btnVisibility").find(".text").html("Privado")
@@ -131,7 +133,7 @@ var nomadpoints = (function(){
 	    }else{
 	    	$("#btnVisibility").find(".text").html("Público")
 	    	$("#btnVisibility").find(".glyphicon").removeClass("glyphicon-eye-close").addClass("glyphicon-eye-open")
-	    }
+	    }*/
 	})
     }
 
