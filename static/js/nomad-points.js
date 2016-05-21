@@ -122,6 +122,17 @@ var nomadpoints = (function(){
 	    }
 	    addPoint(formData)  
 	})
+
+	$("#btnVisibility").click(function(){
+	    var vis=$(this).find(".text").html()
+	    if (vis == "Público"){
+	    	$("#btnVisibility").find(".text").html("Privado")
+	    	$("#btnVisibility").find(".glyphicon").removeClass("glyphicon-eye-open").addClass("glyphicon-eye-close")
+	    }else{
+	    	$("#btnVisibility").find(".text").html("Público")
+	    	$("#btnVisibility").find(".glyphicon").removeClass("glyphicon-eye-close").addClass("glyphicon-eye-open")
+	    }
+	})
     }
 
     var editPointForm = function(id){

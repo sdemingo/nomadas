@@ -11,6 +11,7 @@
 <form id="formNewPoint" method="post" enctype="multipart/form-data">
   {{if .Content}}
   <input type="hidden" id="Id" name="Id" value="{{.Content.Id}}">
+  <input type="hidden" id="Public" name="Public" value="true">
   {{end}}
   <div class="form-group">
     <label>Nombre</label>
@@ -22,10 +23,22 @@
   </div>
 
   {{if .Content}}
+     {{if .Content.Public}}
+       <p><button type="button" class="btn btn-default" id="btnVisibility"><span class="text">Público</span>  <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></button></p>
+     {{else}}
+       <p><button type="button" class="btn btn-default" id="btnVisibility"><span class="text">Privado</span>  <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></button></p>
+     {{end}}
+  {{else}}
+       <p><button type="button" class="btn btn-default" id="btnVisibility"><span class="text">Público</span> <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></button></p>
+  {{end}}
+
+
+  {{if .Content}}
   <p><strong>Posición: </strong> <span id="Lat">{{.Content.Lat}}</span>, <span id="Lon">{{.Content.Lon}}</span></p>
   {{else}}
   <p><strong>Posición: </strong> <span id="Lat"></span>, <span id="Lon"></span></p>
   {{end}}
+
 
   <div class="form-group">
     <label>Descripción:</label>
