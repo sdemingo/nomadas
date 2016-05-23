@@ -19,6 +19,7 @@ var newTmpl = "model/users/tmpl/edit.html"
 var viewTmpl = "model/users/tmpl/view.html"
 var infoTmpl = "model/users/tmpl/info.html"
 var mainTmpl = "model/users/tmpl/main.html"
+var listTmpl = "model/users/tmpl/listUsers.html"
 
 func Main(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
 	return mainTmpl, nil
@@ -30,14 +31,14 @@ func GetList(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
 	}
 
 	wr.R.ParseForm()
-	nus, err := getUsers(wr, wr.R.Form)
+	nus, err := getAllUsers(wr)
 	if err != nil {
 		return infoTmpl, fmt.Errorf("users: getlist: %v", err)
 	}
 
 	tc["Content"] = nus
 
-	return infoTmpl, nil
+	return listTmpl, nil
 }
 
 func GetOne(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {

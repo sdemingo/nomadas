@@ -45,6 +45,10 @@ func init() {
 		routes["/users/add"] = true
 		AppHandler(w, r, users.Add)
 	})
+	http.HandleFunc("/users/list", func(w http.ResponseWriter, r *http.Request) {
+		routes["/users/list"] = true
+		AppHandler(w, r, users.GetList)
+	})
 
 	// Points and tags
 	http.HandleFunc("/points/edit", func(w http.ResponseWriter, r *http.Request) {

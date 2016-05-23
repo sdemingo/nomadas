@@ -2,7 +2,6 @@ package users
 
 import (
 	"fmt"
-	"strconv"
 	"time"
 
 	"app/core"
@@ -75,6 +74,7 @@ func (v NUserBuffer) Len() int {
 	return len(v)
 }
 
+/*
 func getUsers(wr srv.WrapperRequest, filters map[string][]string) (nus []*NUser, err error) {
 
 	if filters["id"] != nil {
@@ -96,7 +96,7 @@ func getUsers(wr srv.WrapperRequest, filters map[string][]string) (nus []*NUser,
 	}
 
 	return
-}
+}*/
 
 func putUser(wr srv.WrapperRequest, nu *NUser) error {
 
@@ -144,6 +144,15 @@ func deleteUser(wr srv.WrapperRequest, nu *NUser) error {
 		return fmt.Errorf("deleteuser: %v", err)
 	}
 	return nil
+}
+
+func getAllUsers(wr srv.WrapperRequest) ([]*NUser, error) {
+	nus := NewNUserBuffer()
+
+	q := data.NewConn(wr, "users")
+	q.GetMany(&nus)
+
+	return nus, nil
 }
 
 func getUserByMail(wr srv.WrapperRequest, email string) (*NUser, error) {
