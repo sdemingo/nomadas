@@ -74,30 +74,6 @@ func (v NUserBuffer) Len() int {
 	return len(v)
 }
 
-/*
-func getUsers(wr srv.WrapperRequest, filters map[string][]string) (nus []*NUser, err error) {
-
-	if filters["id"] != nil {
-		nus := make([]*NUser, 1)
-		id, err := strconv.ParseInt(filters["id"][0], 10, 64)
-		if err != nil {
-			return nus, fmt.Errorf("%v: %s", err, ERR_USERNOTFOUND)
-		}
-		nu, err := getUserById(wr, id)
-		nus[0] = nu
-		return nus, err
-	}
-
-	if filters["mail"] != nil {
-		nu, err := getUserByMail(wr, filters["mail"][0])
-		nus := make([]*NUser, 1)
-		nus[0] = nu
-		return nus, err
-	}
-
-	return
-}*/
-
 func putUser(wr srv.WrapperRequest, nu *NUser) error {
 
 	nu.TimeStamp = time.Now()

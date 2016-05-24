@@ -14,7 +14,7 @@
   </div>
   <div class="panel-body">
 
-    <form id="formNewPoint" method="post" enctype="multipart/form-data">
+    <form id="formNewUser" method="post" enctype="multipart/form-data">
       <div class="form-group">
 	<input type="text" class="form-control" name="Name" placeholder="Nombre">
       </div>
@@ -22,7 +22,8 @@
 	<input type="text" class="form-control" name="Mail" placeholder="Email">
       </div>
       <div class="form-group">
-	<input type="text" class="form-control" name="Role" value="Invitado" readonly>
+	<input type="text" class="form-control" name="RoleName" value="Invitado" readonly>
+	<input type="hidden" name="Role" value="0">
       </div>
     </form>
 
