@@ -68,6 +68,7 @@ var nomadconfig = (function(){
     }
 
     var init = function(){
+	$("#btnUsersPanel").off("click").on("click",loadUsersPanel)
 	$("#btnImportFile").off("click").on("click",importPoints)
 	$("#btnNewConfig").off("click").on("click",sendConfig)
     }
@@ -76,6 +77,32 @@ var nomadconfig = (function(){
 	init:init
     }
 
+})()
+
+
+var nomadusers = (function(){
+
+    var listUsersFormEvents = function(){
+	$(".btnDeleteUser").click(function(e){
+	    e.preventDefault()
+	    showErrorMessage("Esta opción aún no está implementada")
+	})
+
+	$("#btnNewUser").click(function(e){
+	    e.preventDefault()
+	    showErrorMessage("Esta opción aún no está implementada")
+	})
+
+    }
+
+
+    var init = function(){
+	listUsersFormEvents()
+    }
+
+    return{
+	init:init
+    }
 })()
 
 
@@ -1014,6 +1041,22 @@ function loadWelcomePanel(e){
     	success: function(html){
 	    showHTMLContent(html)
 	    moveTo("html")
+	},
+    	error: error
+    });  
+}
+
+function loadUsersPanel(e){
+    if (e) {
+	e.preventDefault()
+    }
+    $.ajax({
+    	url:DOMAIN+"/users/list",
+    	type: 'get',
+    	success: function(html){
+	    showHTMLContent(html)
+	    moveTo("html")
+	    nomadusers.init()
 	},
     	error: error
     });  

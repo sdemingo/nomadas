@@ -67,6 +67,7 @@ var nomadconfig = (function(){
     }
 
     var init = function(){
+	$("#btnUsersPanel").off("click").on("click",loadUsersPanel)
 	$("#btnImportFile").off("click").on("click",importPoints)
 	$("#btnNewConfig").off("click").on("click",sendConfig)
     }

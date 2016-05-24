@@ -49,6 +49,22 @@ function loadWelcomePanel(e){
     });  
 }
 
+function loadUsersPanel(e){
+    if (e) {
+	e.preventDefault()
+    }
+    $.ajax({
+    	url:DOMAIN+"/users/list",
+    	type: 'get',
+    	success: function(html){
+	    showHTMLContent(html)
+	    moveTo("html")
+	    nomadusers.init()
+	},
+    	error: error
+    });  
+}
+
 
 function loadAdminPanel(e){
     if (e) {
