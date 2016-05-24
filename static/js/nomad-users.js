@@ -5,17 +5,16 @@ var nomadusers = (function(){
     var listUsersFormEvents = function(){
 	$(".btnDeleteUser").click(function(e){
 	    e.preventDefault()
-	    showErrorMessage("Esta opción aún no está implementada")
+	    var id=$(this).attr("href").split("=")[1]
+	    if (id){
+		showConfirmMessage("¿Desea completar el borrado del usuario?",function(){
+		    deleteUser(id)
+		})
+	    }
 	})
 
 	$("#btnNewUser").click(function(e){
 	    e.preventDefault()
-	    // showErrorMessage("Esta opción aún no está implementada")
-
-	    // read form and put it into formData
-	    //var form = document.getElementById("formNewUser")
-	    //var formData = new FormData(form)
-	    
 	    var user = readForm($("#formNewUser"))
 	    if (!IsValidUser(user)){
 		showErrorMessage("El usuario tiene campos no validos")

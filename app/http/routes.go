@@ -45,6 +45,10 @@ func init() {
 		routes["/users/add"] = true
 		AppHandler(w, r, users.Add)
 	})
+	http.HandleFunc("/users/delete", func(w http.ResponseWriter, r *http.Request) {
+		routes["/users/delete"] = true
+		AppHandler(w, r, users.Delete)
+	})
 	http.HandleFunc("/users/list", func(w http.ResponseWriter, r *http.Request) {
 		routes["/users/list"] = true
 		AppHandler(w, r, users.GetList)

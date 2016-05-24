@@ -17,12 +17,11 @@ import (
 
 var newTmpl = "model/users/tmpl/edit.html"
 var viewTmpl = "model/users/tmpl/view.html"
-var infoTmpl = "model/users/tmpl/info.html"
-var mainTmpl = "model/users/tmpl/main.html"
+var infoTmpl = "app/tmpl/info.html"
 var listTmpl = "model/users/tmpl/listUsers.html"
 
 func Main(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
-	return mainTmpl, nil
+	return infoTmpl, nil
 }
 
 func GetList(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
@@ -117,6 +116,33 @@ func Add(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
 	}
 
 	tc["Content"] = nu
+
+	return infoTmpl, nil
+}
+
+func Delete(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
+	if wr.NU.GetRole() < core.ROLE_ADMIN {
+		return infoTmpl, fmt.Errorf("users: deleteuser: %s", core.ERR_NOTOPERATIONALLOWED)
+	}
+
+	wr.Parse()
+	sid := wr.Values.Get("id")
+	id, err := strconv.ParseInt(sid, 10, 64)
+	if err != nil {
+		return infoTmpl, fmt.Errorf("users: deleteuser: bad id: %v", err)
+	}
+
+	user, err := getUserById(wr, id)
+	if err != nil {
+		return infoTmpl, fmt.Errorf("users: deleteuser: %v", err)
+	}
+
+	err = deleteUser(wr, user)
+	if err != nil {
+		return infoTmpl, fmt.Errorf("users: deleteuser: %v", err)
+	}
+
+	tc["Content"] = user
 
 	return infoTmpl, nil
 }
