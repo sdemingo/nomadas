@@ -25,8 +25,9 @@ func GetListPoints(wr srv.WrapperRequest, tc map[string]interface{}) (string, er
 
 	wr.R.ParseForm()
 
-	id := wr.NU.ID()
-	points, err := GetPointsByOwner(wr, id)
+	//id := wr.NU.ID()
+	//points, err := GetPointsByOwner(wr, id)
+	points, err := GetAllPublicPoints(wr)
 	if err != nil {
 		return infoTmpl, fmt.Errorf("points: getlistpoints: %v", err)
 	}

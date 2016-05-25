@@ -217,7 +217,7 @@ func GetPointsByOwner(wr srv.WrapperRequest, id int64) ([]*Point, error) {
 	return ps, nil
 }
 
-func GetAllPublicPoints(wr srv.WrapperRequest, id int64) ([]*Point, error) {
+func GetAllPublicPoints(wr srv.WrapperRequest) ([]*Point, error) {
 	ps := NewPointBuffer()
 	q := data.NewConn(wr, "points")
 	q.AddFilter("Public =", true)
