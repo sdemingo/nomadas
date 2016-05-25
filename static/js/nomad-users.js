@@ -7,7 +7,7 @@ var nomadusers = (function(){
 	    e.preventDefault()
 	    var id=$(this).attr("href").split("=")[1]
 	    if (id){
-		showConfirmMessage("¿Desea completar el borrado del usuario?",function(){
+		showConfirmMessage("¿Desea completar el borrado del usuario?\nSe borrará toda la información asociada a ese usuario como puntos o registros",function(){
 		    deleteUser(id)
 		})
 	    }

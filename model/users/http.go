@@ -142,6 +142,10 @@ func Delete(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
 		return infoTmpl, fmt.Errorf("users: deleteuser: %v", err)
 	}
 
+	// TODO:
+	// - Delete all points of this user.
+	// - Not allowed  if the (admin)user has an open session
+
 	tc["Content"] = user
 
 	return infoTmpl, nil
