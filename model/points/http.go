@@ -67,7 +67,7 @@ func ExportListPoints(wr srv.WrapperRequest, tc map[string]interface{}) (string,
 }
 
 func GetOnePoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
-	if wr.NU.GetRole() < core.ROLE_ADMIN {
+	if wr.NU.GetRole() < core.ROLE_GUEST {
 		return viewPointTmpl, fmt.Errorf("points: getonepoint: %s", core.ERR_NOTOPERATIONALLOWED)
 	}
 

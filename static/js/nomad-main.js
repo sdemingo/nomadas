@@ -10,6 +10,15 @@ function mainEvents(){
 }
 
 
+function errorMessage(error){
+    if (!error){
+	return "error desconocido"
+    }
+    var e = error.split(":")
+    return e[e.length-1]
+}
+
+
 // Mark tag as selected 
 var selectTag = function(event){
     event.preventDefault()
