@@ -185,8 +185,7 @@ var nomadpoints = (function(){
 		loadWelcomePanel()
 		if ((response.Error) && (!nodialog)){
 		    showErrorMessage(response.Error)
-		}else{
-		    
+		}else{ 
 		    var pos = searchPoint(allPoints,response.Id)
 		    if (pos<0){
 			allPoints.push(response)

@@ -15,7 +15,7 @@ import (
 var infoTmpl = "app/tmpl/info.html"
 var newCheckinTmpl = "model/checkins/tmpl/newCheckin.html"
 
-//var viewPointTmpl = "model/points/tmpl/viewPoint.html"
+// var viewPointTmpl = "model/points/tmpl/viewPoint.html"
 
 func NewCheckin(wr srv.WrapperRequest, tc map[string]interface{}) (string, error) {
 	if wr.NU.GetRole() < core.ROLE_ADMIN {

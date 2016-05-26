@@ -224,8 +224,12 @@ var nomadcheckins = (function(){
     	    type: 'post',
 	    dataType: 'json',
 	    data: JSON.stringify(checkin),
-    	    success: function (url){
-		showInfoMessage("Checkin guardado con éxito")
+    	    success: function (response){
+		if (response.Error){
+		    showErrorMessage(response.Error)
+		}else{ 
+		    showInfoMessage("Checkin guardado con éxito")
+		}
 		loadWelcomePanel()
 	    },
     	    error: error
@@ -236,8 +240,13 @@ var nomadcheckins = (function(){
 	$.ajax({
     	    url:DOMAIN+"/checkins/delete?id="+id,
     	    type: 'get',
-    	    success: function (url){
-		showInfoMessage("Checkin borrado con éxito")
+	    dataType: 'json',
+    	    success: function (response){
+		if (response.Error){
+		    showErrorMessage(errorMessage(response.Error))
+		}else{ 
+		    showInfoMessage("Checkin borrado con éxito")
+		}
 		loadWelcomePanel()
 	    },
     	    error: error
@@ -443,8 +452,7 @@ var nomadpoints = (function(){
 		loadWelcomePanel()
 		if ((response.Error) && (!nodialog)){
 		    showErrorMessage(response.Error)
-		}else{
-		    
+		}else{ 
 		    var pos = searchPoint(allPoints,response.Id)
 		    if (pos<0){
 			allPoints.push(response)
