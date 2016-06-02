@@ -87,6 +87,7 @@ func GetOnePoint(wr srv.WrapperRequest, tc map[string]interface{}) (string, erro
 	point.NChecks = len(checks)
 	tc["Checkins"] = checks
 	tc["Content"] = point
+	tc["ShowImage"] = hasImage(wr, point)
 
 	if len(checks) > checkins.MAXCHECKINSTOSHOW {
 		tc["Checkins"] = checks[:checkins.MAXCHECKINSTOSHOW]

@@ -85,6 +85,19 @@ func (v PointBuffer) Len() int {
 	return len(v)
 }
 
+func hasImage(wr srv.WrapperRequest, p *Point) bool {
+	if p.ImageKey == "" {
+		return false
+	}
+	q := data.NewConn(wr, "blobs")
+	sz, err := q.Size(p.ImageKey)
+	if err != nil {
+		return false
+	}
+	fmt.Println(sz)
+	return sz > 0
+}
+
 func addPoint(wr srv.WrapperRequest, p *Point) error {
 	q := data.NewConn(wr, "points")
 

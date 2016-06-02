@@ -30,7 +30,7 @@
     </p>
     <p>Creado por {{.Content.UserName}} en {{.Content.GetTimeStamp}}</p>
     <p>{{.Content.GetHTMLDesc}}</p>
-    {{if .Content.ImageKey}}
+    {{if .ShowImage}}
     <img class="img-responsive" src="/blob?id={{.Content.ImageKey}}">
     {{end}}
     <div class="tags-panel">
