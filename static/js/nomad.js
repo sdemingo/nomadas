@@ -33,7 +33,7 @@ var nomadconfig = (function(){
 	    }
 
 	    for (var i=0;i<points.length;i++){
-		nomadmap.sendPoint(points[i])
+		nomadpoints.sendPoint(points[i])
 	    }
 
 	    showInfoMessage("Se van a añadir "+points.length+" puntos. Esta operación puede tardar un tiempo")
